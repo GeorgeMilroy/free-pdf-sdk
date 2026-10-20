@@ -1,0 +1,44 @@
+Free PDF SDK
+Copyright (c) 2026 the Free PDF SDK contributors.
+Licensed under the MIT License or the Apache License, Version 2.0, at your option
+(LICENSE-MIT, LICENSE-APACHE).
+
+Based on pdfcraft
+-----------------
+Free PDF SDK is based on pdfcraft (https://github.com/storytold/pdfcraft), used as a Cargo
+dependency pinned to commit
+
+    6fb6b7cf6fd8dc105fdd56a764d207cff6140694 (pdfcraft 0.10.0)
+
+with the Free PDF SDK patches from the branch free-pdf-sdk/patches of
+https://github.com/GeorgeMilroy/pdfcraft applied (the exact commit is in Cargo.lock and in
+version.json as "pdfcraftRev").
+
+pdfcraft is Copyright (c) 2026 ArtCraft Team and the PdfCraft contributors, licensed under
+the MIT License or the Apache License, Version 2.0. Its licence files, NOTICE and
+ATTRIBUTION.md are in third-party/pdfcraft/.
+
+Trademarks
+----------
+"ArtCraft", "PdfCraft" and the ArtCraft logos are trademarks of the ArtCraft Team. Free PDF SDK
+does not use them as its name or logo, does not ship them, and is not endorsed by the ArtCraft
+Team. The placeholder logos in brand/ are original to this project.
+
+Third-party material
+--------------------
+The viewer embeds third-party material under its own licences: Lucide icons (ISC); the Inter,
+JetBrains Mono and Dancing Script typefaces (SIL OFL 1.1); egui's default fonts (Ubuntu Font
+Licence 1.0, MIT / Bitstream Vera, SIL OFL 1.1, MIT); the Foxit standard-14 substitute fonts and
+Adobe CMap resources (BSD-3-Clause); a CC0 ICC profile; and the Rust crates listed in
+third-party/crates.md. Licences and required notices are in third-party/ (see its README.md).
+
+  Foxit standard-14 substitute fonts:
+    Copyright 2014 PDFium Authors. All rights reserved. Original code copyright 2014 Foxit
+    Software Inc. Redistributed under the BSD-3-Clause licence (third-party/foxit/LICENSE_FOXIT).
+
+  CMap resources (character-mapping data bundled by hayro-cmap):
+    Copyright 1990-2023 Adobe. All rights reserved. Redistributed under the BSD-3-Clause licence
+    (third-party/adobe-cmaps/LICENSE.txt). Neither the name of Adobe nor the names of its
+    contributors are used to endorse or promote this product.
+
+The brand/ placeholder wordmarks contain outlines of the Inter typeface (SIL OFL 1.1).
