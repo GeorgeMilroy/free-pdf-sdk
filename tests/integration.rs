@@ -186,3 +186,37 @@ fn known_losses_are_what_the_docs_say() {
     let listed = doc::annotations(&s, id).expect("lists");
     assert_eq!(listed.iter().find(|a| a.kind == "line").and_then(|a| a.contents.as_deref()), Some("105.83 mm"), "the text survives");
 }
+
+/// Real XFDF exported from production (tests/fixtures/real/*.xfdf, git-ignored: never commit
+/// customer data). Each must import with the same count, authors and pages it lists, and
+/// survive an export and re-import. Skipped when the folder is empty.
+#[test]
+fn real_xfdf_samples_round_trip() {
+    let dir = fps_tests::fixtures_dir().join("real");
+    let Ok(entries) = std::fs::read_dir(&dir) else { return };
+    let mut checked = 0;
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.extension().and_then(|e| e.to_str()) != Some("xfdf") {
+            continue;
+        }
+        let source = std::fs::read_to_string(&path).unwrap_or_default();
+        let expected = xfdf::threads(&xfdf::read(&source).unwrap_or_else(|e| panic!("{}: {e}", path.display())));
+        // Generous page count: real artwork can be long; the fixture's pages are blank.
+        let pages = expected.iter().map(|a| (a.page_index as usize).saturating_add(1)).max().unwrap_or(1);
+        let (mut s, id) = open(plain_pdf(pages));
+        let n = import(&mut s, id, &source, false).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+        assert_eq!(n, expected.len(), "{}: imported count", path.display());
+        let exported = doc::export_xfdf(&s, id).expect("exports");
+        let (mut s2, id2) = open(plain_pdf(pages));
+        assert_eq!(import(&mut s2, id2, &exported, false), Ok(expected.len()), "{}: re-import", path.display());
+        let again = doc::annotations(&s2, id2).expect("lists");
+        for e in &expected {
+            let got = by_id(&again, &e.id);
+            assert_eq!((&got.author, got.page_index, &got.kind), (&e.author, e.page_index, &e.kind), "{}: {}", path.display(), e.id);
+            assert_eq!(got.replies.len(), e.replies.len(), "{}: {} replies", path.display(), e.id);
+        }
+        checked = checked.saturating_add(1);
+    }
+    eprintln!("real XFDF samples checked: {checked}");
+}

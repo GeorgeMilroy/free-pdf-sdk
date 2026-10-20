@@ -5,15 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Free PDF SDK example</title>
     <style>
-      html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
-      #viewer { position: absolute; inset: 0; }
+      :root { --bg: #f7f7f9; --panel: #ffffff; --text: #1a202c; --muted: #5a6474; --border: #dde1e7; --accent: #2b6cb0; }
+      :root[data-theme="dark"] { --bg: #121317; --panel: #1b1d23; --text: #edf0f5; --muted: #a0a8b6; --border: #2c3039; --accent: #63a4f0; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, sans-serif; }
+      body { display: grid; grid-template-rows: auto 1fr auto; height: 100vh; }
+      header { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--border); }
+      header strong { margin-right: 8px; }
+      button, select, input { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; }
+      button:hover { border-color: var(--accent); }
+      #viewer { position: relative; min-height: 0; }
+      #log { height: 120px; overflow: auto; margin: 0; padding: 6px 12px; background: var(--panel); border-top: 1px solid var(--border); color: var(--muted); font: 12px/1.35 ui-monospace, monospace; }
     </style>
   </head>
   <body>
+    <header>
+      <strong>Free PDF SDK</strong>
+      <select id="mode" aria-label="Mode"><option value="annotate">Annotate</option><option value="view">View</option></select>
+      <select id="theme" aria-label="Theme"><option value="light">Light</option><option value="dark">Dark</option><option value="system">System</option></select>
+      <button id="open-plain">Open sample</button>
+      <button id="open-protected">Open protected</button>
+      <input id="password" placeholder="Owner password" size="14" value="fps-owner-secret" />
+      <button id="unlock">Unlock</button>
+      <button id="import">Import ComPDF XFDF</button>
+      <button id="export">Export XFDF</button>
+      <button id="list">List comments</button>
+      <button id="clear">Delete all</button>
+      <button id="save">Save PDF</button>
+      <input id="author" placeholder="Author" size="12" value="Example User" />
+      <button id="set-author">Set author</button>
+      <button id="destroy">Destroy</button>
+    </header>
     <div id="viewer"></div>
+    <pre id="log" aria-live="polite"></pre>
     <script type="module">
-      import { init } from "/sdk/free-pdf-sdk.js";
-      await init(document.getElementById("viewer"), { baseUrl: "/sdk/" });
+      import { FreePdf } from "/sdk/free-pdf-sdk.js";
+
+      const $ = (id) => document.getElementById(id);
+      const log = (...parts) => {
+        const line = parts.map((p) => (typeof p === "string" ? p : JSON.stringify(p))).join(" ");
+        $("log").textContent = `${new Date().toLocaleTimeString()} ${line}\n` + $("log").textContent;
+      };
+      const params = new URLSearchParams(location.search);
+      const mode = params.get("mode") ?? "annotate";
+      const theme = params.get("theme") ?? "light";
+      $("mode").value = mode;
+      $("theme").value = theme;
+      document.documentElement.dataset.theme = theme === "dark" ? "dark" : "light";
+
+      const events = [];
+      const listen = (name) => (data) => {
+        events.push({ name, data: name === "saveRequested" ? { ...data, data: data.data.byteLength } : data });
+        log(`event ${name}`, name === "saveRequested" ? { name: data.name, bytes: data.data.byteLength } : data);
+      };
+      const names = ["ready", "documentLoaded", "documentError", "annotationsChanged", "dirtyChanged", "error", "saveRequested"];
+      const listeners = Object.fromEntries(names.map((n) => [n, listen(n)]));
+
+      let viewer;
+      async function start() {
+        viewer = await FreePdf.init($("viewer"), {
+          baseUrl: "/sdk/",
+          mode,
+          theme,
+          author: $("author").value,
+          disabledElements: params.has("lockdown") ? ["download", "print", "open", "settings", "flatten"] : [],
+          document: params.get("doc") === "none" ? undefined : { url: `/fixtures/${params.get("doc") ?? "plain-3p.pdf"}` },
+          listeners,
+        });
+        window.fps = { viewer, events, FreePdf };
+        log("ready", await viewer.version());
+      }
+
+      const run = (fn) => async () => {
+        try {
+          const r = await fn();
+          if (r !== undefined) log(r);
+        } catch (e) {
+          log(`error ${e.code ?? ""}: ${e.message}`);
+        }
+      };
+      $("mode").onchange = run(() => viewer.setMode($("mode").value));
+      $("theme").onchange = run(async () => {
+        document.documentElement.dataset.theme = $("theme").value === "dark" ? "dark" : "light";
+        await viewer.setTheme($("theme").value);
+      });
+      $("open-plain").onclick = run(() => viewer.load({ url: "/fixtures/plain-3p.pdf" }));
+      $("open-protected").onclick = run(() => viewer.load({ url: "/fixtures/protected-aes256-owner.pdf" }));
+      $("unlock").onclick = run(() => viewer.unlock($("password").value));
+      $("import").onclick = run(async () => {
+        const xfdf = await (await fetch("/fixtures/compdf-review.xfdf")).text();
+        return { imported: await viewer.importXfdf(xfdf, { replace: true }) };
+      });
+      $("export").onclick = run(async () => (await viewer.exportXfdf()).slice(0, 400));
+      $("list").onclick = run(async () => {
+        const list = await viewer.getAnnotations();
+        return { count: list.length, list };
+      });
+      $("clear").onclick = run(async () => ({ deleted: await viewer.deleteAllAnnotations() }));
+      $("save").onclick = run(async () => {
+        const bytes = await viewer.save();
+        const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
+        return { saved: bytes.byteLength, url };
+      });
+      $("set-author").onclick = run(() => viewer.setAuthor($("author").value));
+      $("destroy").onclick = run(() => viewer.destroy());
+
+      start().catch((e) => {
+        log(`init failed ${e.code ?? ""}: ${e.message}`);
+        window.fps = { error: { code: e.code, message: e.message }, events };
+      });
     </script>
   </body>
 </html>

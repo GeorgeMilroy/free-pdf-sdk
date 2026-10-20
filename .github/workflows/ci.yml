@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  # The pdfcraft fork commit named in Cargo.lock must be pushed to GeorgeMilroy/pdfcraft.
+  CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+jobs:
+  rust:
+    name: fmt, clippy, tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: fmt
+        run: cargo fmt --all --check
+      - name: clippy (native crates)
+        run: cargo clippy -p fps-core -p fps-brand -p fps-tests --all-targets --locked -- -D warnings
+      - name: clippy (viewer, wasm32)
+        run: cargo clippy -p fps-viewer --target wasm32-unknown-unknown --locked -- -D warnings
+      - name: tests
+        run: cargo test -p fps-core -p fps-brand -p fps-tests --locked
+
+  web:
+    name: wasm build, TypeScript, e2e
+    runs-on: ubuntu-latest
+    needs: rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: wasm-bindgen-cli (the version in Cargo.lock)
+        run: |
+          v=$(awk '/^name = "wasm-bindgen"$/{getline; gsub(/version = |"/,""); print; exit}' Cargo.lock)
+          cargo install wasm-bindgen-cli --version "$v" --locked
+      - name: npm ci
+        run: |
+          npm ci --no-audit --no-fund
+          npm --prefix js ci --no-audit --no-fund
+      - name: TypeScript typecheck
+        run: npm --prefix js run typecheck
+      - name: build (scripts/build.ps1)
+        shell: pwsh
+        run: ./scripts/build.ps1 -Zip -Jobs 4
+      - name: Playwright (headless Chromium)
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test -c e2e/playwright.config.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: free-pdf-sdk
+          path: |
+            dist/*.zip
+            e2e/test-results/
+          if-no-files-found: ignore
