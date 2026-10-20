@@ -67,7 +67,7 @@ document logic are unit-tested natively in seconds, without compiling eframe and
 
 Each patch is one concern, an opt-in hook whose default leaves pdfcraft unchanged, and written
 so it can go upstream as a PR. We first checked what `PdfCraftApp`'s public API allows from
-outside; these two could not be done from outside:
+outside; these could not be done from outside:
 
 | Patch | Why it must be inside pdfcraft |
 |---|---|
@@ -75,6 +75,7 @@ outside; these two could not be done from outside:
 | `free-pdf-sdk: add a UI profile …` | There is no locked read-only mode (`Mode::Read` can be left) and no way to hide commands, tools or tool groups. `PdfCraftApp::profile` hides ids and locks edits; the default profile changes nothing. |
 | `free-pdf-sdk: keep community links out of the palette …` | Completes the Brand hook: with `community_links` off, the Discord/web/GitHub commands are also absent from the command palette and refused by `execute`. |
 | `free-pdf-sdk: make the ArtCraft marks an opt-out cargo feature` | `Brand::default()` embedded the ArtCraft SVGs, so they were in every binary. The `artcraft-marks` feature (default on) gates them; the SDK depends on `pdfcraft-ui-egui` with `default-features = false`, so the trademarks are not compiled in. |
+| `free-pdf-sdk: count only the groups a profile shows when collapsing All tools` | Completes the UI profile: the collapsed All tools list took the first 14 catalogue groups before skipping hidden ones, so annotate mode's Measure objects (16th) sat behind View more. |
 
 Everything else the API needs is reachable from outside (`fps-viewer` wraps `PdfCraftApp` in its
 own `eframe::App` and runs requests between frames):

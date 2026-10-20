@@ -10,9 +10,9 @@ use fps_core::doc;
 use fps_core::protocol::{Config, Mode, Request, Theme, Zoom, parse_request};
 use fps_core::{ErrorCode, RpcError};
 use pdfcraft_engine::DocId;
-use pdfcraft_ui_egui::PdfCraftApp;
 use pdfcraft_ui_egui::profile::{UiProfile, parts};
 use pdfcraft_ui_egui::theme::ThemePreference;
+use pdfcraft_ui_egui::{LeftPanel, PdfCraftApp};
 use serde_json::{Value, json};
 
 use crate::bridge::{Bridge, Inbox, Payload};
@@ -257,9 +257,11 @@ impl Viewer {
         self.mode = mode;
         self.apply_profile();
         if was == Mode::View && mode == Mode::Annotate {
-            // Leave the Read workspace for the tools, with the comment tools open.
+            // Leave the Read workspace for the tools, with the drawer listing the tool groups the
+            // profile keeps (Fill & Sign, Add comments, Add a stamp, Measure objects).
             let _ = self.app.set_option("mode", "all");
-            let _ = self.app.set_option("tool", "comment");
+            self.app.left = LeftPanel::AllTools;
+            self.app.left_open = true;
         }
     }
 

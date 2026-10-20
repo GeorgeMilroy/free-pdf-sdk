@@ -7,6 +7,12 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+### Fixed
+
+- Annotate mode: the Tools drawer lists all four tool groups (Fill & Sign, Add comments, Add a
+  stamp, Measure objects). Measure objects was hidden behind "View more" (pdfcraft fork patch).
+  The drawer now opens on that list instead of inside Add comments.
+
 ## [0.1.0] - 2026-10-20
 
 ### Added

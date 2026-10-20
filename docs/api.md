@@ -124,6 +124,8 @@ listed as replies.
   caret, replace), shapes (line, arrow, rectangle, oval, polygon, polyline, cloud), ink, replies
   and review status, Fill & Sign (typed and drawn signatures, initials, text, marks) and
   measurement (distance, perimeter, area). Page, content, form and security changes are hidden.
+  The Tools drawer opens on its four tool groups: Fill & Sign, Add comments, Add a stamp and
+  Measure objects (`disabledElements` can remove some of them).
 
 ## Disabled elements
 
