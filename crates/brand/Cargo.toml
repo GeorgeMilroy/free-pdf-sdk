@@ -1,0 +1,13 @@
+[package]
+name = "fps-brand"
+description = "Free PDF SDK branding: name, logos, accent and About text"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]

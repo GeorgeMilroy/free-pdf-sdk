@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">
+	<annots>
+		<line page="0" rect="72,300,372,330" flags="print" name="c2000000-0000-4000-8000-000000000001" title="Measure Desk" subject="Distance Measurement" date="D:20250601080000Z" color="#FF0000" width="1" start="72,315" end="372,315" head="OpenArrow" tail="OpenArrow" IT="LineDimension">
+			<contents>105.83 mm</contents>
+			<measure rateValue="1 in = 1 in" mode="0"><ruler><scale value="0.352778" unit="mm"/></ruler></measure>
+		</line>
+		<polygon page="0" rect="100,100,300,250" flags="print" name="c2000000-0000-4000-8000-000000000002" title="Measure Desk" subject="Area Measurement" date="D:20250601080100Z" color="#0000FF" width="1" IT="PolygonDimension">
+			<contents>3 528 mm²</contents>
+			<vertices>100,100;300,100;300,250;100,250</vertices>
+		</polygon>
+		<stamp page="1" rect="300,600,500,680" flags="print" name="c2000000-0000-4000-8000-000000000003" title="Approver" subject="Stamp" date="D:20250601080200Z" icon="Approved" opacity="1">
+			<contents>APPROVED</contents>
+			<appearance>PERJQ1QgL0JCb3ggWzAgMCAyMDAgODBdID4+</appearance>
+		</stamp>
+	</annots>
+</xfdf>

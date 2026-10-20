@@ -1,0 +1,30 @@
+[package]
+name = "fps-tests"
+description = "Free PDF SDK integration tests and synthetic fixtures"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[lib]
+path = "lib.rs"
+
+[[bin]]
+name = "make-fixtures"
+path = "make_fixtures.rs"
+
+[[test]]
+name = "integration"
+path = "integration.rs"
+
+[dependencies]
+fps-core = { workspace = true }
+pdfcraft-cos = { workspace = true }
+pdfcraft-engine = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

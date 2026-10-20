@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">
+	<annots>
+		<square page="0" rect="72,72,200,150" flags="print" name="9a7e1d10-0000-4000-8000-0000000000a1" title="Guest" subject="Rectangle" date="D:20250401090000Z" creationdate="D:20250401090000Z" color="#E52237" width="1" opacity="1">
+			<contents>Drawn before the author was set</contents>
+		</square>
+		<circle page="1" rect="72,72,200,150" flags="print" name="9a7e1d10-0000-4000-8000-0000000000a2" title="Guest" subject="Circle" date="D:20250401090100Z" creationdate="D:20250401090100Z" color="#E52237" width="1" opacity="1"/>
+	</annots>
+</xfdf>

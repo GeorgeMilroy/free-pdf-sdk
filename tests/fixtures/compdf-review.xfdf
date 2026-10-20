@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">
+	<annots>
+		<square page="0" rect="100.5,500.25,300.75,620" flags="print" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000001" title="Priya Raman" subject="Rectangle" date="D:20250314101500+05'30'" creationdate="D:20250314101500+05'30'" color="#FF0000" width="2" opacity="1">
+			<contents>Logo is too close to the trim line</contents>
+			<popup page="0" rect="300.75,520,480,620" flags="print,nozoom,norotate" open="no"/>
+		</square>
+		<circle page="0" rect="320,300,420,380" flags="print" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000002" title="Priya Raman" subject="Circle" date="D:20250314101612+05'30'" creationdate="D:20250314101612+05'30'" color="#0000FF" width="1.5" opacity="0.8" interior-color="#E6F0FF">
+			<contents>Barcode quiet zone</contents>
+		</circle>
+		<line page="0" rect="90,200,260,240" flags="print" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000003" title="Daniel Ochieng" subject="Arrow" date="D:20250314102001+05'30'" creationdate="D:20250314102001+05'30'" color="#00A000" width="2" opacity="1" start="95,205" end="255,235" head="None" tail="OpenArrow">
+			<contents>Move this up 2 mm</contents>
+		</line>
+		<ink page="1" rect="150,150,330,260" flags="print" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000004" title="Daniel Ochieng" subject="Ink" date="D:20250314102305+05'30'" creationdate="D:20250314102305+05'30'" color="#FF00FF" width="3" opacity="1">
+			<contents></contents>
+			<inklist>
+				<gesture>155,155;180,200;210,240;250,255;300,240;325,190</gesture>
+				<gesture>160,230;320,160</gesture>
+			</inklist>
+		</ink>
+		<freetext page="1" rect="72,600,320,660" flags="print" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000005" title="Priya Raman" subject="Free Text" date="D:20250314102500+05'30'" creationdate="D:20250314102500+05'30'" width="0" opacity="1" justification="0">
+			<contents>Use Pantone 286 C here</contents>
+			<contents-richtext><body xmlns="http://www.w3.org/1999/xhtml" xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:APIVersion="Acrobat:11.0.0" xfa:spec="2.0.2"><p dir="ltr"><span style="font-size:14pt;color:#E52237">Use Pantone 286 C here</span></p></body></contents-richtext>
+			<defaultappearance>0.898 0.133 0.216 rg /Helv 14 Tf</defaultappearance>
+			<defaultstyle>font: Helvetica 14pt; text-align:left; color:#E52237</defaultstyle>
+		</freetext>
+		<text page="2" rect="500,700,520,720" flags="print,nozoom,norotate" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000006" title="Priya Raman" subject="Note" date="D:20250314103000+05'30'" creationdate="D:20250314103000+05'30'" color="#FFD000" opacity="1" icon="Comment">
+			<contents>Is the ingredient list final?</contents>
+		</text>
+		<text page="2" rect="500,700,520,720" flags="print,nozoom,norotate" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000007" title="Daniel Ochieng" subject="Note" date="D:20250314111500+05'30'" creationdate="D:20250314111500+05'30'" color="#FFD000" opacity="1" icon="Comment" inreplyto="0f8b4c2e-1a2b-4c3d-9e8f-000000000006" replyType="reply">
+			<contents>Yes, approved by regulatory on 12 March.</contents>
+		</text>
+		<text page="2" rect="500,700,520,720" flags="print,nozoom,norotate" name="0f8b4c2e-1a2b-4c3d-9e8f-000000000008" title="Priya Raman" subject="Note" date="D:20250314112000+05'30'" creationdate="D:20250314112000+05'30'" color="#FFD000" opacity="1" icon="Comment" inreplyto="0f8b4c2e-1a2b-4c3d-9e8f-000000000006" replyType="reply">
+			<contents>Thanks</contents>
+		</text>
+	</annots>
+	<ids original="7A1C9E33B2D04F51A6C8E0D2F4B61A90" modified="7A1C9E33B2D04F51A6C8E0D2F4B61A90"/>
+</xfdf>

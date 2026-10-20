@@ -1,0 +1,8 @@
+# Free PDF SDK branding. crates/brand reads this at build time; replace the values and the SVGs
+# (same file names) to rebrand. Colours are "#RRGGBB".
+app_name = "Free PDF SDK"
+accent_light = "#2B6CB0"
+accent_dark = "#63A4F0"
+about_text = "An embeddable PDF viewer and annotator. Based on PdfCraft by the ArtCraft team (MIT OR Apache-2.0)."
+about_url = ""
+storage_key = "free-pdf-sdk"

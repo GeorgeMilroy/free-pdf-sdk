@@ -1,0 +1,25 @@
+{
+  "name": "free-pdf-sdk",
+  "version": "0.1.0",
+  "description": "Free PDF SDK: an embeddable, white-label PDF viewer and annotator for the web, based on pdfcraft",
+  "license": "MIT OR Apache-2.0",
+  "type": "module",
+  "main": "./dist/free-pdf-sdk.js",
+  "module": "./dist/free-pdf-sdk.js",
+  "types": "./dist/free-pdf-sdk.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/free-pdf-sdk.d.ts",
+      "import": "./dist/free-pdf-sdk.js"
+    }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3"
+  }
+}

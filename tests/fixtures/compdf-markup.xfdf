@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">
+	<annots>
+		<highlight page="0" rect="72,670,300,690" flags="print" name="b1000000-0000-4000-8000-000000000001" title="QA Team" subject="Highlight" date="D:20250501120000+01'00'" color="#FFFF00" opacity="0.5" coords="72,690,300,690,72,670,300,670"><contents>Check spelling</contents></highlight>
+		<underline page="0" rect="72,630,400,650" flags="print" name="b1000000-0000-4000-8000-000000000002" title="QA Team" subject="Underline" date="D:20250501120100+01'00'" color="#00B050" opacity="1" coords="72,650,400,650,72,630,400,630"/>
+		<strikeout page="0" rect="72,630,400,650" flags="print" name="b1000000-0000-4000-8000-000000000003" title="QA Team" subject="Strikeout" date="D:20250501120200+01'00'" color="#FF0000" opacity="1" coords="72,650,400,650,72,630,400,630"/>
+		<squiggly page="1" rect="72,670,300,690" flags="print" name="b1000000-0000-4000-8000-000000000004" title="QA Team" subject="Squiggly" date="D:20250501120300+01'00'" color="#7030A0" opacity="1" coords="72,690,300,690,72,670,300,670"/>
+	</annots>
+</xfdf>
