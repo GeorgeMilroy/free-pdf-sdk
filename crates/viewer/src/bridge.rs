@@ -21,6 +21,8 @@ pub struct Incoming {
     pub method: String,
     pub params: Value,
     pub data: Option<Vec<u8>>,
+    /// When the wrapper stops waiting (ms since the epoch); expired requests are not run.
+    pub deadline: Option<f64>,
 }
 
 /// What a reply carries.
@@ -30,6 +32,10 @@ pub enum Payload {
 }
 
 pub type Inbox = Rc<RefCell<VecDeque<Incoming>>>;
+
+/// Requests waiting for a frame; past this a request is answered `BUSY` (a page flooding the
+/// viewer must not grow its memory without bound).
+const MAX_QUEUED: usize = 256;
 
 #[derive(Clone)]
 pub struct Bridge {
@@ -160,8 +166,11 @@ impl Bridge {
             }
             match parse(&data) {
                 Ok((method, params, bytes)) => {
-                    if let Ok(mut q) = inbox.try_borrow_mut() {
-                        q.push_back(Incoming { id, method, params, data: bytes });
+                    if let Ok(mut q) = inbox.try_borrow_mut()
+                        && q.len() < MAX_QUEUED
+                    {
+                        let deadline = get(&data, "deadline").as_f64().filter(|d| d.is_finite());
+                        q.push_back(Incoming { id, method, params, data: bytes, deadline });
                     } else {
                         me.reply_err(id, &RpcError::new(ErrorCode::Busy, "the viewer is busy; try again"));
                         return;

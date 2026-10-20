@@ -18,14 +18,29 @@ fn open(bytes: Vec<u8>) -> (Session, DocId) {
     (s, id)
 }
 
+/// What the viewer does for importXfdf: check, delete for `replace`, import, count.
 fn import(s: &mut Session, id: DocId, xfdf: &str, replace: bool) -> Result<usize, fps_core::RpcError> {
-    let before = doc::annotations(s, id)?;
-    let plan = doc::plan_import(s.get(id).expect("doc"), xfdf, replace)?;
+    let plan = doc::plan_import(s.get(id).expect("doc"), xfdf)?;
+    let before = if replace {
+        delete_all(s, id)?;
+        Vec::new()
+    } else {
+        doc::annotations(s, id)?
+    };
     if let Some(edit) = plan.edit {
         doc::apply(s, id, edit)?;
     }
     let after = doc::annotations(s, id)?;
-    Ok(doc::count_imported(&after, if replace { &[] } else { &before }, &plan.expected))
+    Ok(doc::count_imported(&after, &before, &plan.expected))
+}
+
+fn getter(id: DocId) -> impl for<'a> Fn(&'a Session) -> Option<&'a pdfcraft_engine::Document> {
+    move |s| s.get(id)
+}
+
+/// What the viewer does for deleteAllAnnotations.
+fn delete_all(s: &mut Session, id: DocId) -> Result<usize, fps_core::RpcError> {
+    doc::delete_all(s, getter(id), |s, e| doc::apply(s, id, e))
 }
 
 fn by_id<'a>(list: &'a [AnnotationInfo], id: &str) -> &'a AnnotationInfo {
@@ -118,18 +133,79 @@ fn replace_and_delete_all() {
     assert_eq!(import(&mut s, id, &fixture_text("compdf-review.xfdf"), false), Ok(6));
     assert_eq!(import(&mut s, id, &fixture_text("compdf-guest.xfdf"), true), Ok(2));
     assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(2), "replace removed the review comments");
-    let edit = doc::delete_all_edit(s.get(id).expect("doc")).expect("something to delete");
-    doc::apply(&mut s, id, edit).expect("deletes");
+    assert_eq!(delete_all(&mut s, id), Ok(2));
     assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(0));
-    assert!(doc::delete_all_edit(s.get(id).expect("doc")).is_none());
+    assert!(doc::next_deletion(s.get(id).expect("doc")).is_none());
+    assert_eq!(delete_all(&mut s, id), Ok(0));
     // Replies go with their comment.
     assert_eq!(import(&mut s, id, &fixture_text("compdf-review.xfdf"), false), Ok(6));
-    let edit = doc::delete_all_edit(s.get(id).expect("doc")).expect("something to delete");
-    doc::apply(&mut s, id, edit).expect("deletes");
+    assert_eq!(delete_all(&mut s, id), Ok(6));
     assert!(s.get(id).expect("doc").info.annotations.is_empty(), "no reply is left behind");
-    // One undo step brings them all back.
+    // Each deletion is one undo step.
     s.undo(id).expect("undo");
-    assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(6));
+    assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(1));
+}
+
+/// pdfcraft deletes a comment with its replies wherever they sit in the page's /Annots: a reply
+/// stored before an earlier comment shifts that comment's position. Deleting one at a time with
+/// fresh positions copes (a batch of positions computed up front deleted the wrong one, or failed).
+#[test]
+fn delete_all_copes_with_replies_stored_before_their_comment() {
+    let xfdf = r#"<?xml version="1.0" encoding="UTF-8"?>
+<xfdf xmlns="http://ns.adobe.com/xfdf/"><annots>
+<text page="0" rect="10,10,30,30" name="r2" inreplyto="b2" title="R"><contents>reply to b2</contents></text>
+<square page="0" rect="40,40,80,80" name="a1" title="A"><contents>first</contents></square>
+<circle page="0" rect="100,100,140,140" name="b2" title="B"><contents>second</contents></circle>
+</annots></xfdf>"#;
+    let (mut s, id) = open(plain_pdf(1));
+    assert_eq!(import(&mut s, id, xfdf, false), Ok(2));
+    // The old way, positions computed up front and deleted highest first in one batch, fails here.
+    let d = s.get(id).expect("doc");
+    let mut targets: Vec<(usize, usize)> = d.info.annotations.iter().filter(|a| a.in_reply_to.is_none()).map(|a| (a.page, a.index)).collect();
+    targets.sort_unstable_by(|a, b| b.cmp(a));
+    let batch = pdfcraft_engine::Edit::Batch {
+        label: "old".into(),
+        edits: targets.into_iter().map(|(page, index)| pdfcraft_engine::Edit::DeleteAnnotation { page, index }).collect(),
+    };
+    let old = doc::apply(&mut s, id, batch);
+    let left = s.get(id).expect("doc").info.annotations.len();
+    assert!(old.is_err() || left > 0, "the up-front batch should not have worked");
+    if old.is_ok() {
+        s.undo(id).expect("undo");
+    }
+    assert_eq!(delete_all(&mut s, id), Ok(2));
+    assert!(s.get(id).expect("doc").info.annotations.is_empty());
+}
+
+#[test]
+fn delete_all_deletes_locked_comments_too() {
+    let xfdf = r#"<?xml version="1.0" encoding="UTF-8"?>
+<xfdf xmlns="http://ns.adobe.com/xfdf/"><annots>
+<square page="0" rect="40,40,80,80" name="l1" title="A" flags="print,locked"/>
+<circle page="0" rect="100,100,140,140" name="u1" title="B"/>
+</annots></xfdf>"#;
+    let (mut s, id) = open(plain_pdf(1));
+    assert_eq!(import(&mut s, id, xfdf, false), Ok(2));
+    assert!(s.get(id).expect("doc").info.annotations.iter().any(|a| a.locked), "the fixture has a locked comment");
+    assert_eq!(delete_all(&mut s, id), Ok(2));
+    assert!(s.get(id).expect("doc").info.annotations.is_empty());
+}
+
+#[test]
+fn import_refuses_form_values_and_skips_missing_pages() {
+    let (mut s, id) = open(plain_pdf(1));
+    let fields = r#"<xfdf xmlns="http://ns.adobe.com/xfdf/"><annots/><fields><field name="Total"><value>0</value></field></fields></xfdf>"#;
+    assert_eq!(import(&mut s, id, fields, false).err().map(|e| e.code), Some(ErrorCode::XfdfInvalid));
+    let empty_fields = r#"<xfdf xmlns="http://ns.adobe.com/xfdf/"><annots/><fields/></xfdf>"#;
+    assert_eq!(import(&mut s, id, empty_fields, false), Ok(0));
+    let beyond = r#"<xfdf xmlns="http://ns.adobe.com/xfdf/"><annots>
+<square page="0" rect="40,40,80,80" name="p0" title="A"/>
+<square page="7" rect="40,40,80,80" name="p7" title="A"/>
+</annots></xfdf>"#;
+    assert_eq!(import(&mut s, id, beyond, false), Ok(1), "the page-8 comment isn't counted");
+    // A bad XFDF with replace deletes nothing.
+    assert_eq!(import(&mut s, id, "<xfdf><annots><square", true).err().map(|e| e.code), Some(ErrorCode::XfdfInvalid));
+    assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(1));
 }
 
 #[test]
@@ -194,7 +270,7 @@ fn known_losses_are_what_the_docs_say() {
 fn real_xfdf_samples_round_trip() {
     let dir = fps_tests::fixtures_dir().join("real");
     let Ok(entries) = std::fs::read_dir(&dir) else { return };
-    let mut checked = 0;
+    let mut checked = 0usize;
     for entry in entries.flatten() {
         let path = entry.path();
         if path.extension().and_then(|e| e.to_str()) != Some("xfdf") {

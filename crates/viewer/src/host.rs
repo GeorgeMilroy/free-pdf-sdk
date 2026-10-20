@@ -11,6 +11,7 @@ use fps_core::protocol::{Config, Mode, Request, Theme, Zoom, parse_request};
 use fps_core::{ErrorCode, RpcError};
 use pdfcraft_engine::DocId;
 use pdfcraft_ui_egui::PdfCraftApp;
+use pdfcraft_ui_egui::profile::{UiProfile, parts};
 use pdfcraft_ui_egui::theme::ThemePreference;
 use serde_json::{Value, json};
 
@@ -80,6 +81,12 @@ impl Viewer {
             let next = self.inbox.try_borrow_mut().ok().and_then(|mut q| q.pop_front());
             let Some(req) = next else { break };
             let id = req.id;
+            // The wrapper gave up on it (its timeout passed while frames were stalled, as in a
+            // background tab): running it now could change the document behind the host's back.
+            if req.deadline.is_some_and(|d| js_sys::Date::now() > d) {
+                self.bridge.reply_err(id, &RpcError::new(ErrorCode::Busy, "the request expired before the viewer could run it"));
+                continue;
+            }
             match parse_request(&req.method, &req.params, req.data).and_then(|r| self.dispatch(id, r)) {
                 Ok(Some(payload)) => self.bridge.reply_ok(id, payload),
                 Ok(None) => {} // answered later (load)
@@ -120,15 +127,20 @@ impl Viewer {
             Request::GetPermissions => ok(serde_json::to_value(self.permissions()?).unwrap_or(Value::Null)),
             Request::ImportXfdf { xfdf, replace } => {
                 let doc_id = self.doc_id()?;
-                let before = doc::annotations(&self.app.session, doc_id)?;
+                // Checked before anything changes: a bad XFDF never deletes the comments.
                 let d = self.app.session.get(doc_id).ok_or_else(RpcError::no_document)?;
-                let plan = doc::plan_import(d, &xfdf, replace)?;
+                let plan = doc::plan_import(d, &xfdf)?;
+                let before = if replace {
+                    self.delete_all()?;
+                    Vec::new()
+                } else {
+                    doc::annotations(&self.app.session, doc_id)?
+                };
                 if let Some(edit) = plan.edit {
                     self.apply(edit)?;
                 }
                 let after = doc::annotations(&self.app.session, doc_id)?;
-                let imported = doc::count_imported(&after, if replace { &[] } else { &before }, &plan.expected);
-                ok(json!(imported))
+                ok(json!(doc::count_imported(&after, &before, &plan.expected)))
             }
             Request::ExportXfdf => ok(json!(doc::export_xfdf(&self.app.session, self.doc_id()?)?)),
             Request::GetAnnotations => {
@@ -140,9 +152,7 @@ impl Viewer {
                 let d = self.app.session.get(doc_id).ok_or_else(RpcError::no_document)?;
                 doc::check_can_annotate(d)?;
                 let count = doc::annotations(&self.app.session, doc_id)?.len();
-                if let Some(edit) = doc::delete_all_edit(d) {
-                    self.apply(edit)?;
-                }
+                self.delete_all()?;
                 ok(json!(count))
             }
             Request::SetAuthor { author } => {
@@ -201,6 +211,16 @@ impl Viewer {
         }
     }
 
+    /// The open document.
+    fn active_doc(&self) -> Option<&pdfcraft_engine::Document> {
+        self.app.active_ids().and_then(|(_, id)| self.app.session.get(id))
+    }
+
+    /// Deletes every comment, one at a time (see `fps_core::doc::next_deletion`).
+    fn delete_all(&mut self) -> Result<usize, RpcError> {
+        doc::delete_all(self, Self::active_doc, Self::apply)
+    }
+
     fn permissions(&self) -> Result<doc::Permissions, RpcError> {
         let d = self.app.session.get(self.doc_id()?).ok_or_else(RpcError::no_document)?;
         Ok(doc::permissions(d))
@@ -231,12 +251,33 @@ impl Viewer {
     }
 
     fn set_mode(&mut self, mode: Mode) {
+        let was = self.mode;
         self.mode = mode;
         self.apply_profile();
+        if was == Mode::View && mode == Mode::Annotate {
+            // Leave the Read workspace for the tools, with the comment tools open.
+            let _ = self.app.set_option("mode", "all");
+            let _ = self.app.set_option("tool", "comment");
+        }
     }
 
-    /// The UI profile for the mode and the disabled elements (pdfcraft UI profile hook; phase 5).
-    fn apply_profile(&mut self) {}
+    /// pdfcraft's UI profile for the mode and the disabled elements.
+    fn apply_profile(&mut self) {
+        let mut hidden: std::collections::BTreeSet<String> =
+            fps_core::profile::hidden_ids(self.mode, &self.disabled).into_iter().map(str::to_owned).collect();
+        // A single embedded document: no tab strip, Home or workspace tabs.
+        for part in [parts::TABS, parts::HOME, parts::MODE_TABS] {
+            hidden.insert(part.to_owned());
+        }
+        if self.mode == Mode::Annotate {
+            for g in pdfcraft_engine::catalog::TOOL_GROUPS {
+                if !fps_core::profile::ANNOTATE_GROUPS.contains(&g.id) {
+                    hidden.insert(format!("group:{}", g.id));
+                }
+            }
+        }
+        self.app.profile = UiProfile { read_only: self.mode == Mode::View, comments_only: self.mode == Mode::Annotate, hidden };
+    }
 
     fn set_theme(&mut self, theme: Theme) {
         let (pref, attr) = match theme {
@@ -282,8 +323,10 @@ impl Viewer {
             return Err(err);
         }
         // A user password: try the one given (it may be the owner password, which also opens).
+        // A password that opened the file has done its job: it isn't tried as an owner password.
+        let mut owner_password = password;
         if self.app.password_prompt.is_some() {
-            let Some(pw) = password.clone() else {
+            let Some(pw) = owner_password.take() else {
                 self.app.submit_password(None);
                 let err = RpcError::new(ErrorCode::NeedsPassword, "the document needs a password to open");
                 self.document_error(&err);
@@ -297,7 +340,7 @@ impl Viewer {
                 return Err(err);
             }
         }
-        self.pending_load = Some(PendingLoad { id, owner_password: password, started: self.now });
+        self.pending_load = Some(PendingLoad { id, owner_password, started: self.now });
         self.poll_load();
         Ok(None)
     }
@@ -323,7 +366,10 @@ impl Viewer {
         {
             unlocked = self.app.session.unlock(doc_id, pw).is_ok();
             if !unlocked {
-                self.bridge.event("error", &json!({ "code": "WRONG_PASSWORD", "message": "the owner password is incorrect; the document stays restricted" }));
+                self.bridge.event(
+                    "error",
+                    &json!({ "code": "WRONG_PASSWORD", "message": "the owner password is incorrect; the document stays restricted" }),
+                );
             }
         }
         if let Some(author) = self.author.clone() {

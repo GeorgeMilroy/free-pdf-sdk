@@ -7,3 +7,4 @@ node_modules/
 /e2e/.out
 /build
 /tests/fixtures/real/
+/e2e/.*.tmp.mjs

@@ -339,17 +339,27 @@ function nameFromUrl(url: string): string {
   }
 }
 
-/** Copies the document's bytes into a fresh ArrayBuffer (safe to transfer). */
-async function readDocument(source: DocumentSource): Promise<{ name: string; bytes: ArrayBuffer }> {
+/** Copies the document's bytes into a fresh ArrayBuffer (safe to transfer). A URL is fetched within `timeoutMs`. */
+async function readDocument(source: DocumentSource, timeoutMs: number): Promise<{ name: string; bytes: ArrayBuffer }> {
   if ("url" in source) {
-    let response: Response;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const callerSignal = source.fetchInit?.signal;
+    const onAbort = (): void => controller.abort();
+    callerSignal?.addEventListener("abort", onAbort, { once: true });
+    if (callerSignal?.aborted) controller.abort();
     try {
-      response = await fetch(source.url, source.fetchInit);
+      const response = await fetch(source.url, { ...source.fetchInit, signal: controller.signal });
+      if (!response.ok) throw new FreePdfError("FETCH_FAILED", `could not fetch the document: HTTP ${response.status}`);
+      return { name: source.name ?? nameFromUrl(source.url), bytes: await response.arrayBuffer() };
     } catch (e) {
-      throw new FreePdfError("FETCH_FAILED", `could not fetch the document: ${String(e)}`);
+      if (e instanceof FreePdfError) throw e;
+      const why = controller.signal.aborted && !callerSignal?.aborted ? `no response in ${timeoutMs} ms` : String(e);
+      throw new FreePdfError("FETCH_FAILED", `could not fetch the document: ${why}`);
+    } finally {
+      clearTimeout(timer);
+      callerSignal?.removeEventListener("abort", onAbort);
     }
-    if (!response.ok) throw new FreePdfError("FETCH_FAILED", `could not fetch the document: HTTP ${response.status}`);
-    return { name: source.name ?? nameFromUrl(source.url), bytes: await response.arrayBuffer() };
   }
   const data = source.data;
   if (data instanceof Blob) {
@@ -415,7 +425,21 @@ class Viewer implements FreePdfViewer {
     const msg: unknown = event.data;
     if (!isRecord(msg) || msg.ch !== this.channel) return;
     if (msg.fps !== PROTOCOL_VERSION) {
-      this.emit("error", { code: "UNSUPPORTED_PROTOCOL", message: `the viewer speaks protocol ${String(msg.fps)}` });
+      // Another protocol version: fail what is waiting for it now, not after a timeout.
+      const err = new FreePdfError("UNSUPPORTED_PROTOCOL", `the viewer speaks protocol ${String(msg.fps)}; this wrapper speaks ${PROTOCOL_VERSION}`);
+      if (msg.kind === "hello" && this.hello) {
+        this.hello.reject(err);
+        this.hello = null;
+        return;
+      }
+      const p = msg.kind === "res" && typeof msg.id === "number" ? this.pending.get(msg.id) : undefined;
+      if (p && typeof msg.id === "number") {
+        this.pending.delete(msg.id);
+        clearTimeout(p.timer);
+        p.reject(err);
+        return;
+      }
+      this.emit("error", { code: err.code, message: err.message });
       return;
     }
     switch (msg.kind) {
@@ -485,12 +509,22 @@ class Viewer implements FreePdfViewer {
         reject(new FreePdfError("TIMEOUT", `${method} got no reply in ${timeoutMs} ms`));
       }, timeoutMs);
       this.pending.set(id, { resolve: resolve as (v: unknown) => void, reject, timer });
-      contentWindow.postMessage({ fps: PROTOCOL_VERSION, ch: this.channel, kind: "req", id, method, params: params ?? {} }, this.origin, transfer);
+      // The viewer drops the request once the deadline has passed, so a request that timed out
+      // here never takes effect later (frames stall in background tabs).
+      const deadline = Date.now() + timeoutMs;
+      try {
+        contentWindow.postMessage({ fps: PROTOCOL_VERSION, ch: this.channel, kind: "req", id, method, params: params ?? {}, deadline }, this.origin, transfer);
+      } catch (e) {
+        clearTimeout(timer);
+        this.pending.delete(id);
+        reject(new FreePdfError("BAD_REQUEST", `${method} could not be sent: ${e instanceof Error ? e.message : String(e)}`));
+      }
     });
   }
 
   async load(source: DocumentSource, options?: { password?: string }): Promise<LoadResult> {
-    const { name, bytes } = await readDocument(source);
+    if (this.destroyed) throw new FreePdfError("DESTROYED", "the viewer was destroyed");
+    const { name, bytes } = await readDocument(source, this.timeoutMs * 2);
     const params: Record<string, unknown> = { name, data: bytes };
     if (options?.password !== undefined) params.password = options.password;
     return this.request<LoadResult>("load", params, [bytes], this.timeoutMs * 2);
@@ -535,7 +569,7 @@ class Viewer implements FreePdfViewer {
   }
 
   async setDisabledElements(ids: ElementId[]): Promise<void> {
-    await this.request("setDisabledElements", { ids });
+    await this.request("setDisabledElements", { ids: [...ids] });
   }
 
   async setLocale(locale: string): Promise<string> {
@@ -624,7 +658,12 @@ export async function init(element: HTMLElement, options: InitOptions): Promise<
   }
   try {
     const info = await viewer.started();
-    const config: Record<string, unknown> = { mode: options.mode ?? "view", theme: options.theme ?? "system", disabledElements: options.disabledElements ?? [] };
+    // Plain copies: a reactive proxy (Vue) can't be posted to the iframe.
+    const config: Record<string, unknown> = {
+      mode: options.mode ?? "view",
+      theme: options.theme ?? "system",
+      disabledElements: [...(options.disabledElements ?? [])],
+    };
     if (options.author !== undefined) config.author = options.author;
     if (options.locale !== undefined) config.locale = options.locale;
     await viewer.request("configure", config);

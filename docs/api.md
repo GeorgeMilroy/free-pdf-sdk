@@ -71,10 +71,16 @@ Notes:
   protected with an owner password and no commenting, it is `false` until
   `unlock(ownerPassword)`.
 * `importXfdf` returns how many of the XFDF's top-level comments are in the document afterwards
-  (replies are not counted). An XFDF with no comments imports 0 without an error. With
-  `replace: true` the existing comments are deleted first, in the same undo step.
+  (replies are not counted; comments on pages the document doesn't have are skipped). An XFDF
+  with no comments imports 0 without an error. It imports comments only: an XFDF carrying form
+  field values (`<fields>` with fields) is refused with `XFDF_INVALID`. With `replace: true` the
+  existing comments are deleted first; nothing is deleted when the XFDF is invalid.
 * `save()` marks the document saved (`isDirty()` becomes false, `dirtyChanged` fires).
-* `deleteAllAnnotations()` also deletes locked comments; one undo step restores them.
+* `deleteAllAnnotations()` also deletes locked comments. Each comment is deleted as its own
+  undo step (pdfcraft removes replies and pop-ups with their comment, wherever they are stored,
+  so the SDK deletes one comment at a time).
+* A request that times out in the wrapper (`TIMEOUT`) is dropped by the viewer if it hasn't run
+  yet: every request carries a deadline. It never takes effect later.
 
 ### `Annotation`
 

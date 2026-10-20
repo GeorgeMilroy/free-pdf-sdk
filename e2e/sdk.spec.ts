@@ -113,6 +113,23 @@ test("view mode is read-only through the API", async ({ page }) => {
   expect(((await call(page, "getAnnotations")).value as unknown[]).length).toBe(6);
 });
 
+test("view mode: shortcuts and clicks in the viewer change nothing", async ({ page }) => {
+  await open(page);
+  expect((await call(page, "importXfdf", fixture("compdf-review.xfdf"))).value).toBe(6);
+  await call(page, "save"); // clean
+  expect((await call(page, "setMode", "view")).ok).toBe(true);
+  const frame = page.locator("iframe").first();
+  const box = await frame.boundingBox();
+  if (!box) throw new Error("no iframe");
+  // Select a comment, then try to delete it, undo the import, and save.
+  await page.mouse.click(box.x + box.width * 0.45, box.y + box.height * 0.45);
+  for (const key of ["Delete", "Backspace", "Control+z", "Control+s", "Control+p", "n"]) await page.keyboard.press(key);
+  await page.waitForTimeout(500);
+  expect(((await call(page, "getAnnotations")).value as unknown[]).length).toBe(6);
+  expect((await call(page, "isDirty")).value).toBe(false);
+  expect((await events(page)).some((e) => e.name === "saveRequested")).toBe(false);
+});
+
 test("bad requests are typed errors", async ({ page }) => {
   await open(page);
   expect((await call(page, "setTheme", "blue")).code).toBe("BAD_REQUEST");

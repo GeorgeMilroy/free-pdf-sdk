@@ -81,9 +81,9 @@ own `eframe::App` and runs requests between frames):
 |---|---|
 | open bytes, user password | `open_bytes`, `password_prompt` + `submit_password` |
 | owner unlock, permissions | `session.unlock`, `Document::allows_*`, `can_unlock` |
-| XFDF import | `apply_edit(Edit::ImportData)` (one undo step with `replace`) |
+| XFDF import | `apply_edit(Edit::ImportData)`, after checking the XFDF holds comments only |
 | XFDF export, listing | `session.export_data(DataFormat::Xfdf)`, parsed by `fps-core::xfdf` |
-| delete all | `apply_edit(Edit::Batch[DeleteAnnotation…])`, highest index first |
+| delete all | `apply_edit(DeleteAnnotation)` one top-level comment at a time, positions re-read after each (pdfcraft also removes replies and pop-ups, which shifts positions); locked comments are unlocked in the same step |
 | author override | `comment_prefs.author`, set after settings are restored and after each load |
 | theme, locale, page, zoom | `set_theme_preference`, `set_option("language"|"page"|"zoom")`, `DocView::set_fit` |
 | dirty, change events | `first_dirty()`, `Document::edit_generation()` + a comments fingerprint |
@@ -101,7 +101,7 @@ All messages are plain objects sent with `postMessage`:
 | kind | direction | fields |
 |---|---|---|
 | `hello` | viewer → host | `info: { sdk, pdfcraftRev, protocol }`, once the viewer listens |
-| `req` | host → viewer | `id: uint32`, `method: string`, `params: object` (binary in `params.data`, transferred) |
+| `req` | host → viewer | `id: uint32`, `method: string`, `params: object` (binary in `params.data`, transferred), `deadline?: number` (ms since the epoch; the viewer answers `BUSY` instead of running a request whose deadline has passed) |
 | `res` | viewer → host | `id`, `ok: true, result` or `ok: false, error: { code, message }` (binary results are a transferred `Uint8Array`) |
 | `evt` | viewer → host | `name`, `data` |
 
@@ -125,6 +125,10 @@ Additive changes (new methods, new optional params, new result fields) keep vers
 parameter's type, size and range (names ≤ 512 chars, author ≤ 200, password ≤ 1024, XFDF ≤ 32 MiB,
 PDF ≤ 512 MiB, `page` ≥ 1, zoom 10–6400 %, element ids from the documented list) and never panics.
 XFDF is parsed without DTDs and with a nesting limit.
+
+**Flow control.** Requests queue in the viewer and run between frames, in order; at most 256
+wait at a time (more are answered `BUSY`). The wrapper's timeout is the request's deadline, so a
+request the wrapper gave up on (frames stall in background tabs) is never run later.
 
 **Methods.** `configure`, `load`, `unlock`, `getPermissions`, `importXfdf`, `exportXfdf`,
 `getAnnotations`, `deleteAllAnnotations`, `setAuthor`, `setTheme`, `setMode`,

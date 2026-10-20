@@ -104,6 +104,8 @@ if ($page -match "\{\{") { throw "viewer/index.html has an unknown placeholder" 
 Push-Location (Join-Path $repo "js")
 try {
   if (-not (Test-Path "node_modules")) { Invoke-Checked "npm ci (js)" { npm ci --no-audit --no-fund } }
+  # tsc never deletes outputs of removed sources: start clean.
+  if (Test-Path "dist") { Remove-Item -Recurse -Force "dist" }
   Invoke-Checked "tsc (js)" { npm run build }
 } finally { Pop-Location }
 Copy-Item -Recurse (Join-Path $repo "js/dist/*") $out
@@ -123,7 +125,9 @@ Invoke-Checked "sizes" { node (Join-Path $PSScriptRoot "sizes.mjs") (Join-Path $
 if ($Zip) {
   $zipPath = Join-Path $repo "dist/free-pdf-sdk-$version.zip"
   if (Test-Path $zipPath) { Remove-Item -Force $zipPath }
-  Compress-Archive -Path $out -DestinationPath $zipPath
+  # .NET's ZipFile writes '/' separators (Compress-Archive 1.0 on Windows PowerShell writes backslashes).
+  Add-Type -AssemblyName System.IO.Compression.FileSystem
+  [System.IO.Compression.ZipFile]::CreateFromDirectory($out, $zipPath, [System.IO.Compression.CompressionLevel]::Optimal, $true)
   Write-Host "zip: $zipPath"
 }
 Write-Host "built $out" -ForegroundColor Green

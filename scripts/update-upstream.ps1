@@ -66,7 +66,7 @@ Write-Host "upstream/main is $upstream"
 # 2 -------------------------------------------------------------------------------------------
 Step "2. bring the fork's main up to upstream/main (local only)"
 $mainWorktree = $null
-foreach ($line in (GitOut $Pdfcraft worktree list --porcelain) -split "`n") {
+foreach ($line in (GitOut $Pdfcraft worktree list --porcelain) -split "\r?\n") {
   if ($line -match '^worktree (.+)$') { $wt = $Matches[1].Trim() }
   if ($line -match '^branch refs/heads/main$') { $mainWorktree = $wt }
 }
@@ -91,7 +91,13 @@ $mainNew = GitOut $Pdfcraft rev-parse main
 Step "3. rebase $PatchBranch onto upstream/main"
 if (-not (Test-Path $Worktree)) { Git $Pdfcraft worktree add $Worktree $PatchBranch }
 if ((GitOut $Worktree status --porcelain) -ne "") { throw "$Worktree has uncommitted changes" }
+$head = GitOut $Worktree rev-parse --abbrev-ref HEAD
+if ($head -ne $PatchBranch) { throw "$Worktree is on '$head', not $PatchBranch (finish or abort any rebase in progress first)" }
 $patchOld = GitOut $Worktree rev-parse HEAD
+# The lease for the force-push: what the fork on GitHub holds now (nothing on a first push).
+$saved = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+$remoteOld = (git -C $Pdfcraft rev-parse --verify --quiet "refs/remotes/origin/$PatchBranch" | Out-String).Trim()
+$ErrorActionPreference = $saved
 $count = GitOut $Worktree rev-list --count "upstream/main..HEAD"
 Write-Host "rebasing $count patch commit(s)"
 $saved = $ErrorActionPreference; $ErrorActionPreference = "Continue"
@@ -151,15 +157,18 @@ try {
   Run "cargo clippy (native)" { cargo clippy -p fps-core -p fps-brand -p fps-tests --all-targets -j $Jobs -- -D warnings }
   Run "cargo clippy (wasm)" { cargo clippy -p fps-viewer --target wasm32-unknown-unknown -j $Jobs -- -D warnings }
   Run "cargo test" { cargo test -p fps-core -p fps-brand -p fps-tests -j $Jobs }
-  Run "build" { powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1 -LocalFork $Pdfcraft -Jobs $Jobs }
+  # The PowerShell running this script (powershell.exe on Windows, pwsh elsewhere).
+  $ps = (Get-Process -Id $PID).Path
+  Run "build" { & $ps -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "build.ps1") -LocalFork $Pdfcraft -Jobs $Jobs }
   Run "e2e" { npx playwright test -c e2e/playwright.config.ts }
 } finally { Pop-Location }
 
+$pushPatch = if ($remoteOld) { "git -C `"$Pdfcraft`" push --force-with-lease=${PatchBranch}:$remoteOld origin ${PatchBranch}" } else { "git -C `"$Pdfcraft`" push -u origin ${PatchBranch}" }
 Write-Host "`nAll green. Review the changes (git diff), commit them, then push:" -ForegroundColor Green
 Write-Host @"
 
-  # the fork (the patch branch is rewritten by the rebase: force-with-lease)
-  git -C "$Pdfcraft" push --force-with-lease=${PatchBranch}:$patchOld origin ${PatchBranch}
+  # the fork (the rebase rewrote the patch branch: the lease is what GitHub holds now)
+  $pushPatch
   git -C "$Pdfcraft" push origin $tag
   git -C "$Pdfcraft" push origin main          # main: $mainOld -> $mainNew
 

@@ -66,20 +66,45 @@ pub fn check_can_annotate(doc: &Document) -> Result<(), RpcError> {
     Ok(())
 }
 
-/// The edit that deletes every comment (top-level comments; their replies and pop-ups go with
-/// them), or `None` when there are none. Locked comments are deleted too: the host asked for all.
-pub fn delete_all_edit(doc: &Document) -> Option<Edit> {
+/// The edit that deletes the next comment (a top-level one: its replies and pop-ups go with it),
+/// or `None` when none is left. Apply it, then ask again: pdfcraft removes replies and pop-ups
+/// wherever they sit in the page's list, so positions are only valid for one deletion. A locked
+/// comment is unlocked first, in the same undo step: the host asked for all of them.
+pub fn next_deletion(doc: &Document) -> Option<Edit> {
     let names: std::collections::HashSet<&str> = doc.info.annotations.iter().filter_map(|a| a.name.as_deref()).collect();
-    let mut targets: Vec<(usize, usize)> =
-        doc.info.annotations.iter().filter(|a| a.in_reply_to.as_deref().is_none_or(|p| !names.contains(p))).map(|a| (a.page, a.index)).collect();
-    if targets.is_empty() {
-        return None;
+    let target =
+        doc.info.annotations.iter().filter(|a| a.in_reply_to.as_deref().is_none_or(|p| !names.contains(p))).max_by_key(|a| (a.page, a.index))?;
+    let (page, index) = (target.page, target.index);
+    let delete = Edit::DeleteAnnotation { page, index };
+    Some(if target.locked {
+        Edit::Batch { label: "Delete comment".to_owned(), edits: vec![Edit::LockAnnotation { page, index, locked: false }, delete] }
+    } else {
+        delete
+    })
+}
+
+/// Deletes every comment of the document `doc` finds in `state`, one [`next_deletion`] at a time
+/// through `apply`. Returns how many comments were deleted. Ends with an error when a deletion
+/// doesn't shrink the list, so it always ends.
+pub fn delete_all<S>(
+    state: &mut S,
+    doc: impl Fn(&S) -> Option<&Document>,
+    mut apply: impl FnMut(&mut S, Edit) -> Result<(), RpcError>,
+) -> Result<usize, RpcError> {
+    let mut deleted = 0usize;
+    loop {
+        let (before, edit) = {
+            let d = doc(state).ok_or_else(RpcError::no_document)?;
+            (d.info.annotations.len(), next_deletion(d))
+        };
+        let Some(edit) = edit else { return Ok(deleted) };
+        apply(state, edit)?;
+        let after = doc(state).map_or(0, |d| d.info.annotations.len());
+        if after >= before {
+            return Err(RpcError::internal("a comment could not be deleted"));
+        }
+        deleted = deleted.saturating_add(1);
     }
-    // Highest index first on each page, so earlier deletions don't shift later ones.
-    targets.sort_unstable_by(|a, b| a.0.cmp(&b.0).then(b.1.cmp(&a.1)));
-    targets.dedup();
-    let edits = targets.into_iter().map(|(page, index)| Edit::DeleteAnnotation { page, index }).collect();
-    Some(Edit::Batch { label: "Delete all comments".to_owned(), edits })
 }
 
 /// The edit `importXfdf` makes, with what it expects to import. `None` when the XFDF holds no
@@ -90,22 +115,20 @@ pub struct ImportPlan {
     pub expected: Vec<xfdf::XfdfAnnot>,
 }
 
-/// Plans an XFDF import into `doc`; `replace` deletes the existing comments first (one undo
-/// step). Checks the XFDF parses and the document allows comments.
-pub fn plan_import(doc: &Document, xfdf_text: &str, replace: bool) -> Result<ImportPlan, RpcError> {
+/// Plans an XFDF import into `doc` (for `replace`, the caller deletes the existing comments
+/// first). Checks the XFDF parses, holds comments only, and the document allows comments.
+/// Annotations on pages the document doesn't have are not counted: pdfcraft skips them.
+pub fn plan_import(doc: &Document, xfdf_text: &str) -> Result<ImportPlan, RpcError> {
     check_can_annotate(doc)?;
-    let items = xfdf::read(xfdf_text)?;
+    if xfdf::has_field_values(xfdf_text)? {
+        return Err(RpcError::new(ErrorCode::XfdfInvalid, "the XFDF holds form field values; importXfdf imports comments only"));
+    }
+    let pages = page_count(doc);
+    let items: Vec<xfdf::XfdfAnnot> =
+        xfdf::read(xfdf_text)?.into_iter().filter(|a| a.page.and_then(|p| usize::try_from(p).ok()).is_some_and(|p| p < pages)).collect();
     let top: Vec<xfdf::XfdfAnnot> = {
         let names: std::collections::HashSet<&str> = items.iter().filter_map(|a| a.name.as_deref()).collect();
         items.iter().filter(|a| a.in_reply_to.as_deref().is_none_or(|p| !names.contains(p))).cloned().collect()
-    };
-    let import =
-        (!items.is_empty()).then(|| Edit::ImportData { name: "annotations.xfdf".to_owned(), bytes: Arc::new(xfdf_text.as_bytes().to_vec()) });
-    let delete = if replace { delete_all_edit(doc) } else { None };
-    let edit = match (delete, import) {
-        (Some(d), Some(i)) => Some(Edit::Batch { label: "Import comments".to_owned(), edits: vec![d, i] }),
-        (Some(d), None) => Some(d),
-        (None, i) => i,
     };
     // pdfcraft imports data under its "modify" permission (bit 4), not only "annotate" (bit 6).
     if !items.is_empty() && !doc.allows_modification() {
@@ -114,6 +137,7 @@ pub fn plan_import(doc: &Document, xfdf_text: &str, replace: bool) -> Result<Imp
             "the document's security settings don't allow importing comments; unlock it with the owner password",
         ));
     }
+    let edit = (!items.is_empty()).then(|| Edit::ImportData { name: "annotations.xfdf".to_owned(), bytes: Arc::new(xfdf_text.as_bytes().to_vec()) });
     Ok(ImportPlan { edit, expected: top })
 }
 

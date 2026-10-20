@@ -50,7 +50,10 @@ Run "cargo clippy (native)" { cargo clippy -p fps-core -p fps-brand -p fps-tests
 Run "cargo clippy (wasm)" { cargo clippy -p fps-viewer --target wasm32-unknown-unknown --locked -j $Jobs -- -D warnings }
 Run "cargo test" { cargo test -p fps-core -p fps-brand -p fps-tests --locked -j $Jobs }
 Run "typecheck" { npm --prefix js run typecheck }
-Run "build" { powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1 -LocalFork $LocalFork -Jobs $Jobs -Zip }
+$ps = (Get-Process -Id $PID).Path
+$buildArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "build.ps1"), "-Jobs", $Jobs, "-Zip")
+if ($LocalFork -ne "") { $buildArgs += @("-LocalFork", $LocalFork) }
+Run "build" { & $ps @buildArgs }
 if (-not $SkipE2e) { Run "e2e" { npx playwright test -c e2e/playwright.config.ts } }
 
 Run "tag v$Version" { git tag -a "v$Version" -m "Free PDF SDK $Version" }

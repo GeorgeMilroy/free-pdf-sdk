@@ -68,7 +68,8 @@ pub fn read(xfdf: &str) -> Result<Vec<XfdfAnnot>, RpcError> {
         return Err(RpcError::new(ErrorCode::XfdfInvalid, "not XFDF: the root element is not <xfdf>"));
     }
     let mut out = Vec::new();
-    for annots in root.children().filter(|n| n.is_element() && n.tag_name().name() == "annots") {
+    // Only the first <annots>, as pdfcraft imports it.
+    if let Some(annots) = root.children().find(|n| n.is_element() && n.tag_name().name() == "annots") {
         for node in annots.children().filter(roxmltree::Node::is_element) {
             let element = node.tag_name().name().to_ascii_lowercase();
             if !ANNOTATION_ELEMENTS.contains(&element.as_str()) {
@@ -90,6 +91,14 @@ pub fn read(xfdf: &str) -> Result<Vec<XfdfAnnot>, RpcError> {
         }
     }
     Ok(out)
+}
+
+/// Whether the XFDF carries form field values (`<fields>` with fields in it). The SDK imports
+/// comments only: importing field values would change the form, not the comments.
+pub fn has_field_values(xfdf: &str) -> Result<bool, RpcError> {
+    let opts = roxmltree::ParsingOptions { allow_dtd: false, ..roxmltree::ParsingOptions::default() };
+    let doc = roxmltree::Document::parse_with_options(xfdf, opts).map_err(|e| RpcError::new(ErrorCode::XfdfInvalid, format!("not XFDF: {e}")))?;
+    Ok(doc.root_element().children().filter(|c| c.is_element() && c.tag_name().name() == "fields").any(|f| f.children().any(|c| c.is_element())))
 }
 
 fn attr(node: roxmltree::Node<'_, '_>, name: &str) -> Option<String> {
