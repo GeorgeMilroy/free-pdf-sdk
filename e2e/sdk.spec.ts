@@ -130,6 +130,49 @@ test("view mode: shortcuts and clicks in the viewer change nothing", async ({ pa
   expect((await events(page)).some((e) => e.name === "saveRequested")).toBe(false);
 });
 
+test("init with the owner password unlocks; a wrong one opens restricted and fires error", async ({ page }) => {
+  await open(page, "?doc=protected-aes256-owner.pdf&password=fps-owner-secret");
+  const loaded = (await events(page)).find((e) => e.name === "documentLoaded")?.data as { permissions: { canAnnotate: boolean } };
+  expect(loaded.permissions.canAnnotate).toBe(true);
+  expect(((await call(page, "getPermissions")).value as { canAnnotate: boolean }).canAnnotate).toBe(true);
+
+  await open(page, "?doc=protected-aes256-owner.pdf&password=not-it");
+  const err = (await events(page)).find((e) => e.name === "error")?.data as { code: string };
+  expect(err.code).toBe("WRONG_PASSWORD");
+  expect(((await call(page, "getPermissions")).value as { canAnnotate: boolean }).canAnnotate).toBe(false);
+});
+
+test("the viewer's own Save fires saveRequested with the PDF", async ({ page }) => {
+  await open(page);
+  expect((await call(page, "importXfdf", fixture("compdf-guest.xfdf"))).value).toBe(2);
+  await expect.poll(async () => (await call(page, "isDirty")).value).toBe(true);
+  const box = await page.locator("iframe").first().boundingBox();
+  if (!box) throw new Error("no iframe");
+  await page.mouse.click(box.x + box.width * 0.6, box.y + box.height * 0.85);
+  await page.keyboard.press("Control+s");
+  await expect.poll(async () => (await events(page)).find((e) => e.name === "saveRequested")?.data as { data?: number } | undefined).toBeTruthy();
+  const saved = (await events(page)).find((e) => e.name === "saveRequested")?.data as { name: string; data: number };
+  expect(saved.name).toBe("plain-3p.pdf");
+  expect(saved.data).toBeGreaterThan(1000);
+  await expect.poll(async () => (await call(page, "isDirty")).value).toBe(false);
+});
+
+test("a document that can't be fetched fires documentError", async ({ page }) => {
+  await open(page, "?doc=none");
+  const code = await page.evaluate(async () => {
+    const v = (window as unknown as { fps: { viewer: { load: (d: unknown) => Promise<unknown> } } }).fps.viewer;
+    try {
+      await v.load({ url: "/fixtures/missing.pdf" });
+      return "opened";
+    } catch (e) {
+      return (e as { code: string }).code;
+    }
+  });
+  expect(code).toBe("FETCH_FAILED");
+  const ev = (await events(page)).find((e) => e.name === "documentError")?.data as { code: string };
+  expect(ev.code).toBe("FETCH_FAILED");
+});
+
 test("bad requests are typed errors", async ({ page }) => {
   await open(page);
   expect((await call(page, "setTheme", "blue")).code).toBe("BAD_REQUEST");

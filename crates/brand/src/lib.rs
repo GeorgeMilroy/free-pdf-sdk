@@ -85,5 +85,11 @@ mod tests {
             }
         }
         assert!(b.accent_light.is_some() && b.accent_dark.is_some());
+        let shown = [Some(b.app_name), b.about_text, b.about_url];
+        for text in shown.into_iter().flatten() {
+            for mark in ["ArtCraft", "PdfCraft", "artcraft", "pdfcraft"] {
+                assert!(!text.contains(mark), "{mark:?} in the brand's text {text:?}");
+            }
+        }
     }
 }

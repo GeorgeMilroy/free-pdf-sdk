@@ -8,7 +8,8 @@ pub const ANNOTATE_GROUPS: &[&str] = &["comment", "fill_sign", "measure", "stamp
 
 /// Hidden in every mode: what makes no sense in a viewer embedded in a page (opening, closing
 /// and creating files, update checks, document compare, which the SDK does not offer).
-pub const ALWAYS_HIDDEN: &[&str] = &["help.check_updates", "file.revert", "group:compare"];
+pub const ALWAYS_HIDDEN: &[&str] =
+    &["help.check_updates", "file.revert", "group:compare", "help.discord", "help.app_page", "help.github", "help.website"];
 
 /// Hidden in view mode besides what the read-only lock refuses: saving (nothing can change).
 pub const VIEW_HIDDEN: &[&str] = &["file.save", "file.save_as"];

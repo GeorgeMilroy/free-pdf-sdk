@@ -3,6 +3,6 @@
 app_name = "Free PDF SDK"
 accent_light = "#2B6CB0"
 accent_dark = "#63A4F0"
-about_text = "An embeddable PDF viewer and annotator. Based on PdfCraft by the ArtCraft team (MIT OR Apache-2.0)."
+about_text = "An embeddable PDF viewer and annotator. Built on open-source software: see NOTICE and third-party/ in the SDK folder."
 about_url = ""
 storage_key = "free-pdf-sdk"

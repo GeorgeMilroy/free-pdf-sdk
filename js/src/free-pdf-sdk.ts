@@ -524,7 +524,16 @@ class Viewer implements FreePdfViewer {
 
   async load(source: DocumentSource, options?: { password?: string }): Promise<LoadResult> {
     if (this.destroyed) throw new FreePdfError("DESTROYED", "the viewer was destroyed");
-    const { name, bytes } = await readDocument(source, this.timeoutMs * 2);
+    let doc: { name: string; bytes: ArrayBuffer };
+    try {
+      doc = await readDocument(source, this.timeoutMs * 2);
+    } catch (e) {
+      // The viewer reports its own load failures; a fetch that failed never reached it.
+      const err = e instanceof FreePdfError ? e : new FreePdfError("FETCH_FAILED", String(e));
+      this.emit("documentError", { code: err.code, message: err.message });
+      throw err;
+    }
+    const { name, bytes } = doc;
     const params: Record<string, unknown> = { name, data: bytes };
     if (options?.password !== undefined) params.password = options.password;
     return this.request<LoadResult>("load", params, [bytes], this.timeoutMs * 2);

@@ -21,8 +21,10 @@ ATTRIBUTION.md are in third-party/pdfcraft/.
 Trademarks
 ----------
 "ArtCraft", "PdfCraft" and the ArtCraft logos are trademarks of the ArtCraft Team. Free PDF SDK
-does not use them as its name or logo, does not ship them, and is not endorsed by the ArtCraft
-Team. The placeholder logos in brand/ are original to this project.
+does not use them as its name or logo, does not display them, and is not endorsed by the
+ArtCraft Team. The ArtCraft logos are not compiled into the viewer (pdfcraft-ui-egui is built
+without its `artcraft-marks` feature); the names remain only inside pdfcraft's unused message
+strings and translations. The placeholder logos in brand/ are original to this project.
 
 Third-party material
 --------------------

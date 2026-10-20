@@ -72,7 +72,9 @@ $bindgenVersion = (wasm-bindgen --version) -replace '^wasm-bindgen\s+', ''
 if ($lock -notmatch "(?ms)name = `"wasm-bindgen`"\s*\r?\nversion = `"$([regex]::Escape($bindgenVersion))`"") {
   throw "wasm-bindgen-cli $bindgenVersion does not match Cargo.lock: cargo install wasm-bindgen-cli --version <locked> --locked"
 }
-Invoke-Checked "wasm-bindgen" { wasm-bindgen target/wasm32-unknown-unknown/release/fps-viewer.wasm --out-dir $work --out-name fps-viewer --target web --no-typescript }
+$targetDir = if ($env:CARGO_TARGET_DIR) { $env:CARGO_TARGET_DIR } else { Join-Path $repo "target" }
+$wasmBuilt = Join-Path $targetDir "wasm32-unknown-unknown/release/fps-viewer.wasm"
+Invoke-Checked "wasm-bindgen" { wasm-bindgen $wasmBuilt --out-dir $work --out-name fps-viewer --target web --no-typescript }
 
 $wasmIn = Join-Path $work "fps-viewer_bg.wasm"
 $rawBefore = (Get-Item $wasmIn).Length

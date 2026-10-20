@@ -73,6 +73,8 @@ outside; these two could not be done from outside:
 |---|---|
 | `free-pdf-sdk: add a Brand hook …` | Logos are `include_bytes!` in widgets.rs; "PdfCraft"/"ArtCraft" are literals in the window title, About, Home, the tab strip's Discord button, Help links and the translated catalogs. `brand::set(Brand)` replaces them; `Brand::default()` is PdfCraft. Translations are renamed at lookup time, so no catalog changes. |
 | `free-pdf-sdk: add a UI profile …` | There is no locked read-only mode (`Mode::Read` can be left) and no way to hide commands, tools or tool groups. `PdfCraftApp::profile` hides ids and locks edits; the default profile changes nothing. |
+| `free-pdf-sdk: keep community links out of the palette …` | Completes the Brand hook: with `community_links` off, the Discord/web/GitHub commands are also absent from the command palette and refused by `execute`. |
+| `free-pdf-sdk: make the ArtCraft marks an opt-out cargo feature` | `Brand::default()` embedded the ArtCraft SVGs, so they were in every binary. The `artcraft-marks` feature (default on) gates them; the SDK depends on `pdfcraft-ui-egui` with `default-features = false`, so the trademarks are not compiled in. |
 
 Everything else the API needs is reachable from outside (`fps-viewer` wraps `PdfCraftApp` in its
 own `eframe::App` and runs requests between frames):

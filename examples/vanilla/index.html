@@ -68,6 +68,7 @@
           mode,
           theme,
           author: $("author").value,
+          password: params.get("password") ?? undefined,
           disabledElements: params.has("lockdown") ? ["download", "print", "open", "settings", "flatten"] : [],
           document: params.get("doc") === "none" ? undefined : { url: `/fixtures/${params.get("doc") ?? "plain-3p.pdf"}` },
           listeners,

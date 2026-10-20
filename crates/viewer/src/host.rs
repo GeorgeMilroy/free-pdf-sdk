@@ -60,6 +60,8 @@ impl Viewer {
             last_comments: None,
             now: 0.0,
         };
+        // Locked from the first frame: view mode until the host's `configure` says otherwise.
+        viewer.apply_profile();
         // The UI's Save hands the saved PDF to the host (event `saveRequested`); the viewer never
         // downloads files on its own.
         let saves = Rc::clone(&viewer.saves);
