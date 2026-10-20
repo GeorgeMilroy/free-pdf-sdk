@@ -125,7 +125,10 @@ listed as replies.
   and review status, Fill & Sign (typed and drawn signatures, initials, text, marks) and
   measurement (distance, perimeter, area). Page, content, form and security changes are hidden.
   The Tools drawer opens on its four tool groups: Fill & Sign, Add comments, Add a stamp and
-  Measure objects (`disabledElements` can remove some of them).
+  Measure objects (`disabledElements` can remove some of them). Once closed (its ×), or hidden
+  by Read mode (Page display ▸ Read mode, Ctrl+H), a slim rail on the drawer's side (the left
+  unless the user moved it) brings it back: the chevron button (» or «, labelled Tools)
+  reopens it as it was, and each group's coloured icon opens that group.
 
 ## Disabled elements
 

@@ -261,7 +261,8 @@ impl Viewer {
             // profile keeps (Fill & Sign, Add comments, Add a stamp, Measure objects).
             let _ = self.app.set_option("mode", "all");
             self.app.left = LeftPanel::AllTools;
-            self.app.left_open = true;
+            // Opens the panel and brings its tab to the front if it shares a group.
+            let _ = self.app.set_option("left", "open");
         }
     }
 
@@ -280,7 +281,9 @@ impl Viewer {
                 }
             }
         }
-        self.app.profile = UiProfile { read_only: self.mode == Mode::View, comments_only: self.mode == Mode::Annotate, hidden };
+        // With the mode tabs hidden, the tools rail is how a closed Tools panel comes back (pdfcraft
+        // draws none for view mode's read-only profile).
+        self.app.profile = UiProfile { read_only: self.mode == Mode::View, comments_only: self.mode == Mode::Annotate, hidden, tools_rail: true };
     }
 
     fn set_theme(&mut self, theme: Theme) {

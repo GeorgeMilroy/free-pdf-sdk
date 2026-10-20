@@ -76,6 +76,7 @@ outside; these could not be done from outside:
 | `free-pdf-sdk: keep community links out of the palette …` | Completes the Brand hook: with `community_links` off, the Discord/web/GitHub commands are also absent from the command palette and refused by `execute`. |
 | `free-pdf-sdk: make the ArtCraft marks an opt-out cargo feature` | `Brand::default()` embedded the ArtCraft SVGs, so they were in every binary. The `artcraft-marks` feature (default on) gates them; the SDK depends on `pdfcraft-ui-egui` with `default-features = false`, so the trademarks are not compiled in. |
 | `free-pdf-sdk: count only the groups a profile shows when collapsing All tools` | Completes the UI profile: the collapsed All tools list took the first 14 catalogue groups before skipping hidden ones, so annotate mode's Measure objects (16th) sat behind View more. |
+| `free-pdf-sdk: add an opt-in tools rail …` | With the mode tabs hidden, a closed Tools panel (or one Read mode hides) could only come back through the command palette or menus. `UiProfile::tools_rail` draws a rail on the Tools panel side: Tools reopens it as it was (leaving Read mode), and each shown tool group, in its hue, opens that group. None for a read-only profile; off by default. Adds the missing Ukrainian and Polish "Tools". |
 
 Everything else the API needs is reachable from outside (`fps-viewer` wraps `PdfCraftApp` in its
 own `eframe::App` and runs requests between frames):

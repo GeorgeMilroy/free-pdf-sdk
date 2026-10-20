@@ -7,6 +7,12 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+### Added
+
+- Annotate mode: a closed Tools drawer (or one Read mode hides) leaves a slim rail on its side,
+  the left by default, to pull it back out: the chevron reopens it as it was, and each tool
+  group's coloured icon opens that group (pdfcraft fork patch).
+
 ### Fixed
 
 - Annotate mode: the Tools drawer lists all four tool groups (Fill & Sign, Add comments, Add a
