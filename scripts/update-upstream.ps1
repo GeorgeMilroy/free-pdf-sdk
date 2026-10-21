@@ -44,11 +44,14 @@ function Run([string]$what, [scriptblock]$block) {
   try { & $block } finally { $ErrorActionPreference = $saved }
   if ($LASTEXITCODE -ne 0) { throw "FAILED: $what (exit $LASTEXITCODE). Nothing was pushed; fix it and run again." }
 }
-function Git([string]$dir) { $args2 = $args; Run "git $($args2 -join ' ')" { git -C $dir @args2 } }
+# The git program itself: PowerShell names are case-insensitive and functions win over programs,
+# so a bare `git` inside (or after) the `Git` helper below would call the helper again.
+$gitExe = (Get-Command git -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
+function Git([string]$dir) { $args2 = $args; Run "git $($args2 -join ' ')" { & $gitExe -C $dir @args2 } }
 function GitOut([string]$dir) {
   $args2 = $args
   $saved = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-  try { $out = git -C $dir @args2 } finally { $ErrorActionPreference = $saved }
+  try { $out = & $gitExe -C $dir @args2 } finally { $ErrorActionPreference = $saved }
   if ($LASTEXITCODE -ne 0) { throw "FAILED: git $($args2 -join ' ')" }
   return ($out | Out-String).Trim()
 }
@@ -72,7 +75,7 @@ foreach ($line in (GitOut $Pdfcraft worktree list --porcelain) -split "\r?\n") {
 }
 $mainOld = GitOut $Pdfcraft rev-parse main
 $saved = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-git -C $Pdfcraft merge-base --is-ancestor main upstream/main
+& $gitExe -C $Pdfcraft merge-base --is-ancestor main upstream/main
 $canFastForward = ($LASTEXITCODE -eq 0)
 $ErrorActionPreference = $saved
 if ($canFastForward) {
@@ -96,12 +99,12 @@ if ($head -ne $PatchBranch) { throw "$Worktree is on '$head', not $PatchBranch (
 $patchOld = GitOut $Worktree rev-parse HEAD
 # The lease for the force-push: what the fork on GitHub holds now (nothing on a first push).
 $saved = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-$remoteOld = (git -C $Pdfcraft rev-parse --verify --quiet "refs/remotes/origin/$PatchBranch" | Out-String).Trim()
+$remoteOld = (& $gitExe -C $Pdfcraft rev-parse --verify --quiet "refs/remotes/origin/$PatchBranch" | Out-String).Trim()
 $ErrorActionPreference = $saved
 $count = GitOut $Worktree rev-list --count "upstream/main..HEAD"
 Write-Host "rebasing $count patch commit(s)"
 $saved = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-git -C $Worktree rebase upstream/main
+& $gitExe -C $Worktree rebase upstream/main
 $rebased = ($LASTEXITCODE -eq 0)
 $ErrorActionPreference = $saved
 if (-not $rebased) {
@@ -143,7 +146,10 @@ $text = [regex]::Replace($text, '(git = "https://github\.com/GeorgeMilroy/pdfcra
 [System.IO.File]::WriteAllText($cargoToml, $text, (New-Object System.Text.UTF8Encoding $false))
 $notice = Join-Path $repo "NOTICE"
 $noticeText = Get-Content $notice -Raw
-$noticeText = [regex]::Replace($noticeText, '(?m)^(\s+)[0-9a-f]{40}( \(pdfcraft [^)]*\))?\s*$', "`${1}$upstream (pdfcraft upstream)")
+$upstreamVersion = "upstream"
+if ((GitOut $Pdfcraft show "${upstream}:Cargo.toml") -match '(?m)^version = "([^"]+)"') { $upstreamVersion = $Matches[1] }
+# [ \t], not \s: \s also matches line breaks and would swallow the blank lines around the commit.
+$noticeText = [regex]::Replace($noticeText, '(?m)^([ \t]+)[0-9a-f]{40}( \(pdfcraft [^)]*\))?[ \t]*$', "`${1}$upstream (pdfcraft $upstreamVersion)")
 [System.IO.File]::WriteAllText($notice, $noticeText, (New-Object System.Text.UTF8Encoding $false))
 
 # 7 -------------------------------------------------------------------------------------------
