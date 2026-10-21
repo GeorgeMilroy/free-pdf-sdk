@@ -66,6 +66,16 @@ Version 0.2.0 (not released yet).
 - Annotate mode: the Tools drawer lists all four tool groups (Fill & Sign, Add comments, Add a
   stamp, Measure objects). Measure objects was hidden behind "View more" (pdfcraft fork patch).
   The drawer now opens on that list instead of inside Add comments.
+- Redaction: "Remove hidden information" and "Sanitize document" now evaluate
+  optional-content membership dictionaries (OCMDs) when they remove hidden layers, so content a
+  document actually shows is kept and content it hides is removed; malformed visibility data is
+  treated conservatively
+  (pdfcraft 0.11.0).
+
+### Based on
+
+- pdfcraft upstream `b1bf1cf01ff8d513a7a9bcb87d99933f2fb643f8` (0.11.0, was 0.10.0) with the
+  `free-pdf-sdk/patches` commits rebased onto it (exact commit in `version.json`).
 
 ## [0.1.0] - 2026-10-20
 
