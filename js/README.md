@@ -7,11 +7,11 @@ PDF layers on and off with a click. You switch panels, tools and whole features 
 every menu, toolbar and shortcut follows. It runs in the browser (WebAssembly), so documents never
 leave your page.
 
-[Website](https://free-pdf-sdk.web.app) · [Live demo](https://free-pdf-sdk.web.app/demo/) ·
-[Get started](https://free-pdf-sdk.web.app/docs/getting-started/) ·
-[Docs](https://free-pdf-sdk.web.app/docs/) · [GitHub](https://github.com/GeorgeMilroy/free-pdf-sdk)
+[Website](https://freepdfsdk.mecorelabs.com/) · [Live demo](https://freepdfsdk.mecorelabs.com/demo/) ·
+[Get started](https://freepdfsdk.mecorelabs.com/docs/getting-started/) ·
+[Docs](https://freepdfsdk.mecorelabs.com/docs/) · [GitHub](https://github.com/GeorgeMilroy/free-pdf-sdk)
 
-![The viewer in annotate mode on a floor plan, with the Layers panel open and the Furniture layer hidden](https://free-pdf-sdk.web.app/assets/img/viewer-layers.png)
+![The viewer in annotate mode on a floor plan, with the Layers panel open and the Furniture layer hidden](https://freepdfsdk.mecorelabs.com/assets/img/viewer-layers.png)
 
 - **8 modes**, from read-only to full authoring, and **31 feature switches**. What's off is gone
   from every menu, toolbar, right-click menu and shortcut, not greyed out.
@@ -89,9 +89,9 @@ Svelte: `import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte"` (an action).
 ## Documentation
 
 Guides for every framework, the full API reference and recipes:
-**[free-pdf-sdk.web.app/docs](https://free-pdf-sdk.web.app/docs/)**. For AI coding assistants,
-every page is also Markdown, indexed in [/llms.txt](https://free-pdf-sdk.web.app/llms.txt), with a
-[JSON Schema](https://free-pdf-sdk.web.app/schema/viewer-options.schema.json) of the options.
+**[freepdfsdk.mecorelabs.com/docs](https://freepdfsdk.mecorelabs.com/docs/)**. For AI coding assistants,
+every page is also Markdown, indexed in [/llms.txt](https://freepdfsdk.mecorelabs.com/llms.txt), with a
+[JSON Schema](https://freepdfsdk.mecorelabs.com/schema/viewer-options.schema.json) of the options.
 
 ## Support the project
 

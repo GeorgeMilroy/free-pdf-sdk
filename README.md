@@ -15,14 +15,14 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@mecorelabs/free-pdf-sdk"><img src="https://img.shields.io/npm/v/@mecorelabs/free-pdf-sdk?color=FF0801" alt="npm"></a>
   <img src="https://img.shields.io/badge/licence-MIT%20OR%20Apache--2.0-blue" alt="Licence: MIT OR Apache-2.0">
-  <a href="https://free-pdf-sdk.web.app/demo/"><img src="https://img.shields.io/badge/live-demo-0b7" alt="Live demo"></a>
+  <a href="https://freepdfsdk.mecorelabs.com/demo/"><img src="https://img.shields.io/badge/live-demo-0b7" alt="Live demo"></a>
 </p>
 
 <p align="center">
-  <a href="https://free-pdf-sdk.web.app"><b>Website</b></a> ·
-  <a href="https://free-pdf-sdk.web.app/demo/"><b>Live demo</b></a> ·
-  <a href="https://free-pdf-sdk.web.app/docs/getting-started/"><b>Get started</b></a> ·
-  <a href="https://free-pdf-sdk.web.app/docs/"><b>Docs</b></a>
+  <a href="https://freepdfsdk.mecorelabs.com/"><b>Website</b></a> ·
+  <a href="https://freepdfsdk.mecorelabs.com/demo/"><b>Live demo</b></a> ·
+  <a href="https://freepdfsdk.mecorelabs.com/docs/getting-started/"><b>Get started</b></a> ·
+  <a href="https://freepdfsdk.mecorelabs.com/docs/"><b>Docs</b></a>
 </p>
 
 <p align="center">
@@ -82,7 +82,7 @@ Pick a mode, then fine-tune it. The same viewer in `full` mode and in `view` mod
 Modes: `view`, `review`, `annotate`, `fill`, `sign`, `organize`, `edit`, `full`. The full list
 of modes, features and interface options is in
 [docs/reference/config.json](docs/reference/config.json) and on the
-[configuration page](https://free-pdf-sdk.web.app/docs/configuration/).
+[configuration page](https://freepdfsdk.mecorelabs.com/docs/configuration/).
 
 ## Three steps to a working viewer
 
@@ -115,21 +115,21 @@ it over a versioned postMessage protocol, so your code stays simple and your pag
 
 | | |
 |---|---|
-| React | `import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/react"` ([guide](https://free-pdf-sdk.web.app/docs/react/)) |
-| Vue | `import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue"` ([guide](https://free-pdf-sdk.web.app/docs/vue/)) |
-| Svelte | `import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte"` ([guide](https://free-pdf-sdk.web.app/docs/svelte/)) |
-| Angular and everything else | `<free-pdf-viewer>` from `@mecorelabs/free-pdf-sdk/element` ([Angular](https://free-pdf-sdk.web.app/docs/angular/), [Web Component](https://free-pdf-sdk.web.app/docs/web-component/)) |
-| Plain JavaScript | `FreePdf.init()` from `@mecorelabs/free-pdf-sdk` ([guide](https://free-pdf-sdk.web.app/docs/vanilla-js/)) |
+| React | `import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/react"` ([guide](https://freepdfsdk.mecorelabs.com/docs/react/)) |
+| Vue | `import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue"` ([guide](https://freepdfsdk.mecorelabs.com/docs/vue/)) |
+| Svelte | `import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte"` ([guide](https://freepdfsdk.mecorelabs.com/docs/svelte/)) |
+| Angular and everything else | `<free-pdf-viewer>` from `@mecorelabs/free-pdf-sdk/element` ([Angular](https://freepdfsdk.mecorelabs.com/docs/angular/), [Web Component](https://freepdfsdk.mecorelabs.com/docs/web-component/)) |
+| Plain JavaScript | `FreePdf.init()` from `@mecorelabs/free-pdf-sdk` ([guide](https://freepdfsdk.mecorelabs.com/docs/vanilla-js/)) |
 
 One npm package, fully typed.
 
 ## Documentation
 
-The docs live at **[free-pdf-sdk.web.app/docs](https://free-pdf-sdk.web.app/docs/)**: guides for
+The docs live at **[freepdfsdk.mecorelabs.com/docs](https://freepdfsdk.mecorelabs.com/docs/)**: guides for
 every framework, the full API reference and recipes for common setups. Every page is also plain
 Markdown for AI coding assistants, indexed in
-[/llms.txt](https://free-pdf-sdk.web.app/llms.txt), with a
-[JSON Schema](https://free-pdf-sdk.web.app/schema/viewer-options.schema.json) of the options.
+[/llms.txt](https://freepdfsdk.mecorelabs.com/llms.txt), with a
+[JSON Schema](https://freepdfsdk.mecorelabs.com/schema/viewer-options.schema.json) of the options.
 
 In this repository:
 

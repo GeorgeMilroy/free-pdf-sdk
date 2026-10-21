@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "Free PDF SDK: an embeddable, white-label PDF viewer, annotator and editor for the web, with React, Vue, Svelte, Angular and Web Component integrations",
   "license": "MIT OR Apache-2.0",
-  "homepage": "https://free-pdf-sdk.web.app",
+  "homepage": "https://freepdfsdk.mecorelabs.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GeorgeMilroy/free-pdf-sdk.git"
@@ -91,6 +91,6 @@
     "wasm"
   ],
   "bin": {
-    "free-pdf-sdk": "./bin/free-pdf-sdk.mjs"
+    "free-pdf-sdk": "bin/free-pdf-sdk.mjs"
   }
 }
