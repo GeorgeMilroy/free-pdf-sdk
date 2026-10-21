@@ -7,13 +7,13 @@ order: 44
 
 # Svelte
 
-`free-pdf-sdk/svelte` exports `freePdf`, a Svelte action for Svelte 4 and 5. Put it on an
+`@mecorelabs/free-pdf-sdk/svelte` exports `freePdf`, a Svelte action for Svelte 4 and 5. Put it on an
 element with a height; the viewer fills that element. Changed options call the matching API
 methods, the element receives `fps-*` DOM events, and `onViewer` hands you the full API.
 
 ```svelte
 <script>
-  import { freePdf } from "free-pdf-sdk/svelte";
+  import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
 </script>
 
 <div
@@ -25,8 +25,8 @@ methods, the element receives `fps-*` DOM events, and `onViewer` hands you the f
 ## Install
 
 ```bash
-npm install free-pdf-sdk
-npx free-pdf-sdk copy-viewer static/free-pdf-sdk
+npm install @mecorelabs/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer static/free-pdf-sdk
 ```
 
 The second command copies the viewer files (`viewer/`, `version.json`, the licences) into a
@@ -63,7 +63,7 @@ The action takes every `FreePdf.init` option except `listeners`, plus `onViewer`
 | `timeoutMs` | `number` | How long requests wait for a reply (default 60000). Read once, at mount. |
 | `onViewer` | `(viewer) => void` | Called with the viewer's API once it is ready and its first document has loaded or failed to (and again after a new `baseUrl` mounts a new viewer). |
 
-The type is `FreePdfActionOptions`, exported from `free-pdf-sdk/svelte`.
+The type is `FreePdfActionOptions`, exported from `@mecorelabs/free-pdf-sdk/svelte`.
 
 The viewer is an iframe that fills the element. Give the element a height (and leave it empty:
 the iframe is added inside it).
@@ -79,7 +79,7 @@ Svelte 4:
 
 ```svelte
 <script>
-  import { freePdf } from "free-pdf-sdk/svelte";
+  import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
 
   let mode = "review";
   let dark = false;
@@ -114,8 +114,8 @@ Svelte 5 with runes works the same way:
 
 ```svelte
 <script lang="ts">
-  import type { Mode } from "free-pdf-sdk";
-  import { freePdf } from "free-pdf-sdk/svelte";
+  import type { Mode } from "@mecorelabs/free-pdf-sdk";
+  import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
 
   let mode = $state<Mode>("review");
   let dark = $state(false);
@@ -155,7 +155,7 @@ These events don't bubble, so listen on the element that has the action.
 
 ```svelte
 <script>
-  import { freePdf } from "free-pdf-sdk/svelte";
+  import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
   let count = 0;
   let dirty = false;
 </script>
@@ -182,8 +182,8 @@ document is open. Keep the API in a variable and call it from your handlers. Onl
 
 ```svelte
 <script lang="ts">
-  import type { FreePdfViewer } from "free-pdf-sdk";
-  import { freePdf } from "free-pdf-sdk/svelte";
+  import type { FreePdfViewer } from "@mecorelabs/free-pdf-sdk";
+  import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
 
   export let contractId: string;
   export let userName: string;
@@ -246,7 +246,7 @@ to `null` if the element can go away while the component stays.
 
 ## SvelteKit
 
-Server rendering works as is. Svelte runs actions only in the browser, and `free-pdf-sdk/svelte`
+Server rendering works as is. Svelte runs actions only in the browser, and `@mecorelabs/free-pdf-sdk/svelte`
 touches no browser globals until the action runs, so you can import it in any component and keep
 SSR on. On the server the element renders empty; the viewer mounts when the page hydrates.
 
@@ -254,7 +254,7 @@ SSR on. On the server the element renders empty; the viewer mounts when the page
 <!-- src/routes/contracts/[id]/+page.svelte -->
 <script>
   import { page } from "$app/stores";
-  import { freePdf } from "free-pdf-sdk/svelte";
+  import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
 </script>
 
 <div

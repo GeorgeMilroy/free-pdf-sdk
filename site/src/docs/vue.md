@@ -7,12 +7,12 @@ order: 42
 
 # Vue
 
-`free-pdf-sdk/vue` exports `FreePdfViewer`, a Vue 3 component. Props configure the viewer,
+`@mecorelabs/free-pdf-sdk/vue` exports `FreePdfViewer`, a Vue 3 component. Props configure the viewer,
 emitted events report what happens, and a template ref gives you the full API.
 
 ```vue
 <script setup lang="ts">
-import { FreePdfViewer } from "free-pdf-sdk/vue";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue";
 </script>
 
 <template>
@@ -23,8 +23,8 @@ import { FreePdfViewer } from "free-pdf-sdk/vue";
 ## Install
 
 ```bash
-npm install free-pdf-sdk
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npm install @mecorelabs/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
 The second command copies the viewer files (`viewer/`, `version.json`, the licences) into
@@ -109,8 +109,8 @@ The component exposes two methods:
 ```vue
 <script setup lang="ts">
 import { ref } from "vue";
-import type { FreePdfViewer as Api } from "free-pdf-sdk";
-import { FreePdfViewer } from "free-pdf-sdk/vue";
+import type { FreePdfViewer as Api } from "@mecorelabs/free-pdf-sdk";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue";
 
 type ViewerHandle = { viewer(): Api | null; whenReady(): Promise<Api> };
 const viewerRef = ref<ViewerHandle | null>(null);
@@ -128,7 +128,7 @@ async function firstPage() {
 ```
 
 Every API method is async and rejects with a `FreePdfError` that has a `code` and a `message`
-(import `FreePdfError` from `free-pdf-sdk`). Don't store the API object in reactive state; keep it
+(import `FreePdfError` from `@mecorelabs/free-pdf-sdk`). Don't store the API object in reactive state; keep it
 in a local variable, or use `markRaw` if you must.
 
 ## Reactive props
@@ -142,8 +142,8 @@ Reactive objects are copied to plain objects before they are sent to the viewer,
 ```vue
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import type { Mode } from "free-pdf-sdk";
-import { FreePdfViewer } from "free-pdf-sdk/vue";
+import type { Mode } from "@mecorelabs/free-pdf-sdk";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue";
 
 const mode = ref<Mode>("review");
 const features = reactive({ stamps: false, measurement: false });
@@ -192,8 +192,8 @@ keep your `mode` prop in step.
 ```vue
 <script setup lang="ts">
 import { ref } from "vue";
-import type { FreePdfViewer as Api } from "free-pdf-sdk";
-import { FreePdfViewer } from "free-pdf-sdk/vue";
+import type { FreePdfViewer as Api } from "@mecorelabs/free-pdf-sdk";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue";
 
 const props = defineProps<{ contractId: string; userName: string }>();
 const viewerRef = ref<{ viewer(): Api | null; whenReady(): Promise<Api> } | null>(null);
@@ -265,7 +265,7 @@ The viewer runs only in the browser. Wrap the component in `<ClientOnly>`:
 ```vue
 <!-- pages/contracts/[id].vue -->
 <script setup lang="ts">
-import { FreePdfViewer } from "free-pdf-sdk/vue";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue";
 
 const route = useRoute();
 </script>
@@ -288,7 +288,7 @@ const route = useRoute();
 Copy the viewer into Nuxt's public folder (`public/` in Nuxt 3 and 4):
 
 ```bash
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
 If the app is served under a base URL (`app.baseURL`), include it in `base-url`.

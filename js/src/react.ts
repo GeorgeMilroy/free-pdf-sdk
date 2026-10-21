@@ -2,7 +2,7 @@
  * Free PDF SDK for React (17, 18 and 19; Next.js in a client component).
  *
  * ```tsx
- * import { FreePdfViewer, type FreePdfViewerHandle } from "free-pdf-sdk/react";
+ * import { FreePdfViewer, type FreePdfViewerHandle } from "@mecorelabs/free-pdf-sdk/react";
  *
  * const ref = useRef<FreePdfViewerHandle>(null);
  * <FreePdfViewer ref={ref} baseUrl="/free-pdf-sdk/" mode="annotate"

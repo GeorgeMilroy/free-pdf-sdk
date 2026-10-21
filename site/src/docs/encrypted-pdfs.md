@@ -26,7 +26,7 @@ Pass `password` with the document. It is used to open the file and, if the file 
 restrictions, to lift them:
 
 ```ts
-import { FreePdf, FreePdfError } from "free-pdf-sdk";
+import { FreePdf, FreePdfError } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(el, {
   baseUrl: "/free-pdf-sdk/",
@@ -51,7 +51,7 @@ didn't give. When you don't know in advance whether a file is protected, start t
 without a document and open it with `load`, which you can retry:
 
 ```ts
-import { FreePdf, FreePdfError, type DocumentSource, type FreePdfViewer, type LoadResult } from "free-pdf-sdk";
+import { FreePdf, FreePdfError, type DocumentSource, type FreePdfViewer, type LoadResult } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(el, { baseUrl: "/free-pdf-sdk/", mode: "annotate" });
 

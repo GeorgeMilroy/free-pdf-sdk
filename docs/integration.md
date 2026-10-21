@@ -122,7 +122,7 @@ folder at runtime:
 const { FreePdf } = await import(/* webpackIgnore: true */ "/free-pdf-sdk/0.1.0/free-pdf-sdk.js");
 ```
 
-or install the package and import it normally (`import { FreePdf } from "free-pdf-sdk"`); the
+or install the package and import it normally (`import { FreePdf } from "@mecorelabs/free-pdf-sdk"`); the
 `baseUrl` still points at the deployed folder, and the wrapper and viewer versions must match
 (the wrapper logs a warning when they don't).
 
@@ -133,7 +133,7 @@ or install the package and import it normally (`import { FreePdf } from "free-pd
 
 <script>
 import { markRaw } from "vue";
-import { FreePdf } from "free-pdf-sdk";
+import { FreePdf } from "@mecorelabs/free-pdf-sdk";
 
 export default {
   props: { pdfUrl: { type: String, required: true }, mode: { type: String, default: "view" }, author: String, dark: Boolean },

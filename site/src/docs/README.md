@@ -30,7 +30,7 @@ Sections, in sidebar order: `Get started`, `Configure`, `Frameworks`, `Guides`, 
   `crates/core/src/features.rs` and `docs/reference/config.json` (modes, features, ui options).
   Never invent options, methods, events or error codes.
 - Fenced code blocks name their language (`ts`, `tsx`, `vue`, `svelte`, `html`, `json`, `bash`).
-- Link other pages as `/docs/<slug>/`. Use the package name `free-pdf-sdk`.
+- Link other pages as `/docs/<slug>/`. Use the package name `@mecorelabs/free-pdf-sdk`.
 - The product is "Free PDF SDK". It is built on the open-source pdfcraft engine; mention that
   only where it matters (licences), never as branding.
 - No marketing superlatives, no claims you can't point to in the code (sizes, speeds).

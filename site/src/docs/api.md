@@ -8,7 +8,7 @@ order: 70
 # API reference
 
 ```ts
-import { FreePdf, FreePdfError } from "free-pdf-sdk";
+import { FreePdf, FreePdfError } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(document.getElementById("viewer")!, {
   baseUrl: "/free-pdf-sdk/",
@@ -26,7 +26,7 @@ viewer.on("annotationsChanged", ({ count }) => console.log(`${count} comments`))
 const xfdf = await viewer.exportXfdf();
 ```
 
-The package `free-pdf-sdk` exports `FreePdf` (also the default export), `init`,
+The package `@mecorelabs/free-pdf-sdk` exports `FreePdf` (also the default export), `init`,
 `FreePdfError`, the constants `SDK_VERSION`, `PROTOCOL_VERSION`, `MODES` and `FEATURES`, and
 every type on this page. The TypeScript declarations are the authoritative reference; this page
 describes them.
@@ -56,7 +56,7 @@ opened) the promise rejects with a `FreePdfError` and the iframe is removed.
 | any `load` error | `options.document` could not be opened (see [`load`](#load)). |
 
 If the wrapper and viewer versions differ but speak the same protocol, the viewer still starts
-and a warning is logged to the console. Run `npx free-pdf-sdk copy-viewer <folder>` after every
+and a warning is logged to the console. Run `npx @mecorelabs/free-pdf-sdk copy-viewer <folder>` after every
 upgrade so they match.
 
 ### `InitOptions`

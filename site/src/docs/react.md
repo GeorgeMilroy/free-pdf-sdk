@@ -7,11 +7,11 @@ order: 41
 
 # React
 
-`free-pdf-sdk/react` exports `FreePdfViewer`, a component for React 17, 18 and 19. Props
+`@mecorelabs/free-pdf-sdk/react` exports `FreePdfViewer`, a component for React 17, 18 and 19. Props
 configure the viewer, `on*` props receive its events, and a ref gives you the full API.
 
 ```tsx
-import { FreePdfViewer } from "free-pdf-sdk/react";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/react";
 
 export function ContractViewer() {
   return (
@@ -27,8 +27,8 @@ export function ContractViewer() {
 ## Install
 
 ```bash
-npm install free-pdf-sdk
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npm install @mecorelabs/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
 The second command copies the viewer files (`viewer/`, `version.json`, the licences) into
@@ -110,7 +110,7 @@ A ref to the component is a `FreePdfViewerHandle` with two methods:
 
 ```tsx
 import { useRef } from "react";
-import { FreePdfViewer, type FreePdfViewerHandle } from "free-pdf-sdk/react";
+import { FreePdfViewer, type FreePdfViewerHandle } from "@mecorelabs/free-pdf-sdk/react";
 
 export function Viewer() {
   const ref = useRef<FreePdfViewerHandle>(null);
@@ -134,7 +134,7 @@ Every API method is async and rejects with a `FreePdfError` that has a `code` an
 Import the class and the types from the main entry point:
 
 ```ts
-import { FreePdfError, type FreePdfViewer as Api } from "free-pdf-sdk";
+import { FreePdfError, type FreePdfViewer as Api } from "@mecorelabs/free-pdf-sdk";
 ```
 
 ## Change props
@@ -144,7 +144,7 @@ Changing a prop calls the matching API method on the running viewer, in this ord
 for a new `document`. A refused change is reported through `onError`.
 
 ```tsx
-import type { Mode } from "free-pdf-sdk";
+import type { Mode } from "@mecorelabs/free-pdf-sdk";
 
 const [mode, setMode] = useState<Mode>("view");
 const [dark, setDark] = useState(false);
@@ -182,8 +182,8 @@ saves them back to your server. It also handles the viewer's own Save button.
 
 ```tsx
 import { useRef, useState } from "react";
-import { FreePdfError } from "free-pdf-sdk";
-import { FreePdfViewer, type FreePdfViewerHandle } from "free-pdf-sdk/react";
+import { FreePdfError } from "@mecorelabs/free-pdf-sdk";
+import { FreePdfViewer, type FreePdfViewerHandle } from "@mecorelabs/free-pdf-sdk/react";
 
 type Props = { contractId: string; userName: string };
 
@@ -271,7 +271,7 @@ The viewer runs only in the browser, so render it from a Client Component. Put t
 in `public/`:
 
 ```bash
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
 Mark the component that uses `FreePdfViewer` with `"use client"`:
@@ -280,7 +280,7 @@ Mark the component that uses `FreePdfViewer` with `"use client"`:
 // app/contracts/[id]/ContractViewer.tsx
 "use client";
 
-import { FreePdfViewer } from "free-pdf-sdk/react";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/react";
 
 export default function ContractViewer({ id }: { id: string }) {
   return (

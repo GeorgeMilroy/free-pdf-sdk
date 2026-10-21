@@ -1,6 +1,6 @@
 ---
 title: Getting started
-description: Install free-pdf-sdk, serve the viewer files from your site and open your first PDF in a few lines of JavaScript.
+description: Install @mecorelabs/free-pdf-sdk, serve the viewer files from your site and open your first PDF in a few lines of JavaScript.
 section: Get started
 order: 20
 ---
@@ -13,8 +13,8 @@ site serves them, and call `FreePdf.init` with the URL of that folder.
 ## 1. Install the package
 
 ```bash
-npm install free-pdf-sdk
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npm install @mecorelabs/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
 The first command installs the JavaScript wrapper and its framework integrations. The second
@@ -86,7 +86,7 @@ Give the viewer an element with a size. The viewer fills it.
 
 ```ts
 // src/main.ts
-import { FreePdf, FreePdfError } from "free-pdf-sdk";
+import { FreePdf, FreePdfError } from "@mecorelabs/free-pdf-sdk";
 
 async function start(): Promise<void> {
   try {
@@ -176,17 +176,17 @@ Each integration wraps the same API and turns prop changes into the matching cal
 
 | Framework | Import | Page |
 |---|---|---|
-| React (17–19, Next.js client components) | `import { FreePdfViewer } from "free-pdf-sdk/react"` | [React](/docs/react/) |
-| Vue 3 (and Nuxt inside `<ClientOnly>`) | `import { FreePdfViewer } from "free-pdf-sdk/vue"` | [Vue](/docs/vue/) |
-| Svelte 4 and 5, SvelteKit | `import { freePdf } from "free-pdf-sdk/svelte"` | [Svelte](/docs/svelte/) |
-| Angular | `import { defineFreePdfViewer } from "free-pdf-sdk/element"` | [Angular](/docs/angular/) |
-| Lit, Solid, plain HTML, any other | `import { defineFreePdfViewer } from "free-pdf-sdk/element"` | [Web Component](/docs/web-component/) |
-| No framework | `import { FreePdf } from "free-pdf-sdk"` | [Plain JavaScript](/docs/vanilla-js/) |
+| React (17–19, Next.js client components) | `import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/react"` | [React](/docs/react/) |
+| Vue 3 (and Nuxt inside `<ClientOnly>`) | `import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue"` | [Vue](/docs/vue/) |
+| Svelte 4 and 5, SvelteKit | `import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte"` | [Svelte](/docs/svelte/) |
+| Angular | `import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element"` | [Angular](/docs/angular/) |
+| Lit, Solid, plain HTML, any other | `import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element"` | [Web Component](/docs/web-component/) |
+| No framework | `import { FreePdf } from "@mecorelabs/free-pdf-sdk"` | [Plain JavaScript](/docs/vanilla-js/) |
 
 For example, in React:
 
 ```tsx
-import { FreePdfViewer } from "free-pdf-sdk/react";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/react";
 
 export function Contract() {
   return (
@@ -212,7 +212,7 @@ export function Contract() {
       not `viewer/` itself. If your single-page app answers unknown URLs with its own
       `index.html`, a wrong `baseUrl` loads your app inside the iframe and `init` fails with
       `TIMEOUT` after 30 seconds.
-- [ ] **The viewer files are out of date.** After upgrading `free-pdf-sdk`, run `copy-viewer`
+- [ ] **The viewer files are out of date.** After upgrading `@mecorelabs/free-pdf-sdk`, run `copy-viewer`
       again. The console warns "the wrapper is X but the viewer is Y" when they differ.
 - [ ] **The PDF URL is on another origin without CORS.** The wrapper fetches `document.url` from
       your page, so the server holding the PDF must allow your origin (or pass the bytes with

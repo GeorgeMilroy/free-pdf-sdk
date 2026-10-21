@@ -18,7 +18,7 @@ one more specific than the last:
 4. **`disabledElements`**: single commands or tools to hide, such as one markup tool.
 
 ```ts
-import { FreePdf } from "free-pdf-sdk";
+import { FreePdf } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(document.getElementById("viewer")!, {
   baseUrl: "/free-pdf-sdk/",

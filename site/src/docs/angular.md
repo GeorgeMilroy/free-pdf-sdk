@@ -14,8 +14,8 @@ element: attributes and properties in, `fps-*` events out.
 ## Install
 
 ```bash
-npm install free-pdf-sdk
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npm install @mecorelabs/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
 The second command copies the viewer files (`viewer/`, `version.json`, the licences) into a
@@ -41,7 +41,7 @@ Call `defineFreePdfViewer()` in `main.ts`, before bootstrapping:
 ```ts
 // src/main.ts
 import { bootstrapApplication } from "@angular/platform-browser";
-import { defineFreePdfViewer } from "free-pdf-sdk/element";
+import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element";
 import { appConfig } from "./app/app.config";
 import { AppComponent } from "./app/app.component";
 
@@ -89,7 +89,7 @@ bound as properties, so no JSON is involved.
 
 ```ts
 import { CUSTOM_ELEMENTS_SCHEMA, Component, signal } from "@angular/core";
-import type { FeatureFlags, Mode, UiOptions } from "free-pdf-sdk";
+import type { FeatureFlags, Mode, UiOptions } from "@mecorelabs/free-pdf-sdk";
 
 @Component({
   selector: "app-review",
@@ -195,8 +195,8 @@ property returns the API synchronously, or `null` before then.
 
 ```ts
 import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, ViewChild } from "@angular/core";
-import { FreePdfError } from "free-pdf-sdk";
-import type { FreePdfViewerElement } from "free-pdf-sdk/element";
+import { FreePdfError } from "@mecorelabs/free-pdf-sdk";
+import type { FreePdfViewerElement } from "@mecorelabs/free-pdf-sdk/element";
 
 @Component({
   selector: "app-contract-review",
@@ -278,7 +278,7 @@ and pending calls reject with `DESTROYED`. When it is rendered again, a new view
 ## Server-side rendering
 
 The element only works in the browser. `defineFreePdfViewer()` in `main.ts` runs only in the
-browser build; with Angular SSR, keep `free-pdf-sdk/element` out of `main.server.ts` and of code
+browser build; with Angular SSR, keep `@mecorelabs/free-pdf-sdk/element` out of `main.server.ts` and of code
 that runs on the server. On the server, `<free-pdf-viewer>` renders as an empty element and
 mounts once the app is running in the browser.
 

@@ -23,7 +23,7 @@ read directly. Point your assistant at one of these URLs (relative to this site)
 Give these to your assistant along with the docs; they prevent the common mistakes.
 
 1. **Serve the viewer from the page's own origin.** Run
-   `npx free-pdf-sdk copy-viewer <public folder>/free-pdf-sdk` after installing, and pass that
+   `npx @mecorelabs/free-pdf-sdk copy-viewer <public folder>/free-pdf-sdk` after installing, and pass that
    folder's URL as `baseUrl`. A `baseUrl` on another origin is rejected (`BAD_REQUEST`).
 2. **Give the container a height.** The viewer fills its element; an element with no height
    shows nothing.
@@ -42,7 +42,7 @@ Give these to your assistant along with the docs; they prevent the common mistak
 ## A minimal, correct integration
 
 ```ts
-import { FreePdf, FreePdfError } from "free-pdf-sdk";
+import { FreePdf, FreePdfError } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(document.getElementById("viewer")!, {
   baseUrl: "/free-pdf-sdk/",          // same origin as this page

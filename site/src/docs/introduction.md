@@ -13,7 +13,7 @@ through a typed, promise-based JavaScript API. Documents are processed in the br
 WebAssembly; the SDK does not upload them anywhere.
 
 ```ts
-import { FreePdf } from "free-pdf-sdk";
+import { FreePdf } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(document.getElementById("viewer")!, {
   baseUrl: "/free-pdf-sdk/",            // the viewer files, served by your site
@@ -24,7 +24,7 @@ const viewer = await FreePdf.init(document.getElementById("viewer")!, {
 viewer.on("annotationsChanged", ({ count }) => console.log(`${count} comments`));
 ```
 
-The package is `free-pdf-sdk`, licensed MIT OR Apache-2.0.
+The package is `@mecorelabs/free-pdf-sdk`, licensed MIT OR Apache-2.0.
 
 ## Key capabilities
 
@@ -61,7 +61,7 @@ Fine-tune any mode with `features`, and show or hide parts of the interface with
 
 ## How it works
 
-- **Your site serves the viewer.** `npx free-pdf-sdk copy-viewer` copies the viewer files (an
+- **Your site serves the viewer.** `npx @mecorelabs/free-pdf-sdk copy-viewer` copies the viewer files (an
   HTML page, a JavaScript file and a WebAssembly module) into a folder of your site. There is no
   CDN and no server component: they are static files.
 - **Each viewer is an iframe on your own origin.** `FreePdf.init` creates an `<iframe>` that

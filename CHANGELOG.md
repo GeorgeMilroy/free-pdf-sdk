@@ -9,6 +9,12 @@ postMessage protocol are the public surface.
 
 Version 0.2.0 (not released yet).
 
+### Changed
+
+- The npm package is published under the mecorelabs organisation as `@mecorelabs/free-pdf-sdk`
+  (imports become `@mecorelabs/free-pdf-sdk`, `@mecorelabs/free-pdf-sdk/react` and so on). The
+  CLI keeps its name: `free-pdf-sdk copy-viewer`.
+
 ### Added
 
 - The viewer's About dialog no longer has the Contributors and Models tabs: they listed
@@ -28,11 +34,11 @@ Version 0.2.0 (not released yet).
   every command, tool group, document edit and annotation kind belongs to one feature).
 - API: `setFeatures`, `setUi`, `getConfig`; `setMode` accepts every mode. Unknown feature,
   option and panel names are rejected with `BAD_REQUEST`.
-- Framework integrations: `free-pdf-sdk/react` (component and ref handle),
-  `free-pdf-sdk/vue` (component), `free-pdf-sdk/svelte` (action) and `free-pdf-sdk/element`
+- Framework integrations: `@mecorelabs/free-pdf-sdk/react` (component and ref handle),
+  `@mecorelabs/free-pdf-sdk/vue` (component), `@mecorelabs/free-pdf-sdk/svelte` (action) and `@mecorelabs/free-pdf-sdk/element`
   (`<free-pdf-viewer>` Web Component, for Angular and any other framework), all built on a shared
   controller that turns option changes into API calls.
-- npm package with the viewer files and a CLI: `npx free-pdf-sdk copy-viewer <folder>`
+- npm package with the viewer files and a CLI: `npx @mecorelabs/free-pdf-sdk copy-viewer <folder>`
   (`scripts/build.ps1` stages it in `dist/npm`).
 - The landing site (`site/`, Firebase Hosting): home page, live demo running the real SDK, and
   documentation for people and for AI agents (`/llms.txt`, `/llms-full.txt`, Markdown pages, a

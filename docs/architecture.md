@@ -10,7 +10,7 @@ host page and the viewer talk, and how pdfcraft updates flow in.
 ```
  host page (e.g. a Vue 3 app)                             same origin
  ┌────────────────────────────────────────────┐
- │ import { FreePdf } from "free-pdf-sdk"      │
+ │ import { FreePdf } from "@mecorelabs/free-pdf-sdk"      │
  │ viewer = await FreePdf.init(el, options)    │      postMessage (protocol v1)
  │   js/ wrapper: RPC client, typed API ───────┼──────────────┐ requests ▼  ▲ replies, events
  └────────────────────────────────────────────┘              │
@@ -39,7 +39,7 @@ host page and the viewer talk, and how pdfcraft updates flow in.
 | `crates/brand` (`fps-brand`) | Reads `brand/` (name, accent, About text, SVG logos) at compile time. |
 | `brand/` | Replaceable placeholder logos and `brand.toml`. |
 | `viewer/index.html` | Template of the iframe page; `build.ps1` fills in the hashed file names. |
-| `js/` | The npm package `free-pdf-sdk`: TypeScript, ESM + `.d.ts`. |
+| `js/` | The npm package `@mecorelabs/free-pdf-sdk`: TypeScript, ESM + `.d.ts`. |
 | `tests/` (`fps-tests`) | Synthetic fixtures (PDFs generated in code, hand-written XFDF) and integration tests. |
 | `e2e/` | Playwright tests of the public API on `examples/vanilla`, headless Chromium. |
 | `scripts/` | `build.ps1`, `update-upstream.ps1`, `release.ps1`, `serve.mjs`, `collect-notices.mjs`. |

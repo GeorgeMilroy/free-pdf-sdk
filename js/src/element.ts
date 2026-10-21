@@ -4,7 +4,7 @@
  *
  * ```html
  * <script type="module">
- *   import { defineFreePdfViewer } from "free-pdf-sdk/element";
+ *   import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element";
  *   defineFreePdfViewer();
  * </script>
  * <free-pdf-viewer base-url="/free-pdf-sdk/" src="/files/contract.pdf" mode="annotate"

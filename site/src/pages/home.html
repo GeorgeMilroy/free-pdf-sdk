@@ -14,7 +14,7 @@
         <a class="btn primary lg" href="/demo/">Try the live demo <span class="arrow">→</span></a>
         <a class="btn ghost lg" href="/docs/getting-started/">Get started</a>
       </div>
-      <div class="install reveal" style="--i: 4"><span><span class="prompt">$</span> npm install free-pdf-sdk</span><button type="button" data-copy="npm install free-pdf-sdk" aria-label="Copy install command">Copy</button></div>
+      <div class="install reveal" style="--i: 4"><span><span class="prompt">$</span> npm install @mecorelabs/free-pdf-sdk</span><button type="button" data-copy="npm install @mecorelabs/free-pdf-sdk" aria-label="Copy install command">Copy</button></div>
     </div>
     <div class="hero-stage reveal" style="--i: 2" data-tilt>
       <div class="hero-shot">
@@ -278,7 +278,7 @@
       </div>
       <div class="tab-panel active" data-tab="react"><div class="code"><div class="code-bar"><span>tsx</span><button class="copy" type="button">Copy</button></div><pre><code class="language-tsx">
 import { useRef } from "react";
-import { FreePdfViewer, type FreePdfViewerHandle } from "free-pdf-sdk/react";
+import { FreePdfViewer, type FreePdfViewerHandle } from "@mecorelabs/free-pdf-sdk/react";
 
 export function ProofReview({ url }: { url: string }) {
   const ref = useRef&lt;FreePdfViewerHandle&gt;(null);
@@ -301,7 +301,7 @@ export function ProofReview({ url }: { url: string }) {
       <div class="tab-panel" data-tab="vue"><div class="code"><div class="code-bar"><span>vue</span><button class="copy" type="button">Copy</button></div><pre><code class="language-vue">
 &lt;script setup lang="ts"&gt;
 import { ref } from "vue";
-import { FreePdfViewer } from "free-pdf-sdk/vue";
+import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue";
 
 const viewer = ref();
 const count = ref(0);
@@ -321,7 +321,7 @@ const count = ref(0);
 </code></pre></div></div>
       <div class="tab-panel" data-tab="angular"><div class="code"><div class="code-bar"><span>ts</span><button class="copy" type="button">Copy</button></div><pre><code class="language-ts">
 // main.ts: register &lt;free-pdf-viewer&gt; once.
-import { defineFreePdfViewer } from "free-pdf-sdk/element";
+import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element";
 defineFreePdfViewer();
 
 // proof-review.component.ts
@@ -346,7 +346,7 @@ export class ProofReviewComponent {
 </code></pre></div></div>
       <div class="tab-panel" data-tab="svelte"><div class="code"><div class="code-bar"><span>svelte</span><button class="copy" type="button">Copy</button></div><pre><code class="language-svelte">
 &lt;script&gt;
-  import { freePdf } from "free-pdf-sdk/svelte";
+  import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
   let mode = "annotate";
   let count = 0;
 &lt;/script&gt;
@@ -359,7 +359,7 @@ export class ProofReviewComponent {
 </code></pre></div></div>
       <div class="tab-panel" data-tab="element"><div class="code"><div class="code-bar"><span>html</span><button class="copy" type="button">Copy</button></div><pre><code class="language-html">
 &lt;script type="module"&gt;
-  import { defineFreePdfViewer } from "free-pdf-sdk/element";
+  import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element";
   defineFreePdfViewer();
 &lt;/script&gt;
 
@@ -371,7 +371,7 @@ export class ProofReviewComponent {
   style="height: 80vh"&gt;&lt;/free-pdf-viewer&gt;
 </code></pre></div></div>
       <div class="tab-panel" data-tab="js"><div class="code"><div class="code-bar"><span>ts</span><button class="copy" type="button">Copy</button></div><pre><code class="language-ts">
-import { FreePdf } from "free-pdf-sdk";
+import { FreePdf } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(document.getElementById("viewer")!, {
   baseUrl: "/free-pdf-sdk/",
@@ -397,8 +397,8 @@ const xfdf = await viewer.exportXfdf();
       <p>The viewer is a WebAssembly app in an iframe on your own origin. A small typed wrapper talks to it, so your code stays simple and your page stays isolated.</p>
     </div>
     <ol class="steps">
-      <li class="step reveal"><span class="step-n">1</span><h3>Install</h3><p>Add the package to your app.</p><code>npm install free-pdf-sdk</code></li>
-      <li class="step reveal" style="--i: 1"><span class="step-n">2</span><h3>Serve the viewer</h3><p>Copy the viewer files into a folder your site serves, on the same origin.</p><code>npx free-pdf-sdk copy-viewer public/free-pdf-sdk</code></li>
+      <li class="step reveal"><span class="step-n">1</span><h3>Install</h3><p>Add the package to your app.</p><code>npm install @mecorelabs/free-pdf-sdk</code></li>
+      <li class="step reveal" style="--i: 1"><span class="step-n">2</span><h3>Serve the viewer</h3><p>Copy the viewer files into a folder your site serves, on the same origin.</p><code>npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk</code></li>
       <li class="step reveal" style="--i: 2"><span class="step-n">3</span><h3>Mount it</h3><p>Give an element a height and initialise it with a mode and a document.</p><code>FreePdf.init(el, { baseUrl, mode })</code></li>
     </ol>
   </div>

@@ -2,7 +2,7 @@
  * Free PDF SDK: an embeddable PDF viewer and annotator for the web, based on pdfcraft.
  *
  * ```ts
- * import { FreePdf } from "free-pdf-sdk";
+ * import { FreePdf } from "@mecorelabs/free-pdf-sdk";
  * const viewer = await FreePdf.init(document.getElementById("viewer")!, {
  *   baseUrl: "/free-pdf-sdk/",
  *   mode: "annotate",

@@ -162,7 +162,7 @@ function codeSample(flavour) {
     ].filter(Boolean).join("\n");
   }
   return [
-    `import { FreePdf } from "free-pdf-sdk";`,
+    `import { FreePdf } from "@mecorelabs/free-pdf-sdk";`,
     ``,
     `const viewer = await FreePdf.init(document.getElementById("viewer"), {`,
     `  baseUrl: "/free-pdf-sdk/",`,

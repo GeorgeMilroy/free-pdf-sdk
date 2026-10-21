@@ -12,7 +12,7 @@ waits until it is ready (and until `options.document` is open), and resolves wit
 API.
 
 ```ts
-import { FreePdf } from "free-pdf-sdk";
+import { FreePdf } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(document.getElementById("viewer")!, {
   baseUrl: "/free-pdf-sdk/",
@@ -30,11 +30,11 @@ There are two ways to get the SDK, depending on whether you use a bundler.
 ### With a bundler (npm)
 
 ```bash
-npm install free-pdf-sdk
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npm install @mecorelabs/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
-Import `FreePdf` from `free-pdf-sdk` in your code. The second command copies the viewer files
+Import `FreePdf` from `@mecorelabs/free-pdf-sdk` in your code. The second command copies the viewer files
 (`viewer/`, `version.json`, the licences) into `public/free-pdf-sdk`; point `baseUrl` at the URL
 that folder is served from. Run it again after every upgrade so the viewer matches the wrapper
 (the wrapper logs a warning when the versions differ).
@@ -214,7 +214,7 @@ Every method is async and rejects with a `FreePdfError` that has a `code` and a 
 the first document can't be opened:
 
 ```ts
-import { FreePdf, FreePdfError } from "free-pdf-sdk";
+import { FreePdf, FreePdfError } from "@mecorelabs/free-pdf-sdk";
 
 try {
   const viewer = await FreePdf.init(element, { baseUrl: "/free-pdf-sdk/", document: { url } });

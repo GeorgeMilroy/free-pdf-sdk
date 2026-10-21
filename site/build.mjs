@@ -241,7 +241,7 @@ function docPage(doc, docs, index) {
 function llmsTxt(docs) {
   const lines = [`# ${cfg.name}`, "", `> ${cfg.description}`, ""];
   lines.push(
-    "Free PDF SDK is installed with `npm install free-pdf-sdk`, and its viewer files are copied into the host site with `npx free-pdf-sdk copy-viewer <folder>`; they must be served from the page's own origin. Configure what the viewer offers with `mode`, `features`, `ui` and `disabledElements`; every method is async and rejects with a typed `FreePdfError`.",
+    "Free PDF SDK is installed with `npm install @mecorelabs/free-pdf-sdk`, and its viewer files are copied into the host site with `npx @mecorelabs/free-pdf-sdk copy-viewer <folder>`; they must be served from the page's own origin. Configure what the viewer offers with `mode`, `features`, `ui` and `disabledElements`; every method is async and rejects with a typed `FreePdfError`.",
     "",
   );
   for (const section of SECTIONS) {

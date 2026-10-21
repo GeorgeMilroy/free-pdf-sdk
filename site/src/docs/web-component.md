@@ -27,8 +27,8 @@ JavaScript API.
 Install the package and copy the viewer files into a folder your site serves:
 
 ```bash
-npm install free-pdf-sdk
-npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+npm install @mecorelabs/free-pdf-sdk
+npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 ```
 
 The second command copies `viewer/`, `version.json` and the licences into
@@ -39,7 +39,7 @@ must be on the same origin as the page.
 Register the element once, before it is used:
 
 ```ts
-import { defineFreePdfViewer } from "free-pdf-sdk/element";
+import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element";
 
 defineFreePdfViewer(); // registers <free-pdf-viewer>
 ```
@@ -304,7 +304,7 @@ reject with `DESTROYED`. Inserting the element again mounts a new viewer.
 - If a document can't be opened, `fps-document-error` reports why and the viewer keeps running:
   set another `src` (or `password`) to try again.
 - TypeScript: the element class is exported as `FreePdfViewerElement` from
-  `free-pdf-sdk/element`, and the DOM event names as `ELEMENT_EVENTS`.
+  `@mecorelabs/free-pdf-sdk/element`, and the DOM event names as `ELEMENT_EVENTS`.
 
 [Configuration](/docs/configuration/) lists every mode, feature, `ui` option and
 `disabled-elements` id; the [API reference](/docs/api/) lists every method of the viewer.

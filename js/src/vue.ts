@@ -3,7 +3,7 @@
  *
  * ```vue
  * <script setup lang="ts">
- * import { FreePdfViewer } from "free-pdf-sdk/vue";
+ * import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/vue";
  * const viewerRef = ref();
  * </script>
  * <template>

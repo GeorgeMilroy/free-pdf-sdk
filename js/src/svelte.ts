@@ -3,7 +3,7 @@
  *
  * ```svelte
  * <script>
- *   import { freePdf } from "free-pdf-sdk/svelte";
+ *   import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
  *   let mode = "annotate";
  * </script>
  * <div style="height: 80vh"

@@ -13,7 +13,7 @@ Content-Security-Policy (if you use one) that allows WebAssembly.
 
 ## What you deploy
 
-After `npx free-pdf-sdk copy-viewer public/free-pdf-sdk` (or unpacking the release zip), the
+After `npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk` (or unpacking the release zip), the
 folder looks like this:
 
 ```text

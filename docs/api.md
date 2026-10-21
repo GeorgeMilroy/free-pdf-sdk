@@ -1,7 +1,7 @@
 # API reference (v1)
 
 ```ts
-import { FreePdf, FreePdfError } from "free-pdf-sdk";
+import { FreePdf, FreePdfError } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(element, {
   baseUrl: "/free-pdf-sdk/0.1.0/",   // the SDK folder, on this page's origin

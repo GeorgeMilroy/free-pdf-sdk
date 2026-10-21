@@ -21,7 +21,7 @@ Work through these in order; the browser's developer console usually names the c
    `version.json`. Open `<baseUrl>/version.json` in the browser: you should see the SDK version,
    not your app's HTML or a 404. A relative `baseUrl` is resolved against the page's URL, so
    prefer one that starts with `/`.
-4. **The viewer files are missing or stale.** Run `npx free-pdf-sdk copy-viewer <folder>` again
+4. **The viewer files are missing or stale.** Run `npx @mecorelabs/free-pdf-sdk copy-viewer <folder>` again
    after every install or upgrade. A warning "the wrapper is X but the viewer is Y" in the
    console means the two don't match.
 5. **WebGL is unavailable.** The viewer draws with WebGL. Open
@@ -114,7 +114,7 @@ The viewer needs `window`, an iframe and WebGL, so it can only be mounted in the
 
   ```tsx
   "use client";
-  import { FreePdfViewer } from "free-pdf-sdk/react";
+  import { FreePdfViewer } from "@mecorelabs/free-pdf-sdk/react";
 
   export default function Viewer({ url }: { url: string }) {
     return <FreePdfViewer baseUrl="/free-pdf-sdk/" document={{ url }} style={{ height: "80vh" }} />;
@@ -126,7 +126,7 @@ The viewer needs `window`, an iframe and WebGL, so it can only be mounted in the
 - **SvelteKit**: works with server rendering on; actions only run in the browser. See
   [Svelte](/docs/svelte/). Put the folder in `static/`.
 - **Angular with SSR, or any server-rendered page using the Web Component**: import
-  `free-pdf-sdk/element` only in the browser, for example with a dynamic `import()` after
+  `@mecorelabs/free-pdf-sdk/element` only in the browser, for example with a dynamic `import()` after
   checking `isPlatformBrowser`, because the element class needs browser globals when the module
   loads.
 

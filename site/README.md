@@ -19,7 +19,7 @@ the default is `url` in `site.config.json`.
 ## Deploy (Firebase Hosting)
 
 1. Install the Firebase CLI (`npm install -g firebase-tools`) and sign in (`firebase login`).
-2. The project is `free-pdf-sdk` (`site/.firebaserc`); the address is `url` in `site.config.json`.
+2. The project is `@mecorelabs/free-pdf-sdk` (`site/.firebaserc`); the address is `url` in `site.config.json`.
 3. From the repository root:
    - `npm run deploy:hosting:prod` builds the site from the current SDK build and deploys it live.
    - `npm run deploy:sdk-and-hosting:prod` rebuilds the SDK first (`build:sdk`), then does the same.

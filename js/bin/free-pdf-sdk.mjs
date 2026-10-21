@@ -2,7 +2,7 @@
 // Free PDF SDK command line: copies the viewer files (viewer/, version.json and the licences)
 // from this package into a folder your web server serves, such as public/free-pdf-sdk.
 //
-//   npx free-pdf-sdk copy-viewer public/free-pdf-sdk
+//   npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk
 //
 // Run it after every install or upgrade (for example in a "postinstall" or "prebuild" script),
 // so the viewer always matches the wrapper version.

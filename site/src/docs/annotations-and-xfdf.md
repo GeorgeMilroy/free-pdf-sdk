@@ -172,7 +172,7 @@ A typical flow: load the original PDF, import the stored XFDF, and save the XFDF
 user is done.
 
 ```ts
-import { FreePdf, FreePdfError } from "free-pdf-sdk";
+import { FreePdf, FreePdfError } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(element, {
   baseUrl: "/free-pdf-sdk/",
@@ -290,7 +290,7 @@ Before switching production data, round-trip a sample of your stored XFDF coveri
 annotation type your users make (including measurements and signatures). A small page can do it:
 
 ```ts
-import { FreePdf } from "free-pdf-sdk";
+import { FreePdf } from "@mecorelabs/free-pdf-sdk";
 
 const viewer = await FreePdf.init(element, { baseUrl: "/free-pdf-sdk/", mode: "annotate" });
 
