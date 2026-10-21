@@ -59,6 +59,13 @@ Push the fork first: CI (and anyone else building) fetches the patch commit from
 ./scripts/update-upstream.ps1 -PatchedCrates pdfcraft-ui-egui,pdfcraft-xfdf
 ```
 
+## Doing it with Claude Code
+
+Type `/update-pdfcraft`. The skill (`.claude/skills/update-pdfcraft/SKILL.md`) reviews the
+upstream range before touching anything, runs the script, resolves rebase conflicts by keeping
+each patch's hook on top of upstream's code, places new upstream commands in the UI profile, checks
+new features work in the browser build, verifies, and reports. It never pushes or commits here.
+
 ## Building before the fork commit is pushed
 
 Cargo fetches `https://github.com/GeorgeMilroy/pdfcraft` at the commit in `Cargo.lock`. Before

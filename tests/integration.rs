@@ -1,4 +1,4 @@
-//! End-to-end checks of the SDK's document operations on pdfcraft's engine: ComPDF XFDF in and
+//! End-to-end checks of the SDK's document operations on pdfcraft's engine: XFDF in and
 //! out, the owner-password unlock flow on an AES-256 file, and delete/replace semantics.
 
 // Test helpers outside #[test] functions may fail loudly too.
@@ -9,7 +9,7 @@ use std::sync::Arc;
 use fps_core::ErrorCode;
 use fps_core::doc;
 use fps_core::xfdf::{self, AnnotationInfo};
-use fps_tests::{OWNER_PASSWORD, fixture_text, plain_pdf, protected_like_adobe};
+use fps_tests::{OWNER_PASSWORD, fixture_text, plain_pdf, protected_owner_only};
 use pdfcraft_engine::{DocId, Session};
 
 fn open(bytes: Vec<u8>) -> (Session, DocId) {
@@ -56,8 +56,8 @@ fn fixtures_on_disk_match_the_generators() {
 }
 
 #[test]
-fn compdf_review_round_trips_with_the_same_count_authors_and_pages() {
-    let source = fixture_text("compdf-review.xfdf");
+fn review_xfdf_round_trips_with_the_same_count_authors_and_pages() {
+    let source = fixture_text("review.xfdf");
     let expected = xfdf::threads(&xfdf::read(&source).expect("fixture parses"));
     assert_eq!(expected.len(), 6, "5 shapes and 1 note; its 2 replies are not counted");
 
@@ -93,8 +93,8 @@ fn compdf_review_round_trips_with_the_same_count_authors_and_pages() {
 #[test]
 fn markup_and_guest_fixtures_import_exactly() {
     let (mut s, id) = open(plain_pdf(3));
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-markup.xfdf"), false), Ok(4));
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-guest.xfdf"), false), Ok(2));
+    assert_eq!(import(&mut s, id, &fixture_text("markup.xfdf"), false), Ok(4));
+    assert_eq!(import(&mut s, id, &fixture_text("guest.xfdf"), false), Ok(2));
     let listed = doc::annotations(&s, id).expect("lists");
     assert_eq!(listed.len(), 6);
     assert_eq!(listed.iter().filter(|a| a.author.as_deref() == Some("Guest")).count(), 2, "authors are kept as written");
@@ -116,7 +116,7 @@ fn the_old_annots_check_is_not_a_count() {
 #[test]
 fn empty_xfdf_imports_nothing_without_an_error() {
     let (mut s, id) = open(plain_pdf(1));
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-empty.xfdf"), false), Ok(0));
+    assert_eq!(import(&mut s, id, &fixture_text("empty.xfdf"), false), Ok(0));
     assert!(!s.get(id).expect("doc").dirty, "nothing changed");
 }
 
@@ -130,15 +130,15 @@ fn malformed_xfdf_is_a_typed_error() {
 #[test]
 fn replace_and_delete_all() {
     let (mut s, id) = open(plain_pdf(3));
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-review.xfdf"), false), Ok(6));
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-guest.xfdf"), true), Ok(2));
+    assert_eq!(import(&mut s, id, &fixture_text("review.xfdf"), false), Ok(6));
+    assert_eq!(import(&mut s, id, &fixture_text("guest.xfdf"), true), Ok(2));
     assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(2), "replace removed the review comments");
     assert_eq!(delete_all(&mut s, id), Ok(2));
     assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(0));
     assert!(doc::next_deletion(s.get(id).expect("doc")).is_none());
     assert_eq!(delete_all(&mut s, id), Ok(0));
     // Replies go with their comment.
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-review.xfdf"), false), Ok(6));
+    assert_eq!(import(&mut s, id, &fixture_text("review.xfdf"), false), Ok(6));
     assert_eq!(delete_all(&mut s, id), Ok(6));
     assert!(s.get(id).expect("doc").info.annotations.is_empty(), "no reply is left behind");
     // Each deletion is one undo step.
@@ -211,7 +211,7 @@ fn import_refuses_form_values_and_skips_missing_pages() {
 #[test]
 fn reimporting_the_same_comments_replaces_them_by_name() {
     let (mut s, id) = open(plain_pdf(3));
-    let review = fixture_text("compdf-review.xfdf");
+    let review = fixture_text("review.xfdf");
     assert_eq!(import(&mut s, id, &review, false), Ok(6));
     assert_eq!(import(&mut s, id, &review, false), Ok(6), "all six are present");
     assert_eq!(doc::annotations(&s, id).map(|l| l.len()), Ok(6), "no duplicates");
@@ -219,14 +219,14 @@ fn reimporting_the_same_comments_replaces_them_by_name() {
 
 #[test]
 fn owner_protected_aes256_reports_no_commenting_until_unlocked() {
-    let bytes = protected_like_adobe(3).expect("fixture");
+    let bytes = protected_owner_only(3).expect("fixture");
     let (mut s, id) = open(bytes);
     let p = doc::permissions(s.get(id).expect("doc"));
     assert!(p.is_encrypted && !p.can_annotate && p.can_unlock, "{p:?}");
-    assert!(p.can_copy, "the Adobe job grants copying");
+    assert!(p.can_copy, "owner-only protection grants copying");
 
     // Import needs the permission.
-    let err = import(&mut s, id, &fixture_text("compdf-review.xfdf"), false).err();
+    let err = import(&mut s, id, &fixture_text("review.xfdf"), false).err();
     assert_eq!(err.map(|e| e.code), Some(ErrorCode::NotPermitted));
     // So does drawing.
     assert_eq!(doc::check_can_annotate(s.get(id).expect("doc")).err().map(|e| e.code), Some(ErrorCode::NotPermitted));
@@ -239,7 +239,7 @@ fn owner_protected_aes256_reports_no_commenting_until_unlocked() {
     s.unlock(id, OWNER_PASSWORD).expect("owner password unlocks");
     let p = doc::permissions(s.get(id).expect("doc"));
     assert!(p.can_annotate && p.is_encrypted && !p.can_unlock, "{p:?}");
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-review.xfdf"), false), Ok(6));
+    assert_eq!(import(&mut s, id, &fixture_text("review.xfdf"), false), Ok(6));
 
     // The saved file is still protected, and keeps the comments.
     let saved = doc::save_bytes(&s, id).expect("saves");
@@ -253,9 +253,9 @@ fn owner_protected_aes256_reports_no_commenting_until_unlocked() {
 #[test]
 fn known_losses_are_what_the_docs_say() {
     let (mut s, id) = open(plain_pdf(2));
-    assert_eq!(import(&mut s, id, &fixture_text("compdf-known-losses.xfdf"), false), Ok(3), "every annotation itself imports");
+    assert_eq!(import(&mut s, id, &fixture_text("known-losses.xfdf"), false), Ok(3), "every annotation itself imports");
     let exported = doc::export_xfdf(&s, id).expect("exports");
-    // docs/migrating-from-compdf.md, "Known losses": pdfcraft's XFDF carries no /Measure
+    // site/src/docs/annotations-and-xfdf.md, "Known losses": pdfcraft's XFDF carries no /Measure
     // dictionary and no appearance streams.
     assert!(!exported.contains("<measure"), "measurement scale is not kept");
     assert!(!exported.contains("<appearance"), "stamp artwork is not kept");
@@ -295,4 +295,17 @@ fn real_xfdf_samples_round_trip() {
         checked = checked.saturating_add(1);
     }
     eprintln!("real XFDF samples checked: {checked}");
+}
+
+#[test]
+fn the_demo_document_has_three_pages_and_its_form() {
+    let (s, id) = open(fps_tests::demo_pdf());
+    let d = s.get(id).expect("demo opens");
+    assert_eq!(d.info.pages.len(), 3);
+    let mut names: Vec<&str> = d.info.fields.iter().map(|f| f.name.as_str()).collect();
+    names.sort_unstable();
+    assert_eq!(names, ["approved", "company", "email", "name", "notes"]);
+    assert!(d.allows_annotation() && d.allows_form_filling());
+    let layers: Vec<(&str, bool)> = d.info.layers.iter().map(|l| (l.name.as_str(), l.visible)).collect();
+    assert_eq!(layers, [("Structure", true), ("Furniture", true), ("Electrical", true), ("Dimensions", true)]);
 }

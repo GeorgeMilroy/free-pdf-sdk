@@ -3,7 +3,7 @@ resolver = "3"
 members = ["crates/core", "crates/viewer", "crates/brand", "tests"]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 rust-version = "1.95"
@@ -22,8 +22,8 @@ pdfcraft-crypt = { git = "https://github.com/storytold/pdfcraft", rev = "6fb6b7c
 pdfcraft-render = { git = "https://github.com/storytold/pdfcraft", rev = "6fb6b7cf6fd8dc105fdd56a764d207cff6140694" }
 pdfcraft-annot = { git = "https://github.com/storytold/pdfcraft", rev = "6fb6b7cf6fd8dc105fdd56a764d207cff6140694" }
 
-fps-core = { path = "crates/core", version = "0.1.0" }
-fps-brand = { path = "crates/brand", version = "0.1.0" }
+fps-core = { path = "crates/core", version = "0.2.0" }
+fps-brand = { path = "crates/brand", version = "0.2.0" }
 
 eframe = { version = "0.36", default-features = false }
 egui = "0.36"
@@ -66,22 +66,22 @@ codegen-units = 1
 # branch (upstream 6fb6b7cf + the commits listed in docs/architecture.md), at one commit.
 # Until that commit is pushed, build with scripts/dev-env.ps1 -LocalFork <clone>.
 [patch."https://github.com/storytold/pdfcraft"]
-pdfcraft-ui-egui = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-pdfcraft-engine = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-pdfcraft-xfdf = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-pdfcraft-cos = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-pdfcraft-crypt = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-pdfcraft-render = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-pdfcraft-annot = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
+pdfcraft-ui-egui = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+pdfcraft-engine = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+pdfcraft-xfdf = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+pdfcraft-cos = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+pdfcraft-crypt = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+pdfcraft-render = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+pdfcraft-annot = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
 
 # pdfcraft's own `[patch.crates-io]` is not inherited by git dependents: repeat it, taking the
 # vendored crates from the same pdfcraft commit.
 [patch.crates-io]
-hayro-interpret = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-hayro = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-hayro-syntax = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-hayro-jbig2 = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-lopdf = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-winit = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-egui-wgpu = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
-vello_common = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "6a64bd1aa0b18b40dee5e4813ddbbb0feb0e8027" }
+hayro-interpret = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+hayro = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+hayro-syntax = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+hayro-jbig2 = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+lopdf = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+winit = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+egui-wgpu = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }
+vello_common = { git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "af36697f412c7e6d5933afaca0d439bbe4bf95c9" }

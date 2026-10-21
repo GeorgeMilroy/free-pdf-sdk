@@ -40,6 +40,8 @@ const types = {
   ".json": "application/json; charset=utf-8",
   ".wasm": "application/wasm",
   ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".xml": "application/xml; charset=utf-8",
   ".pdf": "application/pdf",
   ".xfdf": "application/vnd.adobe.xfdf",
   ".txt": "text/plain; charset=utf-8",
@@ -64,6 +66,10 @@ createServer(async (req, res) => {
     if (path.startsWith("/sdk/")) {
       root = sdk;
       path = path.slice("/sdk".length);
+    } else if (path.startsWith("/e2e-pages/")) {
+      // Test pages the e2e global setup bundles (framework integrations).
+      root = join(repo, "e2e", ".out");
+      path = path.slice("/e2e-pages".length);
     } else if (path.startsWith("/fixtures/")) {
       root = join(repo, "tests", "fixtures");
       path = path.slice("/fixtures".length);

@@ -40,7 +40,7 @@ host page and the viewer talk, and how pdfcraft updates flow in.
 | `brand/` | Replaceable placeholder logos and `brand.toml`. |
 | `viewer/index.html` | Template of the iframe page; `build.ps1` fills in the hashed file names. |
 | `js/` | The npm package `free-pdf-sdk`: TypeScript, ESM + `.d.ts`. |
-| `tests/` (`fps-tests`) | Synthetic fixtures (PDFs generated in code, ComPDF-style XFDF) and integration tests. |
+| `tests/` (`fps-tests`) | Synthetic fixtures (PDFs generated in code, hand-written XFDF) and integration tests. |
 | `e2e/` | Playwright tests of the public API on `examples/vanilla`, headless Chromium. |
 | `scripts/` | `build.ps1`, `update-upstream.ps1`, `release.ps1`, `serve.mjs`, `collect-notices.mjs`. |
 | `third-party/` | Licences and notices of everything the wasm embeds (generated). |
@@ -77,6 +77,10 @@ outside; these could not be done from outside:
 | `free-pdf-sdk: make the ArtCraft marks an opt-out cargo feature` | `Brand::default()` embedded the ArtCraft SVGs, so they were in every binary. The `artcraft-marks` feature (default on) gates them; the SDK depends on `pdfcraft-ui-egui` with `default-features = false`, so the trademarks are not compiled in. |
 | `free-pdf-sdk: count only the groups a profile shows when collapsing All tools` | Completes the UI profile: the collapsed All tools list took the first 14 catalogue groups before skipping hidden ones, so annotate mode's Measure objects (16th) sat behind View more. |
 | `free-pdf-sdk: add an opt-in tools rail …` | With the mode tabs hidden, a closed Tools panel (or one Read mode hides) could only come back through the command palette or menus. `UiProfile::tools_rail` draws a rail on the Tools panel side: Tools reopens it as it was (leaving Read mode), and each shown tool group, in its hue, opens that group. None for a read-only profile; off by default. Adds the missing Ukrainian and Polish "Tools". |
+| `free-pdf-sdk: give the UI profile features …` | Hosts need modes such as "annotations only" with every other option gone. `features.rs` puts every registered command, tool group, catalogue entry, document edit and annotation kind in one of 34 features (exhaustive matches plus a test, so an upstream addition must be placed). `UiProfile::features` (None = the app as it ships) drives `allows_command`, `allows_edit_in` (an edit of an existing annotation counts as that annotation's kind), group and panel visibility; undo/redo keep a log of the features each step used. |
+| `free-pdf-sdk: hide what the profile refuses in …` (six commits: menus and chrome; dialogs and workspaces; canvas, forms and links; tools panel and page/content editing; comments, Fill & Sign, measurement and stamps; review fixes) | pdfcraft draws many options directly (menus, context menus, panel buttons, dialogs, quick bar, keyboard paths) and greys rather than hides. These commits gate each surface on the profile so a refused option is hidden and its action refused, leaving the default profile unchanged. |
+| `free-pdf-sdk: close the remaining profile gate gaps` | Review follow-ups: per-tab Properties gating, approval vs certify signing, same-frame profile changes, snapping, legacy flags for no-document commands. |
+| `free-pdf-sdk: let a brand leave out About's project credits` | About always had Contributors and Models tabs (pdfcraft's GitHub contributors and the AI models behind its commits), drawn inside the dialog. `Brand::credits` (default on) leaves them out; the SDK turns it off, so About shows only its own tab. Attribution stays in NOTICE and third-party/. |
 
 Everything else the API needs is reachable from outside (`fps-viewer` wraps `PdfCraftApp` in its
 own `eframe::App` and runs requests between frames):
@@ -157,7 +161,7 @@ wrapper rejects with `FreePdfError { code, message }`.
   (drawn and typed signatures) and measurement. Page, content, form and security changes are
   hidden and refused.
 
-## XFDF and ComPDF compatibility
+## XFDF compatibility
 
 * Import goes through pdfcraft's XFDF reader (`pdfcraft-xfdf`), which maps `title` to the author
   and reads 0-based `page`, `name`, `inreplyto`, colours, ink, vertices, callouts and pop-ups.
@@ -165,7 +169,7 @@ wrapper rejects with `FreePdfError { code, message }`.
   from that export, so `getAnnotations()` counts exactly what `exportXfdf()` stores: top-level
   comments, with replies nested. `xfdf.includes("<annots")` is not a test for comments (pdfcraft
   always writes `<annots>`).
-* Known losses are listed in docs/migrating-from-compdf.md.
+* Known losses are listed in the site's Annotations and XFDF page.
 
 ## Security notes
 

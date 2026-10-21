@@ -1,0 +1,923 @@
+{
+  "disabledElements": [
+    {
+      "hides": [
+        "file.save_as",
+        "comment.export",
+        "form.export_data",
+        "measure.export",
+        "export.docx",
+        "export.html",
+        "export.image",
+        "export.pptx",
+        "export.rtf",
+        "export.text",
+        "export.all_images",
+        "group:export"
+      ],
+      "id": "download"
+    },
+    {
+      "hides": [
+        "file.save",
+        "file.save_as"
+      ],
+      "id": "save"
+    },
+    {
+      "hides": [
+        "print.dialog"
+      ],
+      "id": "print"
+    },
+    {
+      "hides": [
+        "file.open",
+        "file.open_recent",
+        "file.pin_folder",
+        "file.close",
+        "file.close_all",
+        "create.blank",
+        "group:create",
+        "group:combine"
+      ],
+      "id": "open"
+    },
+    {
+      "hides": [
+        "comment.flatten",
+        "form.flatten"
+      ],
+      "id": "flatten"
+    },
+    {
+      "hides": [
+        "app.preferences"
+      ],
+      "id": "settings"
+    },
+    {
+      "hides": [
+        "comment.import",
+        "form.import_data"
+      ],
+      "id": "import"
+    },
+    {
+      "hides": [
+        "comment.note"
+      ],
+      "id": "tool:note"
+    },
+    {
+      "hides": [
+        "comment.freetext"
+      ],
+      "id": "tool:freetext"
+    },
+    {
+      "hides": [
+        "comment.callout"
+      ],
+      "id": "tool:callout"
+    },
+    {
+      "hides": [
+        "comment.highlight"
+      ],
+      "id": "tool:highlight"
+    },
+    {
+      "hides": [
+        "comment.underline"
+      ],
+      "id": "tool:underline"
+    },
+    {
+      "hides": [
+        "comment.strikeout"
+      ],
+      "id": "tool:strikeout"
+    },
+    {
+      "hides": [
+        "comment.squiggly"
+      ],
+      "id": "tool:squiggly"
+    },
+    {
+      "hides": [
+        "comment.caret"
+      ],
+      "id": "tool:caret"
+    },
+    {
+      "hides": [
+        "comment.replace"
+      ],
+      "id": "tool:replace"
+    },
+    {
+      "hides": [
+        "comment.ink",
+        "comment.eraser"
+      ],
+      "id": "tool:ink"
+    },
+    {
+      "hides": [
+        "comment.line"
+      ],
+      "id": "tool:line"
+    },
+    {
+      "hides": [
+        "comment.arrow"
+      ],
+      "id": "tool:arrow"
+    },
+    {
+      "hides": [
+        "comment.square"
+      ],
+      "id": "tool:square"
+    },
+    {
+      "hides": [
+        "comment.circle"
+      ],
+      "id": "tool:circle"
+    },
+    {
+      "hides": [
+        "comment.polygon"
+      ],
+      "id": "tool:polygon"
+    },
+    {
+      "hides": [
+        "comment.polyline"
+      ],
+      "id": "tool:polyline"
+    },
+    {
+      "hides": [
+        "comment.cloud"
+      ],
+      "id": "tool:cloud"
+    },
+    {
+      "hides": [
+        "comment.attach"
+      ],
+      "id": "tool:attach"
+    },
+    {
+      "hides": [
+        "comment.stamp",
+        "group:stamp"
+      ],
+      "id": "tool:stamp"
+    },
+    {
+      "hides": [
+        "edit.image"
+      ],
+      "id": "tool:image"
+    },
+    {
+      "hides": [
+        "edit.link",
+        "edit.links_from_urls"
+      ],
+      "id": "tool:link"
+    },
+    {
+      "hides": [
+        "measure.distance",
+        "measure.perimeter",
+        "measure.area",
+        "measure.scale",
+        "measure.info",
+        "measure.snap",
+        "measure.export",
+        "group:measure"
+      ],
+      "id": "tool:measure"
+    },
+    {
+      "hides": [
+        "sign.fill.text",
+        "sign.fill.check",
+        "sign.fill.cross",
+        "sign.fill.dot",
+        "sign.fill.line",
+        "sign.fill.date",
+        "sign.fill.signature",
+        "sign.fill.initials",
+        "group:fill_sign"
+      ],
+      "id": "tool:fillsign"
+    },
+    {
+      "hides": [
+        "sign.fill.signature",
+        "sign.fill.initials"
+      ],
+      "id": "tool:signature"
+    }
+  ],
+  "features": [
+    {
+      "category": "Annotation",
+      "description": "Sticky notes, text boxes, callouts, file attachments, replies, review status, the comment list and comment import/export.",
+      "edits": true,
+      "key": "comments",
+      "modes": [
+        "review",
+        "annotate",
+        "edit",
+        "full"
+      ],
+      "title": "Comments"
+    },
+    {
+      "category": "Annotation",
+      "description": "Highlight, underline, strikethrough, squiggly underline, insert (caret) and replace text.",
+      "edits": true,
+      "key": "markup",
+      "modes": [
+        "review",
+        "annotate",
+        "edit",
+        "full"
+      ],
+      "title": "Text markup"
+    },
+    {
+      "category": "Annotation",
+      "description": "Rectangles, ovals, lines, arrows, polygons, polylines and clouds.",
+      "edits": true,
+      "key": "shapes",
+      "modes": [
+        "annotate",
+        "edit",
+        "full"
+      ],
+      "title": "Shapes"
+    },
+    {
+      "category": "Annotation",
+      "description": "Freehand drawing and the eraser.",
+      "edits": true,
+      "key": "ink",
+      "modes": [
+        "annotate",
+        "edit",
+        "full"
+      ],
+      "title": "Freehand ink"
+    },
+    {
+      "category": "Annotation",
+      "description": "Standard and custom stamps.",
+      "edits": true,
+      "key": "stamps",
+      "modes": [
+        "annotate",
+        "edit",
+        "full"
+      ],
+      "title": "Stamps"
+    },
+    {
+      "category": "Annotation",
+      "description": "Distance, perimeter and area measurements with a drawing scale.",
+      "edits": true,
+      "key": "measurement",
+      "modes": [
+        "annotate",
+        "edit",
+        "full"
+      ],
+      "title": "Measurement"
+    },
+    {
+      "category": "Forms & signing",
+      "description": "Typed text, checkmarks, crosses, dots, lines, dates, and drawn or typed signatures and initials placed on the page.",
+      "edits": true,
+      "key": "fillSign",
+      "modes": [
+        "annotate",
+        "fill",
+        "sign",
+        "edit",
+        "full"
+      ],
+      "title": "Fill & Sign"
+    },
+    {
+      "category": "Forms & signing",
+      "description": "Filling in form fields, clearing a form, importing and exporting form data.",
+      "edits": true,
+      "key": "formFill",
+      "modes": [
+        "fill",
+        "sign",
+        "edit",
+        "full"
+      ],
+      "title": "Form filling"
+    },
+    {
+      "category": "Forms & signing",
+      "description": "Adding, editing and deleting form fields, tab order and field detection.",
+      "edits": true,
+      "key": "formDesign",
+      "modes": [
+        "edit",
+        "full"
+      ],
+      "title": "Form design"
+    },
+    {
+      "category": "Forms & signing",
+      "description": "Signing and certifying with a digital ID (certificate).",
+      "edits": true,
+      "key": "digitalSignatures",
+      "modes": [
+        "sign",
+        "full"
+      ],
+      "title": "Digital signatures"
+    },
+    {
+      "category": "Forms & signing",
+      "description": "The signatures panel: viewing and validating existing digital signatures.",
+      "edits": false,
+      "key": "signaturePanel",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Signature panel"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Insert, delete, rotate, move, duplicate, crop, replace and number pages.",
+      "edits": true,
+      "key": "pages",
+      "modes": [
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Page organization"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Adding, renaming, moving and deleting bookmarks (viewing them is always on).",
+      "edits": true,
+      "key": "bookmarks",
+      "modes": [
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Bookmark editing"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Editing text and images, links, headers and footers, watermarks, backgrounds, Bates numbers and document properties.",
+      "edits": true,
+      "key": "editContent",
+      "modes": [
+        "edit",
+        "full"
+      ],
+      "title": "Content editing"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Flattening comments and form fields into the page content.",
+      "edits": true,
+      "key": "flatten",
+      "modes": [
+        "edit",
+        "full"
+      ],
+      "title": "Flatten"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Marking and applying redactions, sanitizing and removing hidden information.",
+      "edits": true,
+      "key": "redaction",
+      "modes": [
+        "full"
+      ],
+      "title": "Redaction"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Accessibility checking, tags, reading order and alternate text.",
+      "edits": true,
+      "key": "accessibility",
+      "modes": [
+        "edit",
+        "full"
+      ],
+      "title": "Accessibility"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Converting to PDF/A.",
+      "edits": true,
+      "key": "standards",
+      "modes": [
+        "edit",
+        "full"
+      ],
+      "title": "PDF standards"
+    },
+    {
+      "category": "Pages & content",
+      "description": "Running the document's JavaScript, the console and editing scripts. Off unless you turn it on.",
+      "edits": true,
+      "key": "javascript",
+      "modes": [],
+      "title": "JavaScript"
+    },
+    {
+      "category": "Security",
+      "description": "Adding or removing passwords and permissions.",
+      "edits": true,
+      "key": "security",
+      "modes": [
+        "full"
+      ],
+      "title": "Security"
+    },
+    {
+      "category": "Editing",
+      "description": "Undo and redo of the changes the other features allow.",
+      "edits": false,
+      "key": "history",
+      "modes": [
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Undo and redo"
+    },
+    {
+      "category": "Output",
+      "description": "The viewer's own Save button; the PDF goes to your page in the saveRequested event.",
+      "edits": false,
+      "key": "save",
+      "modes": [
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Save"
+    },
+    {
+      "category": "Output",
+      "description": "Save As, saving optimized copies, attachments and reports from the viewer.",
+      "edits": false,
+      "key": "download",
+      "modes": [
+        "edit",
+        "full"
+      ],
+      "title": "Download a copy"
+    },
+    {
+      "category": "Output",
+      "description": "Exporting to Word, PowerPoint, images, HTML and text; extracting and splitting pages.",
+      "edits": false,
+      "key": "export",
+      "modes": [
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Export"
+    },
+    {
+      "category": "Output",
+      "description": "Printing.",
+      "edits": false,
+      "key": "print",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Print"
+    },
+    {
+      "category": "Viewing",
+      "description": "Finding text in the document.",
+      "edits": false,
+      "key": "search",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Search"
+    },
+    {
+      "category": "Viewing",
+      "description": "Copying text and images (when the document allows it).",
+      "edits": false,
+      "key": "copy",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Copy"
+    },
+    {
+      "category": "Viewing",
+      "description": "The document properties dialog (read-only unless content editing is on) and word count.",
+      "edits": false,
+      "key": "documentInfo",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Document properties"
+    },
+    {
+      "category": "Interface",
+      "description": "Keyboard shortcuts and About.",
+      "edits": false,
+      "key": "help",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Help"
+    },
+    {
+      "category": "Interface",
+      "description": "The \"Find tools and commands\" box and palette (Ctrl/Cmd+K).",
+      "edits": false,
+      "key": "palette",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Command palette"
+    },
+    {
+      "category": "Interface",
+      "description": "The preferences dialog, theme switching and rearranging panels.",
+      "edits": false,
+      "key": "preferences",
+      "modes": [
+        "view",
+        "review",
+        "annotate",
+        "fill",
+        "sign",
+        "organize",
+        "edit",
+        "full"
+      ],
+      "title": "Preferences"
+    }
+  ],
+  "modes": [
+    {
+      "description": "Read-only viewing: navigation, search, copy, print. Nothing can change the document.",
+      "features": [
+        "copy",
+        "documentInfo",
+        "help",
+        "palette",
+        "preferences",
+        "print",
+        "search",
+        "signaturePanel"
+      ],
+      "key": "view"
+    },
+    {
+      "description": "Notes, text boxes and text markup with replies and review status. Nothing else changes.",
+      "features": [
+        "comments",
+        "copy",
+        "documentInfo",
+        "help",
+        "history",
+        "markup",
+        "palette",
+        "preferences",
+        "print",
+        "save",
+        "search",
+        "signaturePanel"
+      ],
+      "key": "review"
+    },
+    {
+      "description": "Every kind of annotation: comments, markup, shapes, ink, stamps, measurement and Fill & Sign. No other edits.",
+      "features": [
+        "comments",
+        "copy",
+        "documentInfo",
+        "fillSign",
+        "help",
+        "history",
+        "ink",
+        "markup",
+        "measurement",
+        "palette",
+        "preferences",
+        "print",
+        "save",
+        "search",
+        "shapes",
+        "signaturePanel",
+        "stamps"
+      ],
+      "key": "annotate"
+    },
+    {
+      "description": "Filling in forms and Fill & Sign. No comments, page or content changes.",
+      "features": [
+        "copy",
+        "documentInfo",
+        "fillSign",
+        "formFill",
+        "help",
+        "history",
+        "palette",
+        "preferences",
+        "print",
+        "save",
+        "search",
+        "signaturePanel"
+      ],
+      "key": "fill"
+    },
+    {
+      "description": "Form filling, Fill & Sign and digital signatures.",
+      "features": [
+        "copy",
+        "digitalSignatures",
+        "documentInfo",
+        "fillSign",
+        "formFill",
+        "help",
+        "history",
+        "palette",
+        "preferences",
+        "print",
+        "save",
+        "search",
+        "signaturePanel"
+      ],
+      "key": "sign"
+    },
+    {
+      "description": "Page organization and bookmarks, extracting and splitting pages, and export to other formats (Word, PowerPoint, images, HTML, text). No content or comment changes.",
+      "features": [
+        "bookmarks",
+        "copy",
+        "documentInfo",
+        "export",
+        "help",
+        "history",
+        "pages",
+        "palette",
+        "preferences",
+        "print",
+        "save",
+        "search",
+        "signaturePanel"
+      ],
+      "key": "organize"
+    },
+    {
+      "description": "Full authoring: annotations, forms, pages, content and accessibility. No security, redaction, digital signatures or JavaScript.",
+      "features": [
+        "accessibility",
+        "bookmarks",
+        "comments",
+        "copy",
+        "documentInfo",
+        "download",
+        "editContent",
+        "export",
+        "fillSign",
+        "flatten",
+        "formDesign",
+        "formFill",
+        "help",
+        "history",
+        "ink",
+        "markup",
+        "measurement",
+        "pages",
+        "palette",
+        "preferences",
+        "print",
+        "save",
+        "search",
+        "shapes",
+        "signaturePanel",
+        "stamps",
+        "standards"
+      ],
+      "key": "edit"
+    },
+    {
+      "description": "Everything the viewer offers, except JavaScript (turn it on with features.javascript).",
+      "features": [
+        "accessibility",
+        "bookmarks",
+        "comments",
+        "copy",
+        "digitalSignatures",
+        "documentInfo",
+        "download",
+        "editContent",
+        "export",
+        "fillSign",
+        "flatten",
+        "formDesign",
+        "formFill",
+        "help",
+        "history",
+        "ink",
+        "markup",
+        "measurement",
+        "pages",
+        "palette",
+        "preferences",
+        "print",
+        "redaction",
+        "save",
+        "search",
+        "security",
+        "shapes",
+        "signaturePanel",
+        "stamps",
+        "standards"
+      ],
+      "key": "full"
+    }
+  ],
+  "panels": [
+    {
+      "description": "The comment list",
+      "key": "comments"
+    },
+    {
+      "description": "Bookmarks",
+      "key": "bookmarks"
+    },
+    {
+      "description": "Page thumbnails",
+      "key": "pages"
+    },
+    {
+      "description": "Form fields",
+      "key": "fields"
+    },
+    {
+      "description": "Layers",
+      "key": "layers"
+    },
+    {
+      "description": "File attachments",
+      "key": "attachments"
+    },
+    {
+      "description": "Digital signatures (needs signaturePanel)",
+      "key": "signatures"
+    },
+    {
+      "description": "Accessibility checker (needs accessibility)",
+      "key": "accessibility"
+    },
+    {
+      "description": "Structure tags (needs accessibility)",
+      "key": "tags"
+    },
+    {
+      "description": "Advanced search results (needs search)",
+      "key": "search"
+    }
+  ],
+  "ui": [
+    {
+      "default": true,
+      "description": "The Tools panel on the left, listing the tool groups of the enabled features.",
+      "key": "toolsPanel"
+    },
+    {
+      "default": true,
+      "description": "A slim rail that brings the Tools panel back once it is closed.",
+      "key": "toolsRail"
+    },
+    {
+      "default": true,
+      "description": "The floating tool bar beside the page (Select, Hand and the enabled tools).",
+      "key": "quickToolbar"
+    },
+    {
+      "default": true,
+      "description": "The right-hand rail: panel buttons, page navigation and zoom.",
+      "key": "rightRail"
+    },
+    {
+      "default": true,
+      "description": "Zoom and page display controls on the rail.",
+      "key": "zoomControls"
+    },
+    {
+      "default": true,
+      "description": "Page navigation on the rail.",
+      "key": "pageNavigation"
+    },
+    {
+      "default": true,
+      "description": "The main menu button (File, Edit, View... with the enabled commands).",
+      "key": "menu"
+    },
+    {
+      "default": true,
+      "description": "The \"Find tools and commands\" box in the top bar (needs the palette feature).",
+      "key": "searchBox"
+    },
+    {
+      "default": false,
+      "description": "Panels can't be moved, floated or closed from their tabs.",
+      "key": "lockLayout"
+    },
+    {
+      "default": false,
+      "description": "Also list tools that are planned but not available yet.",
+      "key": "showPlannedTools"
+    },
+    {
+      "default": true,
+      "description": "Links to web pages in documents may open (after a prompt).",
+      "key": "externalLinks"
+    }
+  ]
+}

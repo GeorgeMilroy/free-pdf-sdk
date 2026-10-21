@@ -57,7 +57,7 @@ jobs:
           npm ci --no-audit --no-fund
           npm --prefix js ci --no-audit --no-fund
       - name: TypeScript typecheck
-        run: npm --prefix js run typecheck
+        run: npm --prefix js run lint:types
       - name: build (scripts/build.ps1)
         shell: pwsh
         run: ./scripts/build.ps1 -Zip -Jobs 4

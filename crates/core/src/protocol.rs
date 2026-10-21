@@ -9,9 +9,13 @@
 //! Everything here treats its input as untrusted: [`parse_request`] checks every parameter's
 //! type, size and range and never panics.
 
+use std::collections::BTreeMap;
+
 use serde_json::Value;
 
 use crate::error::RpcError;
+pub use crate::features::Mode;
+use crate::features::{FeatureConfig, UiOptions};
 
 /// The protocol version in every message's `fps` field.
 pub const PROTOCOL_VERSION: u32 = 1;
@@ -41,15 +45,6 @@ pub mod limits {
     pub const MAX_PAGE: u64 = 1_000_000;
 }
 
-/// Viewer mode.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Mode {
-    /// Read-only: nothing in the document can change, from the UI or the API.
-    View,
-    /// Comments, shapes, ink, Fill & Sign and measurement; nothing else.
-    Annotate,
-}
-
 /// Colour theme.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Theme {
@@ -70,32 +65,98 @@ pub enum Zoom {
 /// Settings sent by `configure` (the `init` options other than the document).
 #[derive(Clone, Debug, PartialEq)]
 pub struct Config {
-    pub mode: Mode,
+    /// Mode, feature overrides, interface options and `disabledElements`.
+    pub features: FeatureConfig,
     pub theme: Theme,
     pub author: Option<String>,
-    pub disabled_elements: Vec<String>,
     pub locale: Option<String>,
+}
+
+/// Interface options a request changes; options it doesn't name keep their value.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct UiPatch {
+    pub flags: BTreeMap<String, bool>,
+    pub panels: BTreeMap<String, bool>,
+}
+
+impl UiPatch {
+    /// `ui` with this patch applied.
+    pub fn apply(&self, mut ui: UiOptions) -> UiOptions {
+        for (key, value) in &self.flags {
+            let v = *value;
+            match key.as_str() {
+                "toolsPanel" => ui.tools_panel = v,
+                "toolsRail" => ui.tools_rail = v,
+                "quickToolbar" => ui.quick_toolbar = v,
+                "rightRail" => ui.right_rail = v,
+                "zoomControls" => ui.zoom_controls = v,
+                "pageNavigation" => ui.page_navigation = v,
+                "menu" => ui.menu = v,
+                "searchBox" => ui.search_box = v,
+                "lockLayout" => ui.lock_layout = v,
+                "showPlannedTools" => ui.show_planned_tools = v,
+                "externalLinks" => ui.external_links = v,
+                _ => {}
+            }
+        }
+        for (name, on) in &self.panels {
+            ui.panels.insert(name.clone(), *on);
+        }
+        ui
+    }
 }
 
 /// A validated request.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Request {
     Configure(Config),
-    Load { name: String, data: Vec<u8>, password: Option<String> },
-    Unlock { password: String },
+    Load {
+        name: String,
+        data: Vec<u8>,
+        password: Option<String>,
+    },
+    Unlock {
+        password: String,
+    },
     GetPermissions,
-    ImportXfdf { xfdf: String, replace: bool },
+    ImportXfdf {
+        xfdf: String,
+        replace: bool,
+    },
     ExportXfdf,
     GetAnnotations,
     DeleteAllAnnotations,
-    SetAuthor { author: String },
-    SetTheme { theme: Theme },
-    SetMode { mode: Mode },
-    SetDisabledElements { ids: Vec<String> },
-    SetLocale { locale: String },
+    SetAuthor {
+        author: String,
+    },
+    SetTheme {
+        theme: Theme,
+    },
+    SetMode {
+        mode: Mode,
+    },
+    /// Replaces the feature overrides (relative to the mode).
+    SetFeatures {
+        features: BTreeMap<String, bool>,
+    },
+    /// Changes the given interface options.
+    SetUi {
+        ui: UiPatch,
+    },
+    GetConfig,
+    SetDisabledElements {
+        ids: Vec<String>,
+    },
+    SetLocale {
+        locale: String,
+    },
     GetPageCount,
-    GoToPage { page: u32 },
-    SetZoom { zoom: Zoom },
+    GoToPage {
+        page: u32,
+    },
+    SetZoom {
+        zoom: Zoom,
+    },
     IsDirty,
     Save,
     Version,
@@ -107,12 +168,17 @@ impl Request {
         matches!(self, Self::ImportXfdf { .. } | Self::DeleteAllAnnotations)
     }
 
-    /// Refuses, in view mode, every request that would change the document.
-    pub fn check_mode(&self, mode: Mode) -> Result<(), RpcError> {
-        if mode == Mode::View && self.mutates_document() {
-            return Err(RpcError::read_only());
+    /// Refuses requests the configuration doesn't allow: importing XFDF needs the `comments`
+    /// feature (the viewer treats imported XFDF as comment data), and deleting every comment
+    /// needs some annotation feature (the viewer then checks each annotation's own kind).
+    pub fn check_config(&self, config: &FeatureConfig) -> Result<(), RpcError> {
+        match self {
+            Self::ImportXfdf { .. } if !config.enabled().contains("comments") => {
+                Err(RpcError::new(crate::ErrorCode::ReadOnly, "importing XFDF needs the comments feature"))
+            }
+            Self::DeleteAllAnnotations if !config.allows_annotation_changes() => Err(RpcError::read_only()),
+            _ => Ok(()),
         }
-        Ok(())
     }
 
     /// Whether the request needs an open document.
@@ -146,6 +212,9 @@ pub const METHODS: &[&str] = &[
     "setAuthor",
     "setTheme",
     "setMode",
+    "setFeatures",
+    "setUi",
+    "getConfig",
     "setDisabledElements",
     "setLocale",
     "getPageCount",
@@ -165,10 +234,14 @@ pub fn parse_request(method: &str, params: &Value, data: Option<Vec<u8>>) -> Res
     let p = Params::new(params)?;
     let req = match method {
         "configure" => Request::Configure(Config {
-            mode: p.opt_str("mode", 16)?.map(|s| mode(&s)).transpose()?.unwrap_or(Mode::View),
+            features: FeatureConfig {
+                mode: p.opt_str("mode", 16)?.map(|s| mode(&s)).transpose()?.unwrap_or(Mode::View),
+                features: p.opt_features("features")?.unwrap_or_default(),
+                ui: p.opt_ui("ui")?.unwrap_or_default().apply(UiOptions::default()),
+                disabled: p.opt_elements("disabledElements")?.unwrap_or_default(),
+            },
             theme: p.opt_str("theme", 16)?.map(|s| theme(&s)).transpose()?.unwrap_or(Theme::System),
             author: p.opt_str("author", limits::MAX_AUTHOR_CHARS)?.map(|a| author(&a)).transpose()?,
-            disabled_elements: p.opt_elements("disabledElements")?.unwrap_or_default(),
             locale: p.opt_str("locale", limits::MAX_LOCALE_CHARS)?.map(|l| locale(&l)).transpose()?,
         }),
         "load" => {
@@ -198,6 +271,9 @@ pub fn parse_request(method: &str, params: &Value, data: Option<Vec<u8>>) -> Res
         "setAuthor" => Request::SetAuthor { author: author(&p.req_str("author", limits::MAX_AUTHOR_CHARS)?)? },
         "setTheme" => Request::SetTheme { theme: theme(&p.req_str("theme", 16)?)? },
         "setMode" => Request::SetMode { mode: mode(&p.req_str("mode", 16)?)? },
+        "setFeatures" => Request::SetFeatures { features: p.opt_features("features")?.unwrap_or_default() },
+        "setUi" => Request::SetUi { ui: p.opt_ui("ui")?.unwrap_or_default() },
+        "getConfig" => Request::GetConfig,
         "setDisabledElements" => Request::SetDisabledElements { ids: p.opt_elements("ids")?.unwrap_or_default() },
         "setLocale" => Request::SetLocale { locale: locale(&p.req_str("locale", limits::MAX_LOCALE_CHARS)?)? },
         "getPageCount" => Request::GetPageCount,
@@ -266,6 +342,49 @@ impl<'a> Params<'a> {
         }
     }
 
+    /// `{ featureKey: boolean }`, every key a documented feature.
+    fn opt_features(&self, key: &str) -> Result<Option<BTreeMap<String, bool>>, RpcError> {
+        let Some(v) = self.get(key) else { return Ok(None) };
+        let Value::Object(m) = v else { return Err(RpcError::bad_request(format!("{key} must be an object of booleans"))) };
+        let mut out = BTreeMap::new();
+        for (k, v) in m {
+            if !crate::features::is_feature(k) {
+                return Err(RpcError::bad_request(format!("unknown feature {:?} in {key}", truncate(k, 64))));
+            }
+            let Value::Bool(b) = v else { return Err(RpcError::bad_request(format!("{key}.{} must be a boolean", truncate(k, 64)))) };
+            out.insert(k.clone(), *b);
+        }
+        Ok(Some(out))
+    }
+
+    /// The `ui` options object: documented boolean options, and `panels` (an object of booleans).
+    fn opt_ui(&self, key: &str) -> Result<Option<UiPatch>, RpcError> {
+        let Some(v) = self.get(key) else { return Ok(None) };
+        let Value::Object(m) = v else { return Err(RpcError::bad_request(format!("{key} must be an object"))) };
+        let mut patch = UiPatch::default();
+        for (k, v) in m {
+            if k == "panels" {
+                let Value::Object(panels) = v else { return Err(RpcError::bad_request(format!("{key}.panels must be an object of booleans"))) };
+                for (name, on) in panels {
+                    if !crate::features::PANELS.iter().any(|(p, _)| p == name) {
+                        return Err(RpcError::bad_request(format!("unknown panel {:?} in {key}.panels", truncate(name, 64))));
+                    }
+                    let Value::Bool(b) = on else {
+                        return Err(RpcError::bad_request(format!("{key}.panels.{} must be a boolean", truncate(name, 64))));
+                    };
+                    patch.panels.insert(name.clone(), *b);
+                }
+                continue;
+            }
+            if !crate::features::UI_FLAGS.iter().any(|(f, ..)| f == k) {
+                return Err(RpcError::bad_request(format!("unknown option {:?} in {key}", truncate(k, 64))));
+            }
+            let Value::Bool(b) = v else { return Err(RpcError::bad_request(format!("{key}.{} must be a boolean", truncate(k, 64)))) };
+            patch.flags.insert(k.clone(), *b);
+        }
+        Ok(Some(patch))
+    }
+
     fn opt_elements(&self, key: &str) -> Result<Option<Vec<String>>, RpcError> {
         let Some(v) = self.get(key) else { return Ok(None) };
         let Value::Array(items) = v else { return Err(RpcError::bad_request(format!("{key} must be an array of strings"))) };
@@ -287,11 +406,7 @@ impl<'a> Params<'a> {
 }
 
 fn mode(s: &str) -> Result<Mode, RpcError> {
-    match s {
-        "view" => Ok(Mode::View),
-        "annotate" => Ok(Mode::Annotate),
-        _ => Err(RpcError::bad_request("mode must be \"view\" or \"annotate\"")),
-    }
+    Mode::from_key(s).ok_or_else(|| RpcError::bad_request("mode must be one of view, review, annotate, fill, sign, organize, edit or full"))
 }
 
 fn theme(s: &str) -> Result<Theme, RpcError> {
@@ -405,7 +520,8 @@ mod tests {
         assert_eq!(code(parse("setZoom", json!({ "zoom": "fit" }))), Some(ErrorCode::BadRequest));
         assert_eq!(parse("setZoom", json!({ "zoom": "fit-width" })), Ok(Request::SetZoom { zoom: Zoom::FitWidth }));
         assert_eq!(code(parse("setTheme", json!({ "theme": "blue" }))), Some(ErrorCode::BadRequest));
-        assert_eq!(code(parse("setMode", json!({ "mode": "edit" }))), Some(ErrorCode::BadRequest));
+        assert_eq!(code(parse("setMode", json!({ "mode": "draw" }))), Some(ErrorCode::BadRequest));
+        assert_eq!(parse("setMode", json!({ "mode": "organize" })), Ok(Request::SetMode { mode: Mode::Organize }));
         assert_eq!(code(parse("importXfdf", json!({ "xfdf": "<x/>", "replace": "yes" }))), Some(ErrorCode::BadRequest));
         assert_eq!(code(parse("setLocale", json!({ "locale": "de;rm -rf" }))), Some(ErrorCode::BadRequest));
     }
@@ -429,10 +545,9 @@ mod tests {
         assert_eq!(
             r,
             Ok(Request::Configure(Config {
-                mode: Mode::Annotate,
+                features: FeatureConfig { mode: Mode::Annotate, disabled: vec!["print".into(), "tool:stamp".into()], ..FeatureConfig::default() },
                 theme: Theme::System,
                 author: Some("Q".into()),
-                disabled_elements: vec!["print".into(), "tool:stamp".into()],
                 locale: None,
             }))
         );
@@ -442,7 +557,28 @@ mod tests {
         let many: Vec<&str> = std::iter::repeat_n("print", 300).collect();
         assert_eq!(code(parse("configure", json!({ "disabledElements": many }))), Some(ErrorCode::TooLarge));
         // Defaults: view mode, system theme.
-        assert!(matches!(parse("configure", json!({})), Ok(Request::Configure(Config { mode: Mode::View, theme: Theme::System, .. }))));
+        let Ok(Request::Configure(c)) = parse("configure", json!({})) else { panic!("configure") };
+        assert_eq!((c.features.mode, c.theme), (Mode::View, Theme::System));
+    }
+
+    #[test]
+    fn checks_features_and_ui_options() {
+        let r = parse(
+            "configure",
+            json!({ "mode": "fill", "features": { "comments": true, "print": false }, "ui": { "quickToolbar": false, "panels": { "layers": false } } }),
+        );
+        let Ok(Request::Configure(c)) = r else { panic!("{r:?}") };
+        assert!(c.features.enabled().contains("comments") && !c.features.enabled().contains("print"));
+        assert!(!c.features.ui.quick_toolbar && c.features.ui.panels.get("layers") == Some(&false));
+        assert_eq!(code(parse("configure", json!({ "features": { "teleport": true } }))), Some(ErrorCode::BadRequest));
+        assert_eq!(code(parse("configure", json!({ "features": { "comments": "yes" } }))), Some(ErrorCode::BadRequest));
+        assert_eq!(code(parse("configure", json!({ "features": ["comments"] }))), Some(ErrorCode::BadRequest));
+        assert_eq!(code(parse("configure", json!({ "ui": { "wings": false } }))), Some(ErrorCode::BadRequest));
+        assert_eq!(code(parse("configure", json!({ "ui": { "panels": { "spaceship": false } } }))), Some(ErrorCode::BadRequest));
+        assert_eq!(code(parse("setUi", json!({ "ui": { "menu": 0 } }))), Some(ErrorCode::BadRequest));
+        let r = parse("setUi", json!({ "ui": { "menu": false } }));
+        let Ok(Request::SetUi { ui }) = r else { panic!("{r:?}") };
+        assert!(!ui.apply(UiOptions::default()).menu);
     }
 
     #[test]
@@ -454,14 +590,26 @@ mod tests {
     }
 
     #[test]
-    fn view_mode_refuses_every_mutation() {
+    fn configurations_without_annotations_refuse_every_mutation() {
+        let view = FeatureConfig::default();
+        let organize = FeatureConfig { mode: Mode::Organize, ..FeatureConfig::default() };
+        let annotate = FeatureConfig { mode: Mode::Annotate, ..FeatureConfig::default() };
         let mutating = [Request::DeleteAllAnnotations, Request::ImportXfdf { xfdf: "<xfdf/>".into(), replace: false }];
         for r in &mutating {
-            assert_eq!(r.check_mode(Mode::View).err().map(|e| e.code), Some(ErrorCode::ReadOnly));
-            assert_eq!(r.check_mode(Mode::Annotate), Ok(()));
+            assert_eq!(r.check_config(&view).err().map(|e| e.code), Some(ErrorCode::ReadOnly));
+            assert_eq!(r.check_config(&organize).err().map(|e| e.code), Some(ErrorCode::ReadOnly));
+            assert_eq!(r.check_config(&annotate), Ok(()));
         }
+        // Importing needs comments: fill (Fill & Sign only) and annotate without comments refuse it.
+        let import = Request::ImportXfdf { xfdf: "<xfdf/>".into(), replace: false };
+        let fill = FeatureConfig { mode: Mode::Fill, ..FeatureConfig::default() };
+        let mut no_comments = FeatureConfig { mode: Mode::Annotate, ..FeatureConfig::default() };
+        no_comments.features.insert("comments".into(), false);
+        assert_eq!(import.check_config(&fill).err().map(|e| e.code), Some(ErrorCode::ReadOnly));
+        assert_eq!(import.check_config(&no_comments).err().map(|e| e.code), Some(ErrorCode::ReadOnly));
+        assert_eq!(Request::DeleteAllAnnotations.check_config(&fill), Ok(()));
         for r in [Request::Save, Request::ExportXfdf, Request::GetAnnotations, Request::GetPermissions, Request::IsDirty] {
-            assert_eq!(r.check_mode(Mode::View), Ok(()), "{r:?} reads only");
+            assert_eq!(r.check_config(&view), Ok(()), "{r:?} reads only");
         }
     }
 }

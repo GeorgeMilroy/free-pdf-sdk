@@ -5,6 +5,7 @@
 pub mod doc;
 pub mod elements;
 pub mod error;
+pub mod features;
 pub mod profile;
 pub mod protocol;
 pub mod xfdf;

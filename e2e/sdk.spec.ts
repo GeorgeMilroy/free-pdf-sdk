@@ -49,7 +49,7 @@ test("init, load, events and version", async ({ page }) => {
   expect(loaded.permissions.canAnnotate).toBe(true);
   expect((await call(page, "getPageCount")).value).toBe(3);
   const version = (await call(page, "version")).value as { sdk: string; pdfcraftRev: string };
-  expect(version.sdk).toBe("0.1.0");
+  expect(version.sdk).toBe("0.2.0");
   expect(version.pdfcraftRev).toMatch(/^[0-9a-f]{40}$/);
   expect((await call(page, "goToPage", 2)).ok).toBe(true);
   expect((await call(page, "goToPage", 9)).code).toBe("BAD_REQUEST");
@@ -64,7 +64,7 @@ test("owner-protected AES-256: locked, unlock, import, export, list, delete, sav
   let p = (await call(page, "getPermissions")).value as Record<string, boolean>;
   expect(p).toMatchObject({ canAnnotate: false, isEncrypted: true, canUnlock: true });
 
-  const review = fixture("compdf-review.xfdf");
+  const review = fixture("review.xfdf");
   expect((await call(page, "importXfdf", review)).code).toBe("NOT_PERMITTED");
   expect((await call(page, "unlock", "wrong")).code).toBe("WRONG_PASSWORD");
   p = (await call(page, "unlock", "fps-owner-secret")).value as Record<string, boolean>;
@@ -91,23 +91,23 @@ test("owner-protected AES-256: locked, unlock, import, export, list, delete, sav
   expect(((await call(page, "getAnnotations")).value as unknown[]).length).toBe(0);
 });
 
-test("ComPDF fixtures import with exact counts; replace and empty XFDF", async ({ page }) => {
+test("XFDF fixtures import with exact counts; replace and empty XFDF", async ({ page }) => {
   await open(page);
-  expect((await call(page, "importXfdf", fixture("compdf-markup.xfdf"))).value).toBe(4);
-  expect((await call(page, "importXfdf", fixture("compdf-guest.xfdf"))).value).toBe(2);
+  expect((await call(page, "importXfdf", fixture("markup.xfdf"))).value).toBe(4);
+  expect((await call(page, "importXfdf", fixture("guest.xfdf"))).value).toBe(2);
   expect(((await call(page, "getAnnotations")).value as unknown[]).length).toBe(6);
-  expect((await call(page, "importXfdf", fixture("compdf-review.xfdf"), { replace: true })).value).toBe(6);
+  expect((await call(page, "importXfdf", fixture("review.xfdf"), { replace: true })).value).toBe(6);
   expect(((await call(page, "getAnnotations")).value as unknown[]).length).toBe(6);
-  expect((await call(page, "importXfdf", fixture("compdf-empty.xfdf"))).value).toBe(0);
+  expect((await call(page, "importXfdf", fixture("empty.xfdf"))).value).toBe(0);
   expect((await call(page, "importXfdf", "<not xfdf")).code).toBe("XFDF_INVALID");
 });
 
 test("view mode is read-only through the API", async ({ page }) => {
   await open(page, "?mode=view");
-  expect((await call(page, "importXfdf", fixture("compdf-review.xfdf"))).code).toBe("READ_ONLY");
+  expect((await call(page, "importXfdf", fixture("review.xfdf"))).code).toBe("READ_ONLY");
   expect((await call(page, "deleteAllAnnotations")).code).toBe("READ_ONLY");
   expect((await call(page, "setMode", "annotate")).ok).toBe(true);
-  expect((await call(page, "importXfdf", fixture("compdf-review.xfdf"))).value).toBe(6);
+  expect((await call(page, "importXfdf", fixture("review.xfdf"))).value).toBe(6);
   expect((await call(page, "setMode", "view")).ok).toBe(true);
   expect((await call(page, "deleteAllAnnotations")).code).toBe("READ_ONLY");
   expect(((await call(page, "getAnnotations")).value as unknown[]).length).toBe(6);
@@ -115,7 +115,7 @@ test("view mode is read-only through the API", async ({ page }) => {
 
 test("view mode: shortcuts and clicks in the viewer change nothing", async ({ page }) => {
   await open(page);
-  expect((await call(page, "importXfdf", fixture("compdf-review.xfdf"))).value).toBe(6);
+  expect((await call(page, "importXfdf", fixture("review.xfdf"))).value).toBe(6);
   await call(page, "save"); // clean
   expect((await call(page, "setMode", "view")).ok).toBe(true);
   const frame = page.locator("iframe").first();
@@ -144,7 +144,7 @@ test("init with the owner password unlocks; a wrong one opens restricted and fir
 
 test("the viewer's own Save fires saveRequested with the PDF", async ({ page }) => {
   await open(page);
-  expect((await call(page, "importXfdf", fixture("compdf-guest.xfdf"))).value).toBe(2);
+  expect((await call(page, "importXfdf", fixture("guest.xfdf"))).value).toBe(2);
   await expect.poll(async () => (await call(page, "isDirty")).value).toBe(true);
   const box = await page.locator("iframe").first().boundingBox();
   if (!box) throw new Error("no iframe");
@@ -176,7 +176,7 @@ test("a document that can't be fetched fires documentError", async ({ page }) =>
 test("bad requests are typed errors", async ({ page }) => {
   await open(page);
   expect((await call(page, "setTheme", "blue")).code).toBe("BAD_REQUEST");
-  expect((await call(page, "setMode", "edit")).code).toBe("BAD_REQUEST");
+  expect((await call(page, "setMode", "draw")).code).toBe("BAD_REQUEST");
   expect((await call(page, "setAuthor", "   ")).code).toBe("BAD_REQUEST");
   expect((await call(page, "setDisabledElements", ["nope"])).code).toBe("BAD_REQUEST");
   expect((await call(page, "setDisabledElements", ["print", "tool:stamp"])).ok).toBe(true);
@@ -224,7 +224,7 @@ test("two viewers on one page are isolated; destroy rejects pending calls", asyn
     document.body.appendChild(host);
     const second = await FreePdf.init(host, { baseUrl: "/sdk/", mode: "annotate", document: { url: "/fixtures/plain-3p.pdf" } });
     const first = (window as unknown as { fps: { viewer: Record<string, (...a: unknown[]) => Promise<unknown>> } }).fps.viewer;
-    const xfdf = await (await fetch("/fixtures/compdf-guest.xfdf")).text();
+    const xfdf = await (await fetch("/fixtures/guest.xfdf")).text();
     await second.importXfdf!(xfdf);
     const counts = [((await first.getAnnotations!()) as unknown[]).length, ((await second.getAnnotations!()) as unknown[]).length];
     const pending = second.getAnnotations!();

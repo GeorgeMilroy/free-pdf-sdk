@@ -5,14 +5,14 @@ Licensed under the MIT License or the Apache License, Version 2.0, at your optio
 
 Based on pdfcraft
 -----------------
-Free PDF SDK is based on pdfcraft (https://github.com/storytold/pdfcraft), used as a Cargo
-dependency pinned to commit
+Free PDF SDK is based on pdfcraft by the ArtCraft Team and the PdfCraft contributors
+(https://github.com/storytold/pdfcraft), used as a Cargo dependency pinned to commit
 
     6fb6b7cf6fd8dc105fdd56a764d207cff6140694 (pdfcraft 0.10.0)
 
-with the Free PDF SDK patches from the branch free-pdf-sdk/patches of
-https://github.com/GeorgeMilroy/pdfcraft applied (the exact commit is in Cargo.lock and in
-version.json as "pdfcraftRev").
+with Free PDF SDK modifications to pdfcraft's interface crate (pdfcraft-ui-egui): opt-in hooks
+for white-label branding and for hiding features. The exact modified commit is in Cargo.lock
+and in version.json as "pdfcraftRev".
 
 pdfcraft is Copyright (c) 2026 ArtCraft Team and the PdfCraft contributors, licensed under
 the MIT License or the Apache License, Version 2.0. Its licence files, NOTICE and

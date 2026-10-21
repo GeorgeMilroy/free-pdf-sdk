@@ -1,8 +1,16 @@
 {
   "name": "free-pdf-sdk",
-  "version": "0.1.0",
-  "description": "Free PDF SDK: an embeddable, white-label PDF viewer and annotator for the web, based on pdfcraft",
+  "version": "0.2.0",
+  "description": "Free PDF SDK: an embeddable, white-label PDF viewer, annotator and editor for the web, with React, Vue, Svelte, Angular and Web Component integrations",
   "license": "MIT OR Apache-2.0",
+  "homepage": "https://free-pdf-sdk.web.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeMilroy/free-pdf-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GeorgeMilroy/free-pdf-sdk/issues"
+  },
   "type": "module",
   "main": "./dist/free-pdf-sdk.js",
   "module": "./dist/free-pdf-sdk.js",
@@ -11,15 +19,78 @@
     ".": {
       "types": "./dist/free-pdf-sdk.d.ts",
       "import": "./dist/free-pdf-sdk.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js"
+    },
+    "./vue": {
+      "types": "./dist/vue.d.ts",
+      "import": "./dist/vue.js"
+    },
+    "./svelte": {
+      "types": "./dist/svelte.d.ts",
+      "import": "./dist/svelte.js"
+    },
+    "./controller": {
+      "types": "./dist/controller.d.ts",
+      "import": "./dist/controller.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "bin",
+    "viewer",
+    "version.json",
+    "third-party",
+    "NOTICE",
+    "LICENSE-MIT",
+    "LICENSE-APACHE",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "lint:types": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "typescript": "6.0.3"
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "esbuild": "0.21.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "typescript": "6.0.3",
+    "vue": "3.4.27"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "vue": ">=3.3"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "pdf",
+    "pdf-viewer",
+    "pdf-annotation",
+    "xfdf",
+    "react",
+    "vue",
+    "svelte",
+    "angular",
+    "web-component",
+    "wasm"
+  ],
+  "bin": {
+    "free-pdf-sdk": "./bin/free-pdf-sdk.mjs"
   }
 }

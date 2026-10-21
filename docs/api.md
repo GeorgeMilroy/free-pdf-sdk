@@ -36,6 +36,7 @@ All methods are async and reject with `FreePdfError { code, message }`. The Type
 | `password` | `string` | none | Opens a file that needs a password, and lifts owner restrictions (same as `unlock`). |
 | `disabledElements` | `ElementId[]` | `[]` | See [Disabled elements](#disabled-elements). |
 | `locale` | `string` | browser language | Closest interface language; English otherwise. |
+| `loader` | `string \| { src?, svg?, size?, background?, label? } \| false` | built-in spinner | Animation shown while the viewer starts and while a document opens: an image URL (SVG, GIF, animated WebP/PNG, `data:`), or inline SVG markup. `false`: none. |
 | `timeoutMs` | `number` | `60000` | Per request; loads and saves get twice that. |
 | `listeners` | `{ [event]: listener }` | none | Attached before start, so they hear `ready` and the first `documentLoaded`. |
 
@@ -68,7 +69,7 @@ Notes:
 
 * `permissions.canAnnotate` is true only when the document's security allows both adding
   comments and importing them (pdfcraft imports under the "modify" permission). For files
-  protected with an owner password and no commenting, it is `false` until
+  protected with an owner password that forbids commenting, it is `false` until
   `unlock(ownerPassword)`.
 * `importXfdf` returns how many of the XFDF's top-level comments are in the document afterwards
   (replies are not counted; comments on pages the document doesn't have are skipped). An XFDF

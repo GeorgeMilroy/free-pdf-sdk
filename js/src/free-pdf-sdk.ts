@@ -20,13 +20,112 @@
  */
 
 /** The SDK version this wrapper belongs to. */
-export const SDK_VERSION = "0.1.0";
+export const SDK_VERSION = "0.2.0";
 
 /** The postMessage protocol version this wrapper speaks. */
 export const PROTOCOL_VERSION = 1;
 
-/** Viewer mode: `view` is read-only; `annotate` allows comments, shapes, ink, Fill & Sign and measurement. */
-export type Mode = "view" | "annotate";
+/** Every mode, in documentation order. */
+export const MODES = ["view", "review", "annotate", "fill", "sign", "organize", "edit", "full"] as const;
+
+/**
+ * Viewer mode: a preset of {@link Feature | features}. `view` is read-only; `review` adds notes
+ * and text markup; `annotate` every kind of annotation and Fill & Sign; `fill` form filling and
+ * Fill & Sign; `sign` adds digital signatures; `organize` pages and bookmarks; `edit` full
+ * authoring without security, redaction, digital signatures or JavaScript; `full` everything
+ * except JavaScript. Fine-tune any mode with {@link InitOptions.features}.
+ */
+export type Mode = (typeof MODES)[number];
+
+/** Every feature, in documentation order. */
+export const FEATURES = [
+  "comments",
+  "markup",
+  "shapes",
+  "ink",
+  "stamps",
+  "measurement",
+  "fillSign",
+  "formFill",
+  "formDesign",
+  "digitalSignatures",
+  "signaturePanel",
+  "pages",
+  "bookmarks",
+  "editContent",
+  "flatten",
+  "redaction",
+  "accessibility",
+  "standards",
+  "javascript",
+  "security",
+  "history",
+  "save",
+  "download",
+  "export",
+  "print",
+  "search",
+  "copy",
+  "documentInfo",
+  "help",
+  "palette",
+  "preferences",
+] as const;
+
+/**
+ * Something the viewer can offer. A feature that is off is hidden everywhere in the viewer
+ * (menus, toolbars, panels, context menus, shortcuts) and refused if reached anyway. The docs'
+ * configuration page describes each one.
+ */
+export type Feature = (typeof FEATURES)[number];
+
+/** Feature switches, applied on top of the mode's features. */
+export type FeatureFlags = Partial<Record<Feature, boolean>>;
+
+/** Right-hand panels {@link UiOptions.panels} accepts. */
+export type PanelName = "comments" | "bookmarks" | "pages" | "fields" | "layers" | "attachments" | "signatures" | "accessibility" | "tags" | "search";
+
+/** Parts of the viewer's interface to show or hide (unset options keep their current value). */
+export interface UiOptions {
+  /** The Tools panel on the left, listing the tool groups of the enabled features (default true). */
+  toolsPanel?: boolean;
+  /** A slim rail that brings the Tools panel back once it is closed (default true). */
+  toolsRail?: boolean;
+  /** The floating tool bar beside the page (default true). */
+  quickToolbar?: boolean;
+  /** The right-hand rail: panel buttons, page navigation and zoom (default true). */
+  rightRail?: boolean;
+  /** Zoom and page display controls on the rail (default true). */
+  zoomControls?: boolean;
+  /** Page navigation on the rail (default true). */
+  pageNavigation?: boolean;
+  /** The main menu button (default true). */
+  menu?: boolean;
+  /** The "Find tools and commands" box (default true; needs the `palette` feature). */
+  searchBox?: boolean;
+  /** Show (true) or hide (false) right-hand panels; unlisted panels show when their feature is on. */
+  panels?: Partial<Record<PanelName, boolean>>;
+  /** Panels can't be moved, floated or closed from their tabs (default false). */
+  lockLayout?: boolean;
+  /** Also list tools that are planned but not available yet (default false). */
+  showPlannedTools?: boolean;
+  /** Links to web pages in documents may open, after a prompt (default true). */
+  externalLinks?: boolean;
+}
+
+/** The viewer's configuration, as {@link FreePdfViewer.getConfig} reports it. */
+export interface ViewerConfig {
+  /** The mode. */
+  mode: Mode;
+  /** Every feature, on or off (the mode's preset with your overrides applied). */
+  features: Record<Feature, boolean>;
+  /** Interface options. */
+  ui: Required<Omit<UiOptions, "panels">> & { panels: Partial<Record<PanelName, boolean>> };
+  /** Hidden elements. */
+  disabledElements: ElementId[];
+  /** No feature that changes the document is on. */
+  readOnly: boolean;
+}
 
 /** Colour theme; `system` follows the browser's preference. */
 export type Theme = "light" | "dark" | "system";
@@ -88,14 +187,38 @@ export type DocumentSource =
       name?: string;
     };
 
+/**
+ * The loading animation shown over the viewer while it starts and while a document opens.
+ * Give one of `src` or `svg`; with neither, the built-in spinner is shown.
+ */
+export interface LoaderOptions {
+  /** URL of an image: an SVG, GIF, animated WebP or PNG, or a `data:` URL. */
+  src?: string;
+  /** Inline SVG markup. It is shown as an image, so scripts in it never run. */
+  svg?: string;
+  /** Width of the image as a CSS length (default `48px`); the height follows its aspect ratio. */
+  size?: string;
+  /** Background behind it as a CSS colour (default: the viewer's background for the theme). */
+  background?: string;
+  /** What screen readers announce (default `Loading`). */
+  label?: string;
+}
+
+/** A loader: a URL of an image (shorthand for `{ src }`), or {@link LoaderOptions}. */
+export type Loader = string | LoaderOptions;
+
 /** Options for {@link FreePdf.init}. */
 export interface InitOptions {
   /** URL of the SDK folder (the one holding `viewer/` and `version.json`), on the page's origin. */
   baseUrl: string;
   /** A document to open once the viewer is ready. */
   document?: DocumentSource;
-  /** `view` (read-only, the default) or `annotate`. */
+  /** A preset of features (default `view`, read-only). */
   mode?: Mode;
+  /** Turn individual features on or off, on top of the mode's preset. */
+  features?: FeatureFlags;
+  /** Show or hide parts of the interface. */
+  ui?: UiOptions;
   /** Author of new comments; it wins over a name saved in the viewer's settings. */
   author?: string;
   /** Colour theme (default `system`). */
@@ -106,6 +229,11 @@ export interface InitOptions {
   disabledElements?: ElementId[];
   /** Interface language, such as `en`, `de` or `zh-Hans` (closest available; English otherwise). */
   locale?: string;
+  /**
+   * Loading animation shown while the viewer starts and while a document opens (default: a
+   * built-in spinner; `false`: none). Read once, when the viewer mounts.
+   */
+  loader?: Loader | false;
   /** Milliseconds to wait for a reply before rejecting with `TIMEOUT` (default 60000; loads get twice that). */
   timeoutMs?: number;
   /**
@@ -146,7 +274,7 @@ export interface AnnotationReply {
 export interface Annotation {
   /** The annotation's id (XFDF `name`). */
   id: string;
-  /** Lowercase subtype as ComPDF names it: `text` (note), `freetext`, `square`, `circle`, `line`, `ink`, `polygon`, `polyline`, `highlight`, `underline`, `squiggly`, `strikeout`, `stamp`, `caret`, `fileattachment`, `sound`, `redact`. */
+  /** The PDF subtype in lowercase: `text` (note), `freetext`, `square`, `circle`, `line`, `ink`, `polygon`, `polyline`, `highlight`, `underline`, `squiggly`, `strikeout`, `stamp`, `caret`, `fileattachment`, `sound`, `redact`. */
   type: string;
   /** Author (XFDF `title`). */
   author: string | null;
@@ -262,20 +390,26 @@ export interface FreePdfViewer {
   unlock(password: string): Promise<Permissions>;
   /** What the open document's security allows. */
   getPermissions(): Promise<Permissions>;
-  /** Imports comments from XFDF (ComPDF's included); `replace` deletes the existing ones first. Resolves to the number imported. */
+  /** Imports comments from standard XFDF; `replace` deletes the existing ones first. Resolves to the number imported. */
   importXfdf(xfdf: string | Blob, options?: { replace?: boolean }): Promise<number>;
   /** The document's comments as XFDF (author in `title`). */
   exportXfdf(): Promise<string>;
   /** The document's comments with their replies; the length is the exact count. */
   getAnnotations(): Promise<Annotation[]>;
-  /** Deletes every comment (one undo step); resolves to how many there were. */
+  /** Deletes every comment (one undo step per comment); resolves to how many there were. */
   deleteAllAnnotations(): Promise<number>;
   /** Sets the author of new comments. */
   setAuthor(author: string): Promise<void>;
   /** Sets the colour theme. */
   setTheme(theme: Theme): Promise<void>;
-  /** Switches between `view` (read-only) and `annotate`. */
+  /** Switches mode; your feature overrides still apply on top of it. */
   setMode(mode: Mode): Promise<void>;
+  /** Replaces the feature overrides (relative to the mode). Pass `{}` to use the mode's features as they are. */
+  setFeatures(features: FeatureFlags): Promise<void>;
+  /** Changes interface options; options you leave out keep their value. */
+  setUi(ui: UiOptions): Promise<void>;
+  /** The resolved configuration: mode, every feature on or off, interface options. */
+  getConfig(): Promise<ViewerConfig>;
   /** Hides parts of the interface (replaces the previous list). */
   setDisabledElements(ids: ElementId[]): Promise<void>;
   /** Sets the interface language; resolves to the language used. */
@@ -322,6 +456,13 @@ function asErrorInfo(v: unknown): ErrorInfo {
     return { code: v.code as ErrorCode, message: v.message };
   }
   return { code: "INTERNAL", message: "malformed error from the viewer" };
+}
+
+/** A plain copy of interface options (a reactive proxy can't be posted to the iframe). */
+function plainUi(ui: UiOptions): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...ui };
+  if (ui.panels) out.panels = { ...ui.panels };
+  return out;
 }
 
 function channelId(): string {
@@ -375,8 +516,66 @@ async function readDocument(source: DocumentSource, timeoutMs: number): Promise<
   throw new FreePdfError("BAD_REQUEST", "document needs a url or data (ArrayBuffer, Uint8Array or Blob)");
 }
 
+/** The built-in loader: a ring that turns (slower when the user asks for reduced motion). */
+const DEFAULT_LOADER_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><style>' +
+  "circle{fill:none;stroke-width:4;stroke-linecap:round}.t{stroke:rgba(128,128,136,.25)}" +
+  ".a{stroke:rgb(128,128,136);stroke-dasharray:30 200;transform-origin:24px 24px;animation:s .9s linear infinite}" +
+  "@keyframes s{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.a{animation-duration:3s}}" +
+  '</style><circle class="t" cx="24" cy="24" r="18"/><circle class="a" cx="24" cy="24" r="18"/></svg>';
+
+/** Inline SVG markup is at most this long. */
+const MAX_LOADER_SVG = 1024 * 1024;
+
+/** The loader as a plain, checked description (throws `BAD_REQUEST`), or `null` for none. */
+function loaderOptions(loader: Loader | false | undefined): LoaderOptions | null {
+  if (loader === false) return null;
+  if (loader === undefined) return { svg: DEFAULT_LOADER_SVG };
+  if (typeof loader === "string") return { src: loader };
+  if (!isRecord(loader)) throw new FreePdfError("BAD_REQUEST", "loader must be a URL, an object or false");
+  const out: LoaderOptions = {};
+  for (const key of ["src", "svg", "size", "background", "label"] as const) {
+    const v = loader[key];
+    if (v === undefined) continue;
+    if (typeof v !== "string") throw new FreePdfError("BAD_REQUEST", `loader.${key} must be a string`);
+    out[key] = v;
+  }
+  if (out.svg !== undefined && out.svg.length > MAX_LOADER_SVG) throw new FreePdfError("TOO_LARGE", "loader.svg is over 1 MiB");
+  if (out.src === undefined && out.svg === undefined) out.svg = DEFAULT_LOADER_SVG;
+  return out;
+}
+
+/** The viewer's own background before it paints, so the loader matches it. */
+function themeBackground(theme: Theme): string {
+  const dark = theme === "dark" || (theme === "system" && typeof matchMedia === "function" && matchMedia("(prefers-color-scheme: dark)").matches);
+  return dark ? "#19191c" : "#f1f1f3";
+}
+
+/** Builds the loader overlay (visible). */
+function loaderElement(options: LoaderOptions, theme: Theme): HTMLDivElement {
+  const overlay = document.createElement("div");
+  overlay.setAttribute("role", "status");
+  overlay.dataset.fpsLoader = "";
+  overlay.style.cssText = "position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .2s ease;";
+  overlay.style.background = options.background ?? themeBackground(theme);
+  const img = document.createElement("img");
+  // An <img>: an SVG shown this way can't run scripts or load other resources.
+  img.src = options.src ?? `data:image/svg+xml;charset=utf-8,${encodeURIComponent(options.svg ?? DEFAULT_LOADER_SVG)}`;
+  img.alt = options.label ?? "Loading";
+  img.decoding = "async";
+  img.style.cssText = "display:block;height:auto;max-width:80%;max-height:80%;";
+  img.style.width = options.size ?? "48px";
+  overlay.appendChild(img);
+  return overlay;
+}
+
 class Viewer implements FreePdfViewer {
   readonly iframe: HTMLIFrameElement;
+  /** Holds the iframe and the loader; what the viewer adds to the host's element. */
+  private readonly root: HTMLDivElement;
+  private readonly loader: HTMLDivElement | null;
+  /** Work the loader is shown for (starting counts as one). */
+  private busy = 1;
   private readonly origin: string;
   private readonly channel = channelId();
   private readonly pending = new Map<number, Pending>();
@@ -388,16 +587,44 @@ class Viewer implements FreePdfViewer {
   private readyInfo: VersionInfo | null = null;
   private readonly onMessage = (event: MessageEvent): void => this.receive(event);
 
-  constructor(element: HTMLElement, baseUrl: URL, timeoutMs: number) {
+  constructor(element: HTMLElement, baseUrl: URL, timeoutMs: number, loader: LoaderOptions | null, theme: Theme) {
     this.origin = baseUrl.origin;
     this.timeoutMs = timeoutMs;
+    this.root = document.createElement("div");
+    this.root.style.cssText = "position:relative;width:100%;height:100%;";
     this.iframe = document.createElement("iframe");
     this.iframe.src = new URL(`viewer/index.html#ch=${this.channel}`, baseUrl).href;
     this.iframe.title = "PDF viewer";
     this.iframe.setAttribute("allow", "clipboard-read; clipboard-write; fullscreen");
     this.iframe.style.cssText = "display:block;width:100%;height:100%;border:0;";
+    this.root.appendChild(this.iframe);
+    this.loader = loader ? loaderElement(loader, theme) : null;
+    if (this.loader) this.root.appendChild(this.loader);
     window.addEventListener("message", this.onMessage);
-    element.appendChild(this.iframe);
+    element.appendChild(this.root);
+  }
+
+  /** Shows the loader for a piece of work; pair with {@link idle}. */
+  busyStart(): void {
+    this.busy++;
+    if (this.loader) {
+      this.loader.hidden = false;
+      this.loader.style.opacity = "1";
+      this.loader.style.pointerEvents = "";
+    }
+  }
+
+  /** Ends a piece of work; the loader fades out when none is left. */
+  idle(): void {
+    this.busy = Math.max(0, this.busy - 1);
+    const loader = this.loader;
+    if (!loader || this.busy > 0) return;
+    // Clicks reach the viewer at once, not only when the fade is over.
+    loader.style.opacity = "0";
+    loader.style.pointerEvents = "none";
+    setTimeout(() => {
+      if (this.busy === 0) loader.hidden = true;
+    }, 200);
   }
 
   /** Waits for the viewer's hello. */
@@ -524,19 +751,24 @@ class Viewer implements FreePdfViewer {
 
   async load(source: DocumentSource, options?: { password?: string }): Promise<LoadResult> {
     if (this.destroyed) throw new FreePdfError("DESTROYED", "the viewer was destroyed");
-    let doc: { name: string; bytes: ArrayBuffer };
+    this.busyStart();
     try {
-      doc = await readDocument(source, this.timeoutMs * 2);
-    } catch (e) {
-      // The viewer reports its own load failures; a fetch that failed never reached it.
-      const err = e instanceof FreePdfError ? e : new FreePdfError("FETCH_FAILED", String(e));
-      this.emit("documentError", { code: err.code, message: err.message });
-      throw err;
+      let doc: { name: string; bytes: ArrayBuffer };
+      try {
+        doc = await readDocument(source, this.timeoutMs * 2);
+      } catch (e) {
+        // The viewer reports its own load failures; a fetch that failed never reached it.
+        const err = e instanceof FreePdfError ? e : new FreePdfError("FETCH_FAILED", String(e));
+        this.emit("documentError", { code: err.code, message: err.message });
+        throw err;
+      }
+      const { name, bytes } = doc;
+      const params: Record<string, unknown> = { name, data: bytes };
+      if (options?.password !== undefined) params.password = options.password;
+      return await this.request<LoadResult>("load", params, [bytes], this.timeoutMs * 2);
+    } finally {
+      this.idle();
     }
-    const { name, bytes } = doc;
-    const params: Record<string, unknown> = { name, data: bytes };
-    if (options?.password !== undefined) params.password = options.password;
-    return this.request<LoadResult>("load", params, [bytes], this.timeoutMs * 2);
   }
 
   async unlock(password: string): Promise<Permissions> {
@@ -575,6 +807,18 @@ class Viewer implements FreePdfViewer {
 
   async setMode(mode: Mode): Promise<void> {
     await this.request("setMode", { mode });
+  }
+
+  async setFeatures(features: FeatureFlags): Promise<void> {
+    await this.request("setFeatures", { features: { ...features } });
+  }
+
+  async setUi(ui: UiOptions): Promise<void> {
+    await this.request("setUi", { ui: plainUi(ui) });
+  }
+
+  getConfig(): Promise<ViewerConfig> {
+    return this.request<ViewerConfig>("getConfig");
   }
 
   async setDisabledElements(ids: ElementId[]): Promise<void> {
@@ -623,7 +867,7 @@ class Viewer implements FreePdfViewer {
     this.hello?.reject(error);
     this.hello = null;
     this.listeners.clear();
-    this.iframe.remove();
+    this.root.remove();
   }
 
   on<K extends EventName>(name: K, listener: Listener<K>): void {
@@ -661,7 +905,8 @@ export async function init(element: HTMLElement, options: InitOptions): Promise<
   if (base.origin !== location.origin) {
     throw new FreePdfError("BAD_REQUEST", `the SDK must be served from this page's origin (${location.origin}), not ${base.origin}`);
   }
-  const viewer = new Viewer(element, base, options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+  const theme = options.theme ?? "system";
+  const viewer = new Viewer(element, base, options.timeoutMs ?? DEFAULT_TIMEOUT_MS, loaderOptions(options.loader), theme);
   for (const [name, listener] of Object.entries(options.listeners ?? {})) {
     if (typeof listener === "function") viewer.on(name as EventName, listener as Listener<EventName>);
   }
@@ -670,9 +915,11 @@ export async function init(element: HTMLElement, options: InitOptions): Promise<
     // Plain copies: a reactive proxy (Vue) can't be posted to the iframe.
     const config: Record<string, unknown> = {
       mode: options.mode ?? "view",
-      theme: options.theme ?? "system",
+      theme,
       disabledElements: [...(options.disabledElements ?? [])],
     };
+    if (options.features !== undefined) config.features = { ...options.features };
+    if (options.ui !== undefined) config.ui = plainUi(options.ui);
     if (options.author !== undefined) config.author = options.author;
     if (options.locale !== undefined) config.locale = options.locale;
     await viewer.request("configure", config);
@@ -680,6 +927,7 @@ export async function init(element: HTMLElement, options: InitOptions): Promise<
     if (options.document) {
       await viewer.load(options.document, options.password === undefined ? undefined : { password: options.password });
     }
+    viewer.idle();
     return viewer;
   } catch (e) {
     await viewer.destroy();

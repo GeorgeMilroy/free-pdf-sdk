@@ -1,5 +1,5 @@
 // Screenshots of the example in view and annotate mode, light and dark, after importing the
-// ComPDF review fixture. Usage: node e2e/screenshots.mjs [outDir] (needs scripts/serve.mjs running on 8780).
+// sample review XFDF. Usage: node e2e/screenshots.mjs [outDir] (needs scripts/serve.mjs running on 8780).
 import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 
@@ -15,7 +15,7 @@ for (const theme of ["light", "dark"]) {
     await page.waitForFunction(() => window.fps !== undefined, undefined, { timeout: 120000 });
     await page.evaluate(async (mode) => {
       const v = window.fps.viewer;
-      const xfdf = await (await fetch("/fixtures/compdf-review.xfdf")).text();
+      const xfdf = await (await fetch("/fixtures/review.xfdf")).text();
       await v.importXfdf(xfdf, { replace: true });
       await v.setZoom("fit-width");
       await v.setMode(mode);

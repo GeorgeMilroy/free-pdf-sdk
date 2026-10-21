@@ -49,7 +49,7 @@ Run "cargo fmt --check" { cargo fmt --all --check }
 Run "cargo clippy (native)" { cargo clippy -p fps-core -p fps-brand -p fps-tests --all-targets --locked -j $Jobs -- -D warnings }
 Run "cargo clippy (wasm)" { cargo clippy -p fps-viewer --target wasm32-unknown-unknown --locked -j $Jobs -- -D warnings }
 Run "cargo test" { cargo test -p fps-core -p fps-brand -p fps-tests --locked -j $Jobs }
-Run "typecheck" { npm --prefix js run typecheck }
+Run "typecheck" { npm --prefix js run lint:types }
 $ps = (Get-Process -Id $PID).Path
 $buildArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "build.ps1"), "-Jobs", $Jobs, "-Zip")
 if ($LocalFork -ne "") { $buildArgs += @("-LocalFork", $LocalFork) }

@@ -120,6 +120,18 @@ if (Test-Path (Join-Path $repo "third-party")) { Copy-Item -Recurse (Join-Path $
 $versionJson = [ordered]@{ sdk = $version; pdfcraftRev = $pdfcraftRev } | ConvertTo-Json
 [System.IO.File]::WriteAllText((Join-Path $out "version.json"), $versionJson + "`n", (New-Object System.Text.UTF8Encoding $false))
 
+# --- npm package (dist/npm): the wrapper, its integrations, the CLI and the viewer files --------
+$npm = Join-Path $repo "dist/npm"
+if (Test-Path $npm) { Remove-Item -Recurse -Force $npm }
+New-Item -ItemType Directory -Force (Join-Path $npm "dist") | Out-Null
+Copy-Item -Recurse (Join-Path $repo "js/dist/*") (Join-Path $npm "dist")
+Copy-Item -Recurse (Join-Path $repo "js/bin") (Join-Path $npm "bin")
+foreach ($f in @("js/package.json", "js/README.md")) { Copy-Item (Join-Path $repo $f) $npm }
+Copy-Item -Recurse (Join-Path $out "viewer") (Join-Path $npm "viewer")
+foreach ($f in @("version.json", "NOTICE", "LICENSE-MIT", "LICENSE-APACHE")) { Copy-Item (Join-Path $out $f) $npm }
+Copy-Item -Recurse (Join-Path $out "third-party") (Join-Path $npm "third-party")
+Write-Host "npm package staged: $npm (publish with: npm publish $npm)"
+
 # --- sizes --------------------------------------------------------------------------------------
 Write-Host "wasm before wasm-opt: $([math]::Round($rawBefore / 1MB, 2)) MB"
 Invoke-Checked "sizes" { node (Join-Path $PSScriptRoot "sizes.mjs") (Join-Path $out "viewer/$wasmName") (Join-Path $out "viewer/$glueName") }

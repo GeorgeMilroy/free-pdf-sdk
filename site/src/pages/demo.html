@@ -1,0 +1,90 @@
+<div class="demo">
+  <aside class="demo-panel" aria-label="Viewer configuration">
+    <h1>Live demo</h1>
+    <p class="hint">This is the real SDK. Change the configuration and the viewer follows. Your files are opened in your browser and never uploaded.</p>
+
+    <div class="field">
+      <label for="doc">Document</label>
+      <select id="doc">
+        <option value="/samples/demo.pdf">Sample: layered floor plan, form and specification</option>
+        <option value="/samples/protected-aes256-owner.pdf">Sample: AES-256 encrypted, comments locked</option>
+        <option value="file">Open your own PDF…</option>
+      </select>
+      <input id="file" type="file" accept="application/pdf,.pdf" hidden>
+      <div class="row" id="unlock-row" hidden>
+        <input type="text" id="password" value="fps-owner-secret" aria-label="Owner password">
+        <button class="btn small" type="button" id="unlock">Unlock</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="mode">Mode</label>
+      <select id="mode"></select>
+      <p class="mode-desc" id="mode-desc"></p>
+    </div>
+
+    <details open>
+      <summary>Features</summary>
+      <p class="hint" style="margin:8px 0 0">On or off on top of the mode. A dot marks a change from the mode's preset. <button class="btn small" type="button" id="reset-features" style="margin-top:6px">Reset to mode</button></p>
+      <div class="toggles" id="features"></div>
+    </details>
+
+    <details>
+      <summary>Interface</summary>
+      <div class="toggles" id="ui"></div>
+      <div class="toggles" id="panels"><h5>Panels</h5></div>
+    </details>
+
+    <details>
+      <summary>Appearance</summary>
+      <div class="field">
+        <label for="theme">Viewer theme</label>
+        <select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select>
+      </div>
+      <div class="field">
+        <label for="locale">Language</label>
+        <select id="locale">
+          <option value="en">English</option><option value="ar">العربية</option><option value="bg">Български</option><option value="cs">Čeština</option><option value="de">Deutsch</option><option value="el">Ελληνικά</option><option value="es">Español</option><option value="fr">Français</option><option value="hu">Magyar</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="kk">Қазақ</option><option value="lt">Lietuvių</option><option value="pl">Polski</option><option value="pt-BR">Português (Brasil)</option><option value="ru">Русский</option><option value="sl">Slovenščina</option><option value="te">తెలుగు</option><option value="tr">Türkçe</option><option value="uk">Українська</option><option value="vi">Tiếng Việt</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="author">Comment author</label>
+        <input type="text" id="author" value="Demo user" maxlength="200">
+      </div>
+    </details>
+
+    <details>
+      <summary>API</summary>
+      <div class="row" style="margin-top:10px">
+        <button class="btn small" type="button" data-action="import">Import sample XFDF</button>
+        <button class="btn small" type="button" data-action="export">Export XFDF</button>
+        <button class="btn small" type="button" data-action="list">List comments</button>
+        <button class="btn small" type="button" data-action="delete">Delete all</button>
+        <button class="btn small" type="button" data-action="save">Save PDF</button>
+        <button class="btn small" type="button" data-action="config">getConfig()</button>
+      </div>
+    </details>
+  </aside>
+
+  <section class="demo-main">
+    <div class="viewer-wrap" id="viewer-wrap">
+      <div class="loading" id="loading" hidden></div>
+      <div id="viewer"></div>
+      <div class="drop-hint">Drop a PDF to open it</div>
+    </div>
+    <div class="demo-bottom collapsed" id="bottom">
+      <div class="bottom-tabs" role="tablist">
+        <button type="button" data-pane="code" aria-selected="true">Code</button>
+        <button type="button" data-pane="events" aria-selected="false">Events <span id="event-count"></span></button>
+        <span class="spacer"></span>
+        <select id="code-flavour" aria-label="Code flavour"><option value="js">JavaScript</option><option value="react">React</option><option value="vue">Vue</option><option value="element">Web Component</option></select>
+        <button type="button" id="collapse" aria-label="Collapse">▾</button>
+      </div>
+      <div class="bottom-body">
+        <div data-pane="code" class="pane"><div class="code"><div class="code-bar"><span id="code-lang">ts</span><button class="copy" type="button">Copy</button></div><pre><code class="hljs" id="code"></code></pre></div></div>
+        <div data-pane="events" class="pane" hidden><div class="log" id="log"></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="application/json" id="reference">{{REFERENCE_JSON}}</script>

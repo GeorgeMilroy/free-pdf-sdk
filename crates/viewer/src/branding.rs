@@ -22,6 +22,9 @@ pub fn install() -> String {
         about_text: b.about_text.map(str::to_owned),
         about_url: b.about_url.map(str::to_owned),
         community_links: false,
+        // pdfcraft's project credits (its contributors and the AI models that wrote its commits)
+        // say nothing about this SDK; NOTICE and third-party/ carry the attribution.
+        credits: false,
         storage_key: storage_key.clone(),
     });
     storage_key

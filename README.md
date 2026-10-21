@@ -1,46 +1,51 @@
 # Free PDF SDK
 
-An embeddable, white-label PDF viewer and annotator for the web. It is
+An embeddable, white-label PDF viewer, annotator and editor for the web. It is
 [pdfcraft](https://github.com/storytold/pdfcraft) (Rust) compiled to WebAssembly, behind a small
-typed JavaScript API. Each viewer runs in its own iframe on your origin and talks to your page
-over a versioned postMessage protocol.
+typed JavaScript API with React, Vue, Svelte and Web Component integrations. Each viewer runs in
+its own iframe on your origin and talks to your page over a versioned postMessage protocol;
+documents never leave the browser.
 
 ```js
 import { FreePdf } from "free-pdf-sdk";
 
 const viewer = await FreePdf.init(document.getElementById("viewer"), {
-  baseUrl: "/free-pdf-sdk/0.1.0/",
+  baseUrl: "/free-pdf-sdk/",
   document: { url: "/files/artwork.pdf" },
-  mode: "annotate",
+  mode: "annotate",                              // annotations only, no other edits
+  features: { stamps: false, print: false },     // fine-tune the mode
+  ui: { panels: { layers: false } },             // show or hide parts of the interface
   author: "Priya Raman",
-  theme: "system",
-  disabledElements: ["download", "print"],
 });
 
 await viewer.unlock(ownerPassword);            // owner-protected AES-256 files
-const n = await viewer.importXfdf(storedXfdf);  // ComPDF XFDF included
+const n = await viewer.importXfdf(storedXfdf);  // standard XFDF from any PDF tool
 const comments = await viewer.getAnnotations(); // exact count, authors, pages, replies
 const xfdf = await viewer.exportXfdf();         // author in `title`
 viewer.on("annotationsChanged", ({ count }) => console.log(count));
 ```
 
-* **Modes**: `view` (truly read-only) and `annotate` (notes, free text, callouts, markup, shapes,
-  ink, replies, Fill & Sign signatures, measurement).
-* **Encrypted PDFs**: opens owner-password-protected AES-256 files, reports that commenting is
-  not allowed, and allows it after `unlock(ownerPassword)`.
-* **ComPDF compatible XFDF** in and out; see [docs/migrating-from-compdf.md](docs/migrating-from-compdf.md).
-* **Isolated**: one iframe per viewer, no global CSS or keyboard capture, several viewers per page.
-* **Self-hosted**: no licence key, no network calls, no COOP/COEP headers.
+* **Modes and features**: eight modes (`view`, `review`, `annotate`, `fill`, `sign`,
+  `organize`, `edit`, `full`) and 31 feature switches. A feature that is off is hidden from
+  every menu, toolbar, panel, context menu and shortcut, and refused if reached.
+* **Frameworks**: `free-pdf-sdk/react`, `free-pdf-sdk/vue`, `free-pdf-sdk/svelte`, and
+  `free-pdf-sdk/element` (`<free-pdf-viewer>`) for Angular and everything else.
+* **Encrypted PDFs**: opens owner-password-protected AES-256 files, reports what is allowed, and
+  lifts restrictions with `unlock(ownerPassword)`.
+* **Standard XFDF** in and out, author in `title`.
+* **Isolated and self-hosted**: one iframe per viewer, no licence key, no network calls.
 
 ## Documentation
 
+The full documentation is the website in [site/](site/README.md) (docs for people, plus
+`/llms.txt` for AI agents). Its pages are in [site/src/docs/](site/src/docs/). In this repository:
+
 | | |
 |---|---|
-| [docs/api.md](docs/api.md) | The JavaScript API: options, methods, events, errors, `disabledElements` |
-| [docs/integration.md](docs/integration.md) | Hosting (headers, caching, Firebase), bundlers, a Vue 3 component |
-| [docs/migrating-from-compdf.md](docs/migrating-from-compdf.md) | ComPDF WebViewer → Free PDF SDK, XFDF compatibility and known losses |
+| [docs/reference/config.json](docs/reference/config.json) | Modes, features, interface options, element ids (generated, tested) |
 | [docs/architecture.md](docs/architecture.md) | How it is built, the RPC protocol, the pdfcraft patches |
 | [docs/updating-upstream.md](docs/updating-upstream.md) | Taking new pdfcraft releases |
+| [docs/integration.md](docs/integration.md), [docs/api.md](docs/api.md) | The 0.1.0 docs; superseded by the site's pages |
 
 ## Building
 
@@ -51,22 +56,23 @@ Requirements: Rust (stable, with the `wasm32-unknown-unknown` target), Node 20+,
 rustup target add wasm32-unknown-unknown
 cargo install wasm-bindgen-cli --version 0.2.129 --locked
 npm ci; npm --prefix js ci
-./scripts/build.ps1            # -> dist/free-pdf-sdk-<version>/  (-Zip for a zip)
+./scripts/build.ps1            # -> dist/free-pdf-sdk-<version>/ and dist/npm/  (-Zip for a zip)
+node site/build.mjs            # -> site/public/ (the website, with the SDK and the live demo)
 ```
 
 While the pdfcraft fork commit named in `Cargo.lock` is not yet pushed, add
 `-LocalFork D:\path\to\pdfcraft` (see [docs/updating-upstream.md](docs/updating-upstream.md)).
 
-Run the example: `node scripts/serve.mjs` and open http://127.0.0.1:8780/
-(`?mode=view`, `?theme=dark`, `?doc=protected-aes256-owner.pdf`).
+Run the example: `npm run dev:example` and open http://127.0.0.1:8780/
+(`?mode=view`, `?mode=fill`, `?theme=dark`, `?doc=protected-aes256-owner.pdf`). Run the site:
+`npm run build:site`, then `npm run preview:site:dev`. Deploy it: `npm run deploy:hosting:prod`.
 
-Tests: `cargo test -p fps-core -p fps-brand -p fps-tests` and
-`npx playwright test -c e2e/playwright.config.ts` (after a build).
+Tests: `cargo test -p fps-core -p fps-brand -p fps-tests` and `npm run test:e2e` (after a build).
 
 ## Branding
 
-The name, logos, accent colour and About text come from [brand/](brand/README.md). Replace the
-placeholder SVGs and `brand/brand.toml`, then rebuild.
+The name, logos, accent colours and About text come from [brand/](brand/README.md). Replace the
+SVGs and `brand/brand.toml`, then rebuild.
 
 ## Licence
 

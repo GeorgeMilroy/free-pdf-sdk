@@ -7,10 +7,12 @@ use std::hash::{Hash, Hasher};
 use std::rc::Rc;
 
 use fps_core::doc;
-use fps_core::protocol::{Config, Mode, Request, Theme, Zoom, parse_request};
+use fps_core::features::FeatureConfig;
+use fps_core::protocol::{Config, Request, Theme, Zoom, parse_request};
 use fps_core::{ErrorCode, RpcError};
 use pdfcraft_engine::DocId;
-use pdfcraft_ui_egui::profile::{UiProfile, parts};
+use pdfcraft_ui_egui::features::{Feature, FeatureSet};
+use pdfcraft_ui_egui::profile::UiProfile;
 use pdfcraft_ui_egui::theme::ThemePreference;
 use pdfcraft_ui_egui::{LeftPanel, PdfCraftApp};
 use serde_json::{Value, json};
@@ -35,9 +37,9 @@ pub struct Viewer {
     bridge: Bridge,
     inbox: Inbox,
     saves: SaveQueue,
-    mode: Mode,
+    /// Mode, features, interface options and disabled elements.
+    config: FeatureConfig,
     author: Option<String>,
-    disabled: Vec<String>,
     pending_load: Option<PendingLoad>,
     last_dirty: bool,
     /// The open document, its edit generation and a fingerprint of its comments.
@@ -52,9 +54,8 @@ impl Viewer {
             bridge,
             inbox,
             saves: Rc::new(RefCell::new(Vec::new())),
-            mode: Mode::View,
+            config: FeatureConfig::default(),
             author: None,
-            disabled: Vec::new(),
             pending_load: None,
             last_dirty: false,
             last_comments: None,
@@ -107,7 +108,7 @@ impl Viewer {
     }
 
     fn dispatch(&mut self, id: u32, req: Request) -> Result<Option<Payload>, RpcError> {
-        req.check_mode(self.mode)?;
+        req.check_config(&self.config)?;
         if req.needs_document() {
             self.doc_id()?;
         }
@@ -167,11 +168,23 @@ impl Viewer {
                 ok(json!({}))
             }
             Request::SetMode { mode } => {
-                self.set_mode(mode);
+                self.config.mode = mode;
+                self.apply_profile();
                 ok(json!({}))
             }
+            Request::SetFeatures { features } => {
+                self.config.features = features;
+                self.apply_profile();
+                ok(json!({}))
+            }
+            Request::SetUi { ui } => {
+                self.config.ui = ui.apply(self.config.ui.clone());
+                self.apply_profile();
+                ok(json!({}))
+            }
+            Request::GetConfig => ok(self.config.to_json()),
             Request::SetDisabledElements { ids } => {
-                self.disabled = ids;
+                self.config.disabled = ids;
                 self.apply_profile();
                 ok(json!({}))
             }
@@ -218,9 +231,26 @@ impl Viewer {
         self.app.active_ids().and_then(|(_, id)| self.app.session.get(id))
     }
 
-    /// Deletes every comment, one at a time (see `fps_core::doc::next_deletion`).
+    /// Deletes every comment, one at a time (see `fps_core::doc::next_deletion`), after checking
+    /// that the configuration allows deleting every one of them, so it never stops half-way.
     fn delete_all(&mut self) -> Result<usize, RpcError> {
+        self.check_deletable()?;
         doc::delete_all(self, Self::active_doc, Self::apply)
+    }
+
+    /// Refuses (`READ_ONLY`) when an annotation's kind belongs to a feature that is off.
+    fn check_deletable(&self) -> Result<(), RpcError> {
+        let Some(d) = self.active_doc() else { return Ok(()) };
+        for a in &d.info.annotations {
+            let f = pdfcraft_ui_egui::features::annotation_feature(&a.subtype, a.intent.as_deref(), a.fill_sign);
+            if !self.app.profile.allows_feature(f) {
+                return Err(RpcError::new(
+                    ErrorCode::ReadOnly,
+                    format!("the document has {} annotations, which this configuration can't change (feature {:?} is off)", a.subtype, f.key()),
+                ));
+            }
+        }
+        Ok(())
     }
 
     fn permissions(&self) -> Result<doc::Permissions, RpcError> {
@@ -239,51 +269,47 @@ impl Viewer {
     }
 
     fn configure(&mut self, cfg: Config) {
-        self.set_mode(cfg.mode);
+        self.config = cfg.features;
         self.set_theme(cfg.theme);
         if let Some(author) = cfg.author {
             self.app.comment_prefs.author = author.clone();
             self.author = Some(author);
         }
-        self.disabled = cfg.disabled_elements;
         self.apply_profile();
         if let Some(locale) = cfg.locale {
             self.set_locale(&locale);
         }
     }
 
-    fn set_mode(&mut self, mode: Mode) {
-        let was = self.mode;
-        self.mode = mode;
-        self.apply_profile();
-        if was == Mode::View && mode == Mode::Annotate {
-            // Leave the Read workspace for the tools, with the drawer listing the tool groups the
-            // profile keeps (Fill & Sign, Add comments, Add a stamp, Measure objects).
+    /// Hands the configuration to pdfcraft's UI profile. Leaving read-only (view) for a mode that
+    /// edits opens the tools: the All tools list of the enabled features.
+    fn apply_profile(&mut self) {
+        let was_read_only = self.app.profile.read_only;
+        let resolved = self.config.resolve();
+        let mut features = FeatureSet::empty();
+        for key in &resolved.features {
+            match Feature::from_key(key) {
+                Some(f) => features.insert(f),
+                // fps-core and pdfcraft disagree on a name: a pdfcraft update renamed a feature.
+                None => web_sys::console::warn_1(&format!("free-pdf-sdk: pdfcraft has no feature {key:?}").into()),
+            }
+        }
+        self.app.set_profile(UiProfile {
+            read_only: resolved.read_only,
+            hidden: resolved.hidden,
+            tools_rail: resolved.tools_rail,
+            features: Some(features),
+            hide_planned: resolved.hide_planned,
+            lock_layout: resolved.lock_layout,
+            external_links: Some(resolved.external_links),
+            ..UiProfile::default()
+        });
+        if was_read_only && !resolved.read_only {
             let _ = self.app.set_option("mode", "all");
             self.app.left = LeftPanel::AllTools;
             // Opens the panel and brings its tab to the front if it shares a group.
             let _ = self.app.set_option("left", "open");
         }
-    }
-
-    /// pdfcraft's UI profile for the mode and the disabled elements.
-    fn apply_profile(&mut self) {
-        let mut hidden: std::collections::BTreeSet<String> =
-            fps_core::profile::hidden_ids(self.mode, &self.disabled).into_iter().map(str::to_owned).collect();
-        // A single embedded document: no tab strip, Home or workspace tabs.
-        for part in [parts::TABS, parts::HOME, parts::MODE_TABS] {
-            hidden.insert(part.to_owned());
-        }
-        if self.mode == Mode::Annotate {
-            for g in pdfcraft_engine::catalog::TOOL_GROUPS {
-                if !fps_core::profile::ANNOTATE_GROUPS.contains(&g.id) {
-                    hidden.insert(format!("group:{}", g.id));
-                }
-            }
-        }
-        // With the mode tabs hidden, the tools rail is how a closed Tools panel comes back (pdfcraft
-        // draws none for view mode's read-only profile).
-        self.app.profile = UiProfile { read_only: self.mode == Mode::View, comments_only: self.mode == Mode::Annotate, hidden, tools_rail: true };
     }
 
     fn set_theme(&mut self, theme: Theme) {

@@ -1,7 +1,7 @@
 //! Reading XFDF: the annotations an XFDF document holds, as the SDK lists them.
 //!
 //! The listing (`getAnnotations()`) is read from pdfcraft's own XFDF export, so it shows exactly
-//! what `exportXfdf()` stores. ComPDF-written XFDF is read the same way (fixtures in tests/).
+//! what `exportXfdf()` stores. XFDF written by other PDF tools is read the same way (fixtures in tests/).
 
 use serde::Serialize;
 
@@ -209,7 +209,7 @@ pub struct ReplyInfo {
 #[serde(rename_all = "camelCase")]
 pub struct AnnotationInfo {
     pub id: String,
-    /// Lowercase subtype, as ComPDF names it: `text` (note), `freetext`, `square`, `circle`,
+    /// The PDF subtype in lowercase: `text` (note), `freetext`, `square`, `circle`,
     /// `line`, `ink`, `polygon`, `polyline`, `highlight`, `underline`, `squiggly`, `strikeout`,
     /// `stamp`, `caret`, `fileattachment`, `sound`, `redact`.
     #[serde(rename = "type")]

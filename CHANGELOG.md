@@ -7,7 +7,49 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+Version 0.2.0 (not released yet).
+
 ### Added
+
+- The viewer's About dialog no longer has the Contributors and Models tabs: they listed
+  pdfcraft's project contributors and the AI models used to build it. pdfcraft's attribution
+  stays in `NOTICE` and `third-party/` (pdfcraft fork: `Brand::credits`).
+- `loader` option: your own SVG, GIF or other image as the loading animation while the viewer
+  starts and while a document opens (`loader` attribute on `<free-pdf-viewer>`). By default a
+  built-in spinner now covers the viewer until it is ready; `loader: false` turns it off.
+- No `ocr` feature: the browser build has no OCR models, so text recognition is not offered and the viewer's OCR tools are hidden.
+- The sample document's floor plan has four layers (Structure, Furniture, Electrical, Dimensions) for the Layers panel.
+- **Configuration model.** Eight modes (`view`, `review`, `annotate`, `fill`, `sign`, `organize`,
+  `edit`, `full`), each a preset of 31 features, plus per-feature overrides (`features`) and
+  interface options (`ui`: Tools panel, tools rail, quick toolbar, right rail, zoom and page
+  navigation, menu, search box, individual panels, layout lock, planned tools, external
+  links). A feature that is off is hidden from every menu, submenu, context menu, toolbar,
+  panel, dialog and keyboard shortcut, and its actions are refused if reached (pdfcraft fork:
+  every command, tool group, document edit and annotation kind belongs to one feature).
+- API: `setFeatures`, `setUi`, `getConfig`; `setMode` accepts every mode. Unknown feature,
+  option and panel names are rejected with `BAD_REQUEST`.
+- Framework integrations: `free-pdf-sdk/react` (component and ref handle),
+  `free-pdf-sdk/vue` (component), `free-pdf-sdk/svelte` (action) and `free-pdf-sdk/element`
+  (`<free-pdf-viewer>` Web Component, for Angular and any other framework), all built on a shared
+  controller that turns option changes into API calls.
+- npm package with the viewer files and a CLI: `npx free-pdf-sdk copy-viewer <folder>`
+  (`scripts/build.ps1` stages it in `dist/npm`).
+- The landing site (`site/`, Firebase Hosting): home page, live demo running the real SDK, and
+  documentation for people and for AI agents (`/llms.txt`, `/llms-full.txt`, Markdown pages, a
+  JSON Schema of the options). Tables come from `docs/reference/config.json`, which a test keeps
+  in step with the code.
+- Brand: the Free PDF SDK logo (vector, traced from the artwork) and brand colours in the viewer.
+- A synthetic demo document (cover with a floor plan, an approval form, a dimensioned
+  specification) in `tests/fixtures/demo.pdf`.
+
+### Changed
+
+- `importXfdf` and `deleteAllAnnotations` reject with `READ_ONLY` whenever the configuration
+  has no annotation feature (not only in `view` mode).
+- Any configuration without a document-changing feature is read-only (the viewer stays in Read
+  mode), whatever its mode.
+
+### Added (earlier in 0.2.0)
 
 - Annotate mode: a closed Tools drawer (or one Read mode hides) leaves a slim rail on its side,
   the left by default, to pull it back out: the chevron reopens it as it was, and each tool
@@ -34,7 +76,7 @@ postMessage protocol are the public surface.
   `error`, `saveRequested`.
 - postMessage RPC protocol version 1: request ids, typed `{ code, message }` errors, channel ids,
   origin and source checks on both sides, validated inputs.
-- ComPDF-compatible XFDF import and export (author in `title`), exact comment counts, replies.
+- Standard XFDF import and export (author in `title`), exact comment counts, replies.
 - Owner-password-protected AES-256 PDFs: permissions reported, `unlock(ownerPassword)`.
 - Locked view mode and comments-only annotate mode (pdfcraft UI profile patch).
 - White-label branding from `brand/` (pdfcraft Brand patch); no ArtCraft or PdfCraft marks.

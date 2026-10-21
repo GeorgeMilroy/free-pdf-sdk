@@ -53,8 +53,7 @@ Serve `.wasm` compressed (brotli or gzip) if your host can; see the size in the 
 
 ## Firebase Hosting example
 
-With the SDK copied to `public/free-pdf-sdk/0.1.0/` (a Vue CLI app copies
-`public/` into `dist/`):
+With the SDK copied to `public/free-pdf-sdk/0.1.0/` (Vue CLI copies `public/` into `dist/`):
 
 ```json
 {
@@ -173,3 +172,4 @@ export default {
 
 <style scoped>.pdf-host { width: 100%; height: 100%; }</style>
 ```
+

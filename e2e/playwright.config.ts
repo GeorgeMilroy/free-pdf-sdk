@@ -17,6 +17,7 @@ export default defineConfig({
     launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] },
   },
   projects: [{ name: "chromium", use: { browserName: "chromium" } }],
+  globalSetup: "./global-setup.ts",
   webServer: {
     command: `node ../scripts/serve.mjs --port ${port}`,
     url: `http://127.0.0.1:${port}/`,

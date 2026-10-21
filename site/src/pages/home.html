@@ -1,0 +1,459 @@
+<section class="hero" id="top">
+  <div class="aurora" aria-hidden="true">
+    <span class="blob blob-1" data-parallax="-0.12"></span>
+    <span class="blob blob-2" data-parallax="0.08"></span>
+    <span class="blob blob-3" data-parallax="-0.05"></span>
+    <span class="grid-bg"></span>
+  </div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="pill reveal"><span class="dot"></span>Free and open source · v{{VERSION}}</span>
+      <h1 class="reveal" style="--i: 1">Show your users <span class="accent">exactly</span> what they need.<br>Hide the rest.</h1>
+      <p class="lead reveal" style="--i: 2">Free PDF SDK is a white-label PDF viewer, annotator and editor for the web. Your users switch PDF layers on and off with a click. You switch panels, tools and whole features on or off, and every menu, toolbar and shortcut follows. It runs in the browser, so documents never leave your page.</p>
+      <div class="hero-cta reveal" style="--i: 3">
+        <a class="btn primary lg" href="/demo/">Try the live demo <span class="arrow">→</span></a>
+        <a class="btn ghost lg" href="/docs/getting-started/">Get started</a>
+      </div>
+      <div class="install reveal" style="--i: 4"><span><span class="prompt">$</span> npm install free-pdf-sdk</span><button type="button" data-copy="npm install free-pdf-sdk" aria-label="Copy install command">Copy</button></div>
+    </div>
+    <div class="hero-stage reveal" style="--i: 2" data-tilt>
+      <div class="hero-shot">
+        <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span><em>Free PDF SDK · annotate · Layers</em></div>
+        <img class="shot-light" fetchpriority="high" src="/assets/img/viewer-layers.png" width="1100" height="855" alt="Free PDF SDK with the Layers panel open: Structure, Furniture, Electrical and Dimensions layers of a floor plan, each with a show/hide toggle">
+        <img class="shot-dark" src="/assets/img/viewer-layers-dark.png" width="1100" height="855" alt="Free PDF SDK in the dark theme with the Layers panel open: Structure, Furniture, Electrical and Dimensions layers of a floor plan, each with a show/hide toggle">
+      </div>
+      <div class="float-card fc-layers" data-depth="2" aria-hidden="true">
+        <div class="fc-title"><svg viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>Layers</div>
+        <div class="fc-row"><i class="eye on"></i>Structure</div>
+        <div class="fc-row blink"><i class="eye"></i>Furniture</div>
+        <div class="fc-row"><i class="eye on"></i>Electrical</div>
+        <div class="fc-row"><i class="eye on"></i>Dimensions</div>
+      </div>
+      <div class="float-card fc-mode" data-depth="3" aria-hidden="true">
+        <code>mode: <b>"annotate"</b></code>
+        <div class="fc-switches"><span class="on">comments</span><span class="on">shapes</span><span>pages</span><span>editContent</span></div>
+      </div>
+      <div class="float-card fc-comment" data-depth="1" aria-hidden="true">
+        <span class="avatar">A</span>
+        <div><b>Ada</b> approved the plan<small>just now · sheet A-101</small></div>
+        <i class="tick">✓</i>
+      </div>
+    </div>
+  </div>
+  <div class="marquee" aria-label="Works with React, Next.js, Vue, Nuxt, Angular, Svelte, SvelteKit, Lit, Web Components and vanilla JavaScript">
+    <div class="marquee-track">
+      <span>React</span><span>Next.js</span><span>Vue</span><span>Nuxt</span><span>Angular</span><span>Svelte</span><span>SvelteKit</span><span>Web Components</span><span>Vanilla JS</span><span>Lit</span>
+      <span aria-hidden="true">React</span><span aria-hidden="true">Next.js</span><span aria-hidden="true">Vue</span><span aria-hidden="true">Nuxt</span><span aria-hidden="true">Angular</span><span aria-hidden="true">Svelte</span><span aria-hidden="true">SvelteKit</span><span aria-hidden="true">Web Components</span><span aria-hidden="true">Vanilla JS</span><span aria-hidden="true">Lit</span>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container stats-grid">
+    <div class="stat reveal"><b><span data-count="8">0</span></b><span>modes, from read-only to full authoring</span></div>
+    <div class="stat reveal" style="--i: 1"><b><span data-count="31">0</span></b><span>feature switches, each hidden everywhere when off</span></div>
+    <div class="stat reveal" style="--i: 2"><b><span data-count="23">0</span></b><span>interface languages</span></div>
+    <div class="stat reveal" style="--i: 3"><b><span data-count="0">0</span></b><span>servers. Documents stay on the device</span></div>
+  </div>
+</section>
+
+<section class="section layers" id="layers">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">PDF layers</p>
+      <h2>Show a layer. Hide a layer. One click.</h2>
+      <p>Structure, furniture, electrical, plumbing, dimensions, revisions: CAD exports keep them on PDF layers. The Layers panel lists every layer in the drawing and switches it on or off, and the page redraws instantly. Printing follows what is shown; the file itself is untouched.</p>
+    </div>
+    <div class="story">
+      <div class="story-steps">
+        <article class="story-step is-active" data-layers="structure furniture electrical dimensions">
+          <span class="step-no">01</span>
+          <h3>Every layer on</h3>
+          <p>The plan opens with all four layers visible, exactly as the file was exported. Nothing is flattened, nothing is lost.</p>
+        </article>
+        <article class="story-step" data-layers="structure electrical dimensions">
+          <span class="step-no">02</span>
+          <h3>Hide the furniture</h3>
+          <p>The client sees the shell as it will be built. Furniture layouts disappear without touching the file.</p>
+        </article>
+        <article class="story-step" data-layers="structure electrical">
+          <span class="step-no">03</span>
+          <h3>Check the electrical</h3>
+          <p>Dimensions and furniture off: outlets, switches and lights stand out against the walls, so the electrician can check every run.</p>
+        </article>
+        <article class="story-step" data-layers="structure dimensions">
+          <span class="step-no">04</span>
+          <h3>Dimensions for site</h3>
+          <p>Structure and dimensions only: a clean setting-out drawing for the contractor, with nothing in the way.</p>
+          <a class="btn primary" href="/demo/">Try it on the sample plan</a>
+        </article>
+      </div>
+      <div class="story-stage">
+        <div class="stage-card">
+          <div class="stage-art">
+            <svg viewBox="0 0 520 400" role="img" aria-label="A floor plan whose Structure, Furniture, Electrical and Dimensions layers switch on and off">
+              <rect class="paper" x="0" y="0" width="520" height="400" rx="10"/>
+              <g class="layer l-structure" fill="none" stroke="#0b0d0f" stroke-linecap="square">
+                <rect x="60" y="50" width="400" height="280" stroke-width="4"/>
+                <path d="M260 50v120M260 210v120M260 190h100M395 190h65" stroke-width="2"/>
+                <path d="M140 330h40" stroke="#fff" stroke-width="6"/>
+                <path d="M260 210h40M300 210a40 40 0 0 0-40-40M360 190v35M360 225a35 35 0 0 0 35-35M140 330v-40M140 290a40 40 0 0 1 40 40" stroke-width="1"/>
+                <path d="M90 48h60M90 52h60M320 48h80M320 52h80M58 170v60M62 170v60" stroke="#5a9bd8" stroke-width="1"/>
+                <g fill="#5a6068" stroke="none" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="9"><text x="76" y="70">LIVING</text><text x="276" y="70">BEDROOM</text><text x="276" y="212">BATH</text></g>
+              </g>
+              <g class="layer l-furniture" fill="#c7cbd1">
+                <rect x="80" y="270" width="90" height="34"/><rect x="80" y="266" width="90" height="8" fill="#9aa1aa"/>
+                <circle cx="125" cy="200" r="16"/>
+                <rect x="190" y="100" width="60" height="40"/><rect x="182" y="106" width="6" height="10" fill="#9aa1aa"/><rect x="182" y="124" width="6" height="10" fill="#9aa1aa"/><rect x="252" y="106" width="6" height="10" fill="#9aa1aa"/><rect x="252" y="124" width="6" height="10" fill="#9aa1aa"/>
+                <rect x="290" y="70" width="90" height="70"/><rect x="294" y="74" width="36" height="12" fill="#f2f3f5"/><rect x="336" y="74" width="36" height="12" fill="#f2f3f5"/>
+                <rect x="280" y="250" width="70" height="34" fill="#d9dde3"/><rect x="286" y="256" width="58" height="22" fill="#f2f3f5"/>
+                <rect x="400" y="250" width="30" height="20" fill="#d9dde3"/><rect x="410" y="290" width="22" height="30" fill="#d9dde3"/>
+              </g>
+              <g class="layer l-electrical" fill="none" stroke="#e67300" stroke-width="1.2">
+                <g><circle cx="160" cy="190" r="7"/><path d="M155 185l10 10M155 195l10-10"/></g>
+                <g><circle cx="360" cy="120" r="7"/><path d="M355 115l10 10M355 125l10-10"/></g>
+                <g><circle cx="360" cy="262" r="7"/><path d="M355 257l10 10M355 267l10-10"/></g>
+                <circle cx="64" cy="100" r="3"/><circle cx="64" cy="300" r="3"/><circle cx="256" cy="260" r="3"/><circle cx="456" cy="120" r="3"/><circle cx="456" cy="300" r="3"/><circle cx="220" cy="326" r="3"/>
+                <rect x="110" y="320" width="4" height="8"/><rect x="264" y="150" width="4" height="8"/><rect x="400" y="194" width="8" height="4"/>
+              </g>
+              <g class="layer l-dimensions" fill="none" stroke="#e10600" stroke-width="1">
+                <path d="M60 350h400M60 346v8M460 346v8M478 50v280M474 50h8M474 330h8M60 32h200M260 32h200M60 28v8M260 28v8M460 28v8"/>
+                <g fill="#e10600" stroke="none" font-family="JetBrains Mono, monospace" font-size="9"><text x="246" y="364">8 000</text><text x="466" y="44">4 600</text><text x="146" y="25">4 000</text><text x="346" y="25">4 000</text><text x="60" y="388">SCALE 1:100 · mm</text></g>
+              </g>
+            </svg>
+          </div>
+          <div class="mock-panel" aria-label="Layers panel">
+            <div class="mock-head"><svg viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>Layers <small>4</small></div>
+            <button type="button" class="mock-row" data-layer="structure" aria-pressed="true"><i class="eye"></i>Structure</button>
+            <button type="button" class="mock-row" data-layer="furniture" aria-pressed="true"><i class="eye"></i>Furniture</button>
+            <button type="button" class="mock-row" data-layer="electrical" aria-pressed="true"><i class="eye"></i>Electrical</button>
+            <button type="button" class="mock-row" data-layer="dimensions" aria-pressed="true"><i class="eye"></i>Dimensions</button>
+            <p class="mock-hint">Click a layer to toggle it</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head center reveal">
+      <p class="eyebrow">Everything a document workflow needs</p>
+      <h2>A complete PDF toolkit. Only the parts you switch on.</h2>
+      <p>Every capability below is a feature flag. Leave one off and it disappears from the toolbars, the menus, the right-click menus and the keyboard shortcuts.</p>
+    </div>
+    <div class="bento">
+      <article class="bento-card span-2 reveal">
+        <div class="menu-mock" aria-hidden="true">
+          <div class="menu-mock-bar"><span class="menu-mode">mode: <b data-menu-mode>annotate</b></span></div>
+          <ul class="menu-mock-list" data-menu-list></ul>
+        </div>
+        <h3>Hide what you don't need</h3>
+        <p>Pick a mode, then fine-tune with 31 feature switches. What's off is gone from every menu, not greyed out.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 1">
+        <div class="art art-measure" aria-hidden="true">
+          <svg viewBox="0 0 220 120"><rect x="30" y="22" width="160" height="70" rx="3" class="ink-stroke"/><path class="dim" d="M30 106h160"/><path class="dim-tick" d="M30 100v12M190 100v12"/><text x="110" y="100" text-anchor="middle" class="dim-label">4 200 mm</text></svg>
+        </div>
+        <h3>Measurement</h3>
+        <p>Distance, perimeter and area with a drawing scale.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 2">
+        <div class="art art-comments" aria-hidden="true">
+          <div class="bubble b1"><span class="av">A</span>Move the door 200 mm left</div>
+          <div class="bubble b2 reply"><span class="av">J</span>Done, see rev B</div>
+          <div class="bubble b3 status">✓ Resolved</div>
+        </div>
+        <h3>Comments &amp; review</h3>
+        <p>Notes, callouts, highlights, shapes, ink and stamps, with replies and review status.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 1">
+        <div class="art art-forms" aria-hidden="true">
+          <div class="field-mock"><span>Full name</span><i class="typing"></i></div>
+          <div class="field-mock"><span>Approved for print</span><i class="checkbox"></i></div>
+          <div class="field-mock sig"><span>Signature</span><svg viewBox="0 0 120 32"><path class="sig-path" d="M4 24c10-18 18-18 22-4s10 12 18-2 14-16 22-2 14 12 24-4 16-14 26-2"/></svg></div>
+        </div>
+        <h3>Forms, Fill &amp; Sign</h3>
+        <p>Fill fields, tick boxes, add dates and drawn or typed signatures. Design forms in edit mode.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 2">
+        <div class="art art-pages" aria-hidden="true">
+          <span class="thumb t1">1</span><span class="thumb t2">2</span><span class="thumb t3">3</span><span class="thumb t4">4</span>
+        </div>
+        <h3>Page organization</h3>
+        <p>Insert, delete, rotate, reorder, duplicate, crop, replace and number pages.</p>
+      </article>
+      <article class="bento-card dark span-2 reveal" style="--i: 3">
+        <div class="art art-private" aria-hidden="true">
+          <div class="orbit"><span class="doc"></span><span class="ring r1"></span><span class="ring r2"></span><span class="lock"></span></div>
+        </div>
+        <h3>Private by design</h3>
+        <p>WebAssembly in an iframe on your own origin. No server, no uploads, no tracking. AES-256 encrypted files open in place, and an owner password lifts their restrictions.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 1">
+        <div class="art art-redact" aria-hidden="true">
+          <span class="line w1"></span><span class="line w2 redacted"></span><span class="line w3"></span><span class="line w4 redacted"></span><span class="line w2"></span>
+        </div>
+        <h3>Redaction</h3>
+        <p>Mark, apply and sanitize. Hidden information is removed, not covered.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 2">
+        <div class="art art-sign" aria-hidden="true">
+          <div class="seal"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <div class="seal-lines"><span></span><span></span></div>
+        </div>
+        <h3>Signature validation</h3>
+        <p>See who signed a file, when, and whether every signature still checks out.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 3">
+        <div class="art art-brand" aria-hidden="true">
+          <span class="swatch s1"></span><span class="swatch s2"></span><span class="swatch s3"></span><span class="swatch s4"></span>
+        </div>
+        <h3>White-label</h3>
+        <p>Light, dark and system themes at runtime. <a href="/docs/theming-and-localization/">Build from source</a> to compile in your name, logo and accent colour.</p>
+      </article>
+      <article class="bento-card reveal" style="--i: 4">
+        <div class="art art-lang" aria-hidden="true"><span>Layers</span><span>Calques</span><span>Ebenen</span><span>Capas</span><span>Слои</span><span>图层</span></div>
+        <h3>23 languages</h3>
+        <p>The whole interface, translated. Pick a locale or follow the browser.</p>
+      </article>
+    </div>
+    <ul class="more-features reveal" aria-label="More features">
+      <li>Encrypted PDFs (AES-256)</li><li>Export to Word, images and HTML</li><li>PDF/A</li><li>Accessibility checker</li><li>Bookmarks</li><li>Attachments</li><li>Watermarks &amp; Bates numbers</li><li>Flatten</li><li>Print</li><li>Search</li><li>XFDF in and out</li><li>Undo &amp; redo</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="modes">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Modes and features</p>
+      <h2>One option. The right interface.</h2>
+      <p>Drag the handle: the same viewer in <code>full</code> mode and in <code>view</code> mode. Every editing tool, panel and menu entry is gone, from the toolbars down to the right-click menus.</p>
+    </div>
+    <div class="compare reveal" data-compare>
+      <div class="compare-frame">
+        <img class="shot-light after" src="/assets/img/viewer-view.png" width="1100" height="855" alt="Free PDF SDK in view mode: only the document, search and navigation">
+        <img class="shot-dark after" loading="lazy" src="/assets/img/viewer-view-dark.png" width="1100" height="855" alt="Free PDF SDK in view mode, dark theme: only the document, search and navigation">
+        <div class="compare-before">
+          <img class="shot-light" src="/assets/img/viewer-full.png" width="1100" height="855" alt="Free PDF SDK in full mode: the Tools panel, quick toolbar, menus and every panel">
+          <img class="shot-dark" loading="lazy" src="/assets/img/viewer-full-dark.png" width="1100" height="855" alt="Free PDF SDK in full mode, dark theme: the Tools panel, quick toolbar, menus and every panel">
+        </div>
+        <div class="compare-handle" aria-hidden="true"><span></span></div>
+        <input class="compare-range" type="range" min="0" max="100" value="55" aria-label="Reveal full mode (left) or view mode (right)">
+        <span class="compare-label left">mode: "full"</span>
+        <span class="compare-label right">mode: "view"</span>
+      </div>
+    </div>
+    <div class="modes reveal" id="mode-showcase">
+      <div class="mode-list" role="tablist" aria-label="Modes"></div>
+      <div class="mode-detail" id="mode-panel" role="tabpanel" tabindex="0">
+        <p class="eyebrow">mode</p>
+        <h3></h3>
+        <p class="desc"></p>
+        <div class="chips"></div>
+        <div class="code"><div class="code-bar"><span>ts</span><button class="copy" type="button">Copy</button></div><pre><code class="hljs language-ts mode-code"></code></pre></div>
+      </div>
+    </div>
+    <script type="application/json" id="reference">{{REFERENCE_JSON}}</script>
+  </div>
+</section>
+
+<section class="section" id="frameworks">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Integrations</p>
+      <h2>Drop it into the framework you already use</h2>
+      <p>First-class components for React and Vue, an action for Svelte, and a Web Component for Angular and everything else. One npm package, fully typed.</p>
+    </div>
+    <div class="tabs reveal">
+      <div class="tab-list" role="tablist">
+        <button type="button" data-tab="react" aria-selected="true">React</button>
+        <button type="button" data-tab="vue" aria-selected="false">Vue</button>
+        <button type="button" data-tab="angular" aria-selected="false">Angular</button>
+        <button type="button" data-tab="svelte" aria-selected="false">Svelte</button>
+        <button type="button" data-tab="element" aria-selected="false">Web Component</button>
+        <button type="button" data-tab="js" aria-selected="false">JavaScript</button>
+      </div>
+      <div class="tab-panel active" data-tab="react"><div class="code"><div class="code-bar"><span>tsx</span><button class="copy" type="button">Copy</button></div><pre><code class="language-tsx">
+import { useRef } from "react";
+import { FreePdfViewer, type FreePdfViewerHandle } from "free-pdf-sdk/react";
+
+export function ProofReview({ url }: { url: string }) {
+  const ref = useRef&lt;FreePdfViewerHandle&gt;(null);
+  return (
+    &lt;FreePdfViewer
+      ref={ref}
+      baseUrl="/free-pdf-sdk/"
+      mode="annotate"
+      features={{ stamps: false }}
+      document={{ url }}
+      onAnnotationsChanged={async () =&gt; {
+        const xfdf = await ref.current?.viewer()?.exportXfdf();
+        if (xfdf) await fetch("/api/comments", { method: "PUT", body: xfdf });
+      }}
+      style={{ height: "80vh" }}
+    /&gt;
+  );
+}
+</code></pre></div></div>
+      <div class="tab-panel" data-tab="vue"><div class="code"><div class="code-bar"><span>vue</span><button class="copy" type="button">Copy</button></div><pre><code class="language-vue">
+&lt;script setup lang="ts"&gt;
+import { ref } from "vue";
+import { FreePdfViewer } from "free-pdf-sdk/vue";
+
+const viewer = ref();
+const count = ref(0);
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;FreePdfViewer
+    ref="viewer"
+    base-url="/free-pdf-sdk/"
+    mode="annotate"
+    :features="{ stamps: false }"
+    :document="{ url: '/files/proof.pdf' }"
+    @annotations-changed="(e) =&gt; (count = e.count)"
+    style="height: 80vh"
+  /&gt;
+&lt;/template&gt;
+</code></pre></div></div>
+      <div class="tab-panel" data-tab="angular"><div class="code"><div class="code-bar"><span>ts</span><button class="copy" type="button">Copy</button></div><pre><code class="language-ts">
+// main.ts: register &lt;free-pdf-viewer&gt; once.
+import { defineFreePdfViewer } from "free-pdf-sdk/element";
+defineFreePdfViewer();
+
+// proof-review.component.ts
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+
+@Component({
+  selector: "app-proof-review",
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    &lt;free-pdf-viewer
+      base-url="/free-pdf-sdk/"
+      mode="annotate"
+      src="/files/proof.pdf"
+      [features]="{ stamps: false }"
+      (fps-annotations-changed)="count = $any($event).detail.count"
+      style="height: 80vh"&gt;&lt;/free-pdf-viewer&gt;`,
+})
+export class ProofReviewComponent {
+  count = 0;
+}
+</code></pre></div></div>
+      <div class="tab-panel" data-tab="svelte"><div class="code"><div class="code-bar"><span>svelte</span><button class="copy" type="button">Copy</button></div><pre><code class="language-svelte">
+&lt;script&gt;
+  import { freePdf } from "free-pdf-sdk/svelte";
+  let mode = "annotate";
+  let count = 0;
+&lt;/script&gt;
+
+&lt;div
+  style="height: 80vh"
+  use:freePdf={{ baseUrl: "/free-pdf-sdk/", mode, document: { url: "/files/proof.pdf" } }}
+  on:fps-annotations-changed={(e) =&gt; (count = e.detail.count)}
+&gt;&lt;/div&gt;
+</code></pre></div></div>
+      <div class="tab-panel" data-tab="element"><div class="code"><div class="code-bar"><span>html</span><button class="copy" type="button">Copy</button></div><pre><code class="language-html">
+&lt;script type="module"&gt;
+  import { defineFreePdfViewer } from "free-pdf-sdk/element";
+  defineFreePdfViewer();
+&lt;/script&gt;
+
+&lt;free-pdf-viewer
+  base-url="/free-pdf-sdk/"
+  src="/files/proof.pdf"
+  mode="fill"
+  ui='{"panels": {"layers": false}}'
+  style="height: 80vh"&gt;&lt;/free-pdf-viewer&gt;
+</code></pre></div></div>
+      <div class="tab-panel" data-tab="js"><div class="code"><div class="code-bar"><span>ts</span><button class="copy" type="button">Copy</button></div><pre><code class="language-ts">
+import { FreePdf } from "free-pdf-sdk";
+
+const viewer = await FreePdf.init(document.getElementById("viewer")!, {
+  baseUrl: "/free-pdf-sdk/",
+  mode: "annotate",
+  features: { stamps: false, measurement: false },
+  ui: { panels: { layers: false } },
+  author: "Ada Lovelace",
+  document: { url: "/files/proof.pdf" },
+});
+
+viewer.on("annotationsChanged", ({ count }) =&gt; console.log(count, "comments"));
+const xfdf = await viewer.exportXfdf();
+</code></pre></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">How it works</p>
+      <h2>Three steps to a working viewer</h2>
+      <p>The viewer is a WebAssembly app in an iframe on your own origin. A small typed wrapper talks to it, so your code stays simple and your page stays isolated.</p>
+    </div>
+    <ol class="steps">
+      <li class="step reveal"><span class="step-n">1</span><h3>Install</h3><p>Add the package to your app.</p><code>npm install free-pdf-sdk</code></li>
+      <li class="step reveal" style="--i: 1"><span class="step-n">2</span><h3>Serve the viewer</h3><p>Copy the viewer files into a folder your site serves, on the same origin.</p><code>npx free-pdf-sdk copy-viewer public/free-pdf-sdk</code></li>
+      <li class="step reveal" style="--i: 2"><span class="step-n">3</span><h3>Mount it</h3><p>Give an element a height and initialise it with a mode and a document.</p><code>FreePdf.init(el, { baseUrl, mode })</code></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="docs">
+  <div class="container split">
+    <div class="card reveal">
+      <p class="eyebrow">Documentation</p>
+      <h3>Docs written for developers</h3>
+      <p>Guides for every framework, a full API reference and recipes for common setups.</p>
+      <ul><li>Getting started in five minutes</li><li>Modes, features and interface options</li><li>Storing comments as XFDF</li></ul>
+      <a class="btn" href="/docs/introduction/">Read the docs</a>
+    </div>
+    <div class="card dark reveal" style="--i: 1">
+      <p class="eyebrow">For AI agents</p>
+      <h3>Docs your coding assistant can read</h3>
+      <p>Every page is also plain Markdown, indexed in <code>/llms.txt</code>, with a JSON Schema of the options so agents generate valid configurations.</p>
+      <ul><li><code>/llms.txt</code> and <code>/llms-full.txt</code></li><li><code>/docs/&lt;page&gt;.md</code> for every page</li><li><code>/schema/viewer-options.schema.json</code></li></ul>
+      <a class="btn primary" href="/docs/ai-agents/">Docs for AI agents</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="cta-band reveal">
+      <span class="cta-glow" aria-hidden="true" data-parallax="0.06"></span>
+      <div>
+        <h2>See it with your own documents</h2>
+        <p>Open a PDF in the live demo, toggle its layers and switch modes. Nothing is uploaded.</p>
+      </div>
+      <div class="row"><a class="btn primary lg" href="/demo/">Open the live demo</a><a class="btn ghost lg" href="/docs/getting-started/">Get started</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section support" id="support" aria-labelledby="support-title">
+  <div class="container">
+    <div class="support-card reveal">
+      <span class="support-glow" aria-hidden="true" data-parallax="0.04"></span>
+      <div class="support-copy">
+        <p class="eyebrow">Support the project</p>
+        <h2 id="support-title">Help us keep it up to date</h2>
+        <p>Free PDF SDK is open source, built on the <a href="https://github.com/storytold/pdfcraft" target="_blank" rel="noopener">pdfcraft</a> engine by the ArtCraft Team. Donations pay for the work on top: bringing in each new engine release, keeping the SDK and its framework integrations working, testing new browser versions, fixing bugs and keeping the docs current. If it saves you time, a donation helps us keep going.</p>
+        <ul class="support-list">
+          <li><span class="support-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/></svg></span>Engine and security updates, brought in and tested</li>
+          <li><span class="support-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M20 6 9 17l-5-5"/></svg></span>Bug fixes and new browser releases checked</li>
+          <li><span class="support-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>Docs, examples and framework guides kept current</li>
+        </ul>
+      </div>
+      <div class="support-action">
+        <span class="support-cup" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="64" height="64"><path class="steam s1" d="M24 14c-3 4 3 6 0 10"/><path class="steam s2" d="M32 12c-3 4 3 6 0 10"/><path class="steam s3" d="M40 14c-3 4 3 6 0 10"/><path class="cup" d="M14 28h36v10a16 16 0 0 1-16 16h-4a16 16 0 0 1-16-16z"/><path class="handle" d="M50 31h3a6 6 0 0 1 0 12h-4"/><path class="heart" d="M32 46c-6-4-9-7-9-10a4 4 0 0 1 9-2 4 4 0 0 1 9 2c0 3-3 6-9 10z"/></svg>
+        </span>
+        <div class="support-kofi" id="kofi-button"><a class="btn support-btn lg" href="https://ko-fi.com/K4V228W28L" target="_blank" rel="noopener">Donate on Ko-fi</a></div>
+        <p class="support-note">Any amount helps. Opens Ko-fi in a new tab.</p>
+      </div>
+    </div>
+  </div>
+</section>

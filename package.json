@@ -5,11 +5,21 @@
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "scripts": {
-    "serve": "node scripts/serve.mjs",
-    "e2e": "playwright test -c e2e/playwright.config.ts"
+    "dev:example": "node scripts/serve.mjs",
+    "preview:site:dev": "node scripts/serve.mjs --root site/public",
+    "test:e2e": "playwright test -c e2e/playwright.config.ts",
+    "build:sdk": "node scripts/ps.mjs scripts/build.ps1",
+    "build:sdk:local-fork": "node scripts/ps.mjs scripts/build.ps1 -LocalFork ../storytold/pdfcraft",
+    "build:site": "node site/build.mjs",
+    "deploy:hosting:prod": "npm run build:site && cd site && firebase deploy --only hosting --project free-pdf-sdk --non-interactive",
+    "deploy:sdk-and-hosting:prod": "npm run build:sdk && npm run deploy:hosting:prod",
+    "check:npm-package:dev": "npm publish ./dist/npm --dry-run",
+    "publish:npm:prod": "npm publish ./dist/npm --access public"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
-    "binaryen": "132.0.0"
+    "binaryen": "132.0.0",
+    "highlight.js": "11.9.0",
+    "marked": "12.0.2"
   }
 }

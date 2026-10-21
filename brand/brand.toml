@@ -1,8 +1,8 @@
 # Free PDF SDK branding. crates/brand reads this at build time; replace the values and the SVGs
 # (same file names) to rebrand. Colours are "#RRGGBB".
 app_name = "Free PDF SDK"
-accent_light = "#2B6CB0"
-accent_dark = "#63A4F0"
+accent_light = "#E10600"
+accent_dark = "#FF4D40"
 about_text = "An embeddable PDF viewer and annotator. Built on open-source software: see NOTICE and third-party/ in the SDK folder."
 about_url = ""
 storage_key = "free-pdf-sdk"
