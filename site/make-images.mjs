@@ -58,7 +58,12 @@ for (const theme of ["light", "dark"]) {
     const file = theme === "dark" ? `${shot.file}-dark.png` : `${shot.file}.png`;
     const page = await browser.newPage({ viewport: { width: 1430, height: 960 }, deviceScaleFactor: 1 });
     await page.emulateMedia({ colorScheme: theme });
-    await page.addInitScript((t) => localStorage.setItem("fps-theme", t), theme);
+    await page.addInitScript((t) => {
+      localStorage.setItem("fps-theme", t);
+      // A recorded choice keeps the consent banner (site/src/assets/js/consent.js) out of the
+      // shot; declined, so nothing is sent to analytics. `v` follows consent.js's VERSION.
+      localStorage.setItem("fps-consent", JSON.stringify({ v: 1, analytics: false, gpc: false, at: new Date().toISOString() }));
+    }, theme);
     await page.goto(`${base}/demo/?mode=${shot.mode}`);
     await page.waitForFunction(() => window.fpsDemo !== undefined, undefined, { timeout: 120000 });
     await page.waitForTimeout(2000);
@@ -68,7 +73,7 @@ for (const theme of ["light", "dark"]) {
       // The viewer is a canvas, so by position: close the Tools panel (its ×), open the Layers
       // panel from the right-hand rail, then hide the Furniture layer (its second row).
       const box = await page.locator("#viewer-wrap").boundingBox();
-      await page.mouse.click(box.x + 248, box.y + 100);
+      await page.mouse.click(box.x + 248, box.y + 74);
       await page.waitForTimeout(600);
       await page.mouse.click(box.x + box.width - 23, box.y + 226);
       await page.waitForTimeout(900);

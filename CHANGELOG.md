@@ -69,13 +69,27 @@ Version 0.2.0 (not released yet).
 - Redaction: "Remove hidden information" and "Sanitize document" now evaluate
   optional-content membership dictionaries (OCMDs) when they remove hidden layers, so content a
   document actually shows is kept and content it hides is removed; malformed visibility data is
-  treated conservatively
-  (pdfcraft 0.11.0).
+  treated conservatively (pdfcraft 0.11.0).
+- Rendering reads each object stream's index once instead of again for every object in it (pdfcraft).
+- PNG export is 3-5x faster for opaque pages, at the same file size (pdfcraft).
+
+### From pdfcraft, in the `formDesign` feature and the viewer layout
+
+- Prepare a form ▸ **Calculation order**: a page to read, check, fix and set the order calculated
+  fields run in. Renaming a field renames it in the calculations that read it.
+- Prepare a form ▸ **Text field table**: draw a grid of text fields (rows and columns) as one
+  edit.
+- The mode bar has no Read tab, as in Acrobat; Read mode stays a View command, and a read-only
+  configuration still pins the viewer to it.
+- The Edit panel and Format text are laid out as Acrobat's; the Tools panel has no tab strip
+  while docked on its own; Organize pages remembers its thumbnail size.
+- Norwegian Bokmål interface and date language.
 
 ### Based on
 
-- pdfcraft upstream `b1bf1cf01ff8d513a7a9bcb87d99933f2fb643f8` (0.11.0, was 0.10.0) with the
-  `free-pdf-sdk/patches` commits rebased onto it (exact commit in `version.json`).
+- pdfcraft upstream `88dad98dd478d255399b1405b33765f4da542704` (0.11.0 and later main; was
+  0.10.0) with the `free-pdf-sdk/patches` commits rebased onto it (exact commit in
+  `version.json`). The fork's profile gates now also cover the new Edit panel.
 
 ## [0.1.0] - 2026-10-20
 

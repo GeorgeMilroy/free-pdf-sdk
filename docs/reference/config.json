@@ -331,7 +331,7 @@
     },
     {
       "category": "Forms & signing",
-      "description": "Adding, editing and deleting form fields, tab order and field detection.",
+      "description": "Adding, editing and deleting form fields, text field tables, tab and calculation order, and field detection.",
       "edits": true,
       "key": "formDesign",
       "modes": [
