@@ -90,6 +90,8 @@ whenVisible([...document.querySelectorAll("[data-count]")], (el) => {
     el.textContent = String(target);
     return;
   }
+  // The HTML holds the real number (for crawlers and no-JS); count up from 0 once visible.
+  el.textContent = "0";
   const start = performance.now();
   const tick = (now) => {
     const t = Math.min(1, (now - start) / 1300);

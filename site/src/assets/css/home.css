@@ -42,6 +42,20 @@ body.home {
   opacity: 1;
   transform: none;
 }
+/* The hero is painted on the first frame (it holds the LCP image and the H1): it slides in with
+   CSS alone, never hidden and never waiting for the script. */
+.js .hero .reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  animation: hero-in 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes hero-in {
+  from {
+    transform: translateY(28px);
+  }
+}
 
 /* Buttons used on this page. */
 .btn.lg {
@@ -1462,6 +1476,28 @@ body.home {
   box-shadow: none;
   margin: 0;
 }
+.tab-panel .tab-doc {
+  display: inline-block;
+  margin: 14px 18px;
+  font-weight: 600;
+}
+
+/* FAQ. */
+.faq details {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+.faq summary {
+  cursor: pointer;
+}
+.faq summary h3 {
+  display: inline;
+  font-size: 1.05rem;
+  margin: 0;
+}
+.faq details p {
+  margin: 10px 0 0;
+}
 @keyframes fade {
   from {
     opacity: 0;
@@ -1934,6 +1970,9 @@ body.home {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+  .js .hero .reveal {
+    animation: none;
   }
   .hero-shot {
     transform: none;

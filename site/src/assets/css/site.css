@@ -313,6 +313,72 @@ kbd {
 .based-on {
   opacity: 0.8;
 }
+.footer-link {
+  display: block;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.footer-link:hover {
+  color: var(--accent);
+}
+
+/* Analytics consent banner (assets/js/consent.js). Accept and Decline look the same on purpose:
+   declining must be as easy as accepting. Above the Ko-fi widget, which sits bottom-left. */
+body {
+  padding-bottom: var(--consent-h, 0px); /* Set by consent.js while the banner shows. */
+}
+html {
+  scroll-padding-bottom: var(--consent-h, 0px);
+}
+.consent {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 2147483000;
+  max-height: 60vh;
+  max-height: 60dvh;
+  overflow-y: auto;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  font-size: 14px;
+}
+.consent-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.consent p {
+  margin: 0;
+  flex: 1;
+  color: var(--text);
+}
+.consent p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.consent-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+@media (max-width: 760px) {
+  .consent-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .consent-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
 
 /* Shared bits. */
 .eyebrow {
@@ -546,6 +612,13 @@ pre.bare {
 .prose {
   min-width: 0;
   font-size: 16px;
+}
+/* Links in running text: underlined, not told apart by colour alone (WCAG 1.4.1). */
+.prose p a,
+.prose li a,
+.prose td a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .prose h1 {
   font-size: clamp(30px, 4vw, 40px);

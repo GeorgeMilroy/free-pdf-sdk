@@ -31,6 +31,34 @@ the default is `url` in `site.config.json`.
 version reaches visitors on their next visit. Firebase compresses responses (gzip/brotli)
 automatically.
 
+## Analytics and privacy
+
+The site counts visits with Google Analytics 4 (`analytics.measurementId` in `site.config.json`),
+but only for visitors who click **Accept** in the cookie banner (`src/assets/js/consent.js`). Until
+then the Google tag is not loaded at all: nothing goes to Google and no cookie is set. Declining is
+one click, "Cookie settings" in the footer changes the choice (declining deletes the `_ga` cookies),
+and a Global Privacy Control signal counts as declining. Google signals and ad personalisation are
+off. Remove `analytics` from the config to drop the banner and the tag.
+
+The privacy notice (`/privacy/`) is built from `src/pages/privacy.md`. `legal.controller`,
+`legal.email` and `legal.updated` in `site.config.json` are required: the build stops without them.
+When you change what the site collects, update the notice and `legal.updated`, and raise `VERSION` in
+`consent.js` so everyone is asked again.
+
+The notice promises some Google Analytics settings, made in GA, not in this repository. Check them
+once for the property:
+
+- Admin → Data collection and modification → Data retention: event data **2 months** and user data
+  **2 months**.
+- Admin → Data collection: Google signals **off**. Turning granular location and device data off for
+  the EU goes further; if you do, update "What is collected" in `privacy.md` (city, screen size,
+  device details).
+- Admin → Data streams → web stream → Enhanced measurement: the events it collects (scrolls,
+  outbound clicks, file downloads, site search) are listed in `privacy.md`; keep the two in step.
+- Admin → Account settings: the data processing terms are accepted. The contracting Google entity
+  depends on the account's country; the notice names Google Ireland for the EEA/UK and Google LLC
+  elsewhere.
+
 ## Content
 
 | Path | What it is |

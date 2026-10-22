@@ -7,6 +7,7 @@
 // generated from docs/reference/config.json so they never drift from the code. The built SDK
 // is copied to /sdk/ so the demo runs the real thing, from the same origin.
 
+import { execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,8 +23,26 @@ const cfg = JSON.parse(readFileSync(join(site, "site.config.json"), "utf8"));
 const version = JSON.parse(readFileSync(join(repo, "js/package.json"), "utf8")).version;
 const reference = JSON.parse(readFileSync(join(repo, "docs/reference/config.json"), "utf8"));
 const siteUrl = (process.env.SITE_URL ?? cfg.url).replace(/\/$/, "");
+// Google Analytics loads only after the visitor consents (assets/js/consent.js); the privacy
+// notice has to say who to contact, so the build refuses to run without it.
+const analyticsId = cfg.analytics?.measurementId ?? "";
+if (analyticsId && !/^G-[A-Z0-9]+$/.test(analyticsId)) throw new Error(`site.config.json: analytics.measurementId ${analyticsId} is not a GA4 id (G-...)`);
+for (const k of ["controller", "email", "updated"]) {
+  if (!cfg.legal?.[k]) throw new Error(`site.config.json: legal.${k} is required for the privacy notice`);
+}
+// The sitemap's <lastmod>: the date of the last commit touching these files, or nothing outside a
+// git checkout. A shallow clone would give every page the same date.
+const lastmod = (files) => {
+  try {
+    return execFileSync("git", ["log", "-1", "--format=%cs", "--", ...files], { cwd: repo, encoding: "utf8" }).trim() || null;
+  } catch {
+    return null;
+  }
+};
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+// JSON-LD inside <script>: escape "<" so a "</script>" or "<!--" in a value cannot break out.
+const ldJson = (data) => `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, "\\u003c")}</script>`;
 const slugify = (s) =>
   String(s)
     .toLowerCase()
@@ -135,8 +154,8 @@ const NAV = [
   ["Live demo", "/demo/"],
 ];
 
-function layout({ title, description, path, body, bodyClass = "", head = "", scripts = "" }) {
-  const full = title === cfg.name ? `${cfg.name}: ${cfg.tagline}` : `${title} | ${cfg.name}`;
+function layout({ title, description, path, body, bodyClass = "", head = "", scripts = "", jsonLd }) {
+  const full = title === cfg.name ? (cfg.homeTitle ?? `${cfg.name}: ${cfg.tagline}`) : `${title} | ${cfg.name}`;
   const exact = NAV.some(([, href]) => href === path);
   const nav = NAV.map(([label, href]) => {
     const current = path === href || (!exact && label === "Docs" && path.startsWith("/docs/"));
@@ -150,8 +169,10 @@ function layout({ title, description, path, body, bodyClass = "", head = "", scr
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(full)}</title>
 <meta name="description" content="${esc(description)}">
+<meta name="robots" content="max-image-preview:large">
 <link rel="canonical" href="${esc(siteUrl + path)}">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="${esc(cfg.name)}">
 <meta property="og:title" content="${esc(full)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${esc(siteUrl + path)}">
@@ -162,12 +183,12 @@ function layout({ title, description, path, body, bodyClass = "", head = "", scr
 <link rel="icon" href="/assets/img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="alternate" type="text/plain" title="Documentation for AI agents" href="/llms.txt">
-<link rel="preconnect" href="https://fonts.googleapis.com">
+${analyticsId ? `<meta name="fps-analytics" content="${esc(analyticsId)}">\n` : ""}<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/assets/css/site.css?v=${version}">
 <script>try{var t=localStorage.getItem("fps-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-${head}
+${jsonLd ? ldJson(jsonLd) + "\n" : ""}${head}
 </head>
 <body class="${bodyClass}">
 <a class="skip" href="#main">Skip to content</a>
@@ -198,7 +219,7 @@ ${body}
     </div>
     <div><h3>Product</h3><a href="/demo/">Live demo</a><a href="/docs/introduction/">Overview</a><a href="/docs/configuration/">Modes &amp; features</a><a href="/docs/changelog/">Changelog</a></div>
     <div><h3>Developers</h3><a href="/docs/getting-started/">Getting started</a><a href="/docs/api/">API reference</a><a href="/docs/react/">Frameworks</a><a href="/docs/ai-agents/">Docs for AI agents</a></div>
-    <div><h3>Open source</h3><a href="/licenses/">Licences &amp; notices</a><a href="/llms.txt">llms.txt</a></div>
+    <div><h3>Open source</h3><a href="/licenses/">Licences &amp; notices</a><a href="/llms.txt">llms.txt</a><a href="/privacy/">Privacy</a>${analyticsId ? `<button class="footer-link" type="button" data-consent-open hidden>Cookie settings</button>` : ""}</div>
   </div>
   <div class="container footer-bottom">
     <p>© ${new Date().getUTCFullYear()} ${esc(cfg.name)}. Released under MIT OR Apache-2.0.</p>
@@ -206,7 +227,7 @@ ${body}
   </div>
 </footer>
 <script type="module" src="/assets/js/site.js?v=${version}"></script>
-${scripts}
+${analyticsId ? `<script type="module" src="/assets/js/consent.js?v=${version}"></script>\n` : ""}${scripts}
 </body>
 </html>
 `;
@@ -349,8 +370,24 @@ function main() {
     "index.html",
     layout({
       title: cfg.name,
-      description: cfg.description,
+      description: cfg.homeDescription ?? cfg.description,
       path: "/",
+      // WebSite gives Google the site name for search results (on the home page only, with the
+      // canonical home URL); Organization gives the publisher and its logo.
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@graph": [
+          { "@type": "WebSite", "@id": `${siteUrl}/#website`, name: cfg.name, alternateName: "FreePDFSDK", url: `${siteUrl}/`, publisher: { "@id": `${siteUrl}/#organization` } },
+          {
+            "@type": "Organization",
+            "@id": `${siteUrl}/#organization`,
+            name: cfg.legal.controller,
+            url: `${siteUrl}/`,
+            logo: `${siteUrl}/assets/img/apple-touch-icon.png`,
+            ...(cfg.github ? { sameAs: [cfg.github] } : {}),
+          },
+        ],
+      },
       body: page("home.html").replace("{{REFERENCE_JSON}}", () => refJson),
       bodyClass: "home",
       head: `<link rel="stylesheet" href="/assets/css/home.css?v=${version}"><script>document.documentElement.classList.add("js")</script>`,
@@ -401,10 +438,35 @@ function main() {
       body: `<div class="container narrow prose"><h1>Licences and notices</h1><p>Free PDF SDK is released under <strong>MIT OR Apache-2.0</strong>. It includes the open-source software below; the full licence texts ship with the SDK in <code>third-party/</code> and are served with the SDK: <a href="/sdk/NOTICE">NOTICE</a> and <a href="/sdk/third-party/README.md">third-party/README.md</a>.</p>${markdown(licToc).parse(licences.replace(/^# .*$/m, ""))}</div>`,
     }),
   );
+  const privacy = readFileSync(join(src, "pages", "privacy.md"), "utf8").replace(/\{\{([A-Z_]+)\}\}/g, (m, key) => {
+    const value = { SITE_NAME: cfg.name, SITE_URL: siteUrl, CONTROLLER: cfg.legal.controller, EMAIL: cfg.legal.email, UPDATED: cfg.legal.updated, MEASUREMENT_ID: analyticsId }[key];
+    if (value === undefined) throw new Error(`privacy.md: unknown placeholder ${m}`);
+    return value;
+  });
+  write(
+    "privacy/index.html",
+    layout({
+      title: "Privacy notice",
+      description: "What the Free PDF SDK website collects, why, and the choices you have.",
+      path: "/privacy/",
+      body: `<div class="container narrow prose">${markdown([]).parse(privacy)}<p><button class="btn" type="button" data-consent-open hidden>Cookie settings</button></p></div>`,
+    }),
+  );
   write("404.html", layout({ title: "Page not found", description: "This page does not exist.", path: "/404.html", body: `<div class="container narrow center-block"><p class="eyebrow">404</p><h1>Page not found</h1><p>The page you are looking for doesn't exist or has moved.</p><p><a class="btn primary" href="/">Home</a> <a class="btn" href="/docs/introduction/">Docs</a></p></div>` }));
   write("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);
-  const urls = ["/", "/demo/", "/licenses/", ...docs.map((d) => `/docs/${d.slug}/`)];
-  write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${esc(siteUrl + u)}</loc></url>`).join("\n")}\n</urlset>\n`);
+  // <lastmod>: the last commit to each page's content sources (not the templates, CSS or JS).
+  const sources = {
+    "/": ["site/src/pages/home.html", "site/site.config.json", "js/package.json"],
+    "/demo/": ["site/src/pages/demo.html"],
+    "/licenses/": ["third-party/README.md"],
+    "/privacy/": ["site/src/pages/privacy.md", "site/site.config.json"],
+    ...Object.fromEntries(docs.map((d) => [`/docs/${d.slug}/`, d.slug === "changelog" ? ["CHANGELOG.md"] : [`site/src/docs/${d.slug}.md`, "docs/reference/config.json"]])),
+  };
+  const sitemap = Object.entries(sources).map(([u, files]) => {
+    const m = lastmod(files);
+    return `  <url><loc>${esc(siteUrl + u)}</loc>${m ? `<lastmod>${m}</lastmod>` : ""}</url>`;
+  });
+  write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap.join("\n")}\n</urlset>\n`);
 
   checkLinks();
   console.log(`site built: ${out} (${docs.length} docs pages, SDK ${version})`);

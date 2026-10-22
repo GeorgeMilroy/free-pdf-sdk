@@ -2,6 +2,16 @@
   "name": "Free PDF SDK",
   "tagline": "The embeddable PDF viewer and annotator for the web",
   "description": "Free PDF SDK is an embeddable, white-label PDF viewer, annotator and editor for web apps. It runs entirely in the browser, works with React, Vue, Angular, Svelte and plain JavaScript, and lets you choose exactly which features your users see.",
-  "url": "https://freepdfsdk.mecorelabs.com",
-  "github": ""
+  "homeTitle": "Free PDF SDK: Open-Source JavaScript PDF Viewer and Editor",
+  "homeDescription": "Free, open-source PDF viewer, annotator and editor for web apps. Embed it in React, Vue, Angular, Svelte or plain JavaScript; it runs fully in the browser.",
+  "url":"https://freepdfsdk.mecorelabs.com",
+  "github": "",
+  "analytics": {
+    "measurementId": "G-ZTJKQ1CLQ0"
+  },
+  "legal": {
+    "controller": "Mecore Labs",
+    "email": "privacy@mecorelabs.com",
+    "updated": "2026-10-22"
+  }
 }

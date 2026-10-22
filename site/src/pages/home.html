@@ -20,7 +20,7 @@
       <div class="hero-shot">
         <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span><em>Free PDF SDK · annotate · Layers</em></div>
         <img class="shot-light" fetchpriority="high" src="/assets/img/viewer-layers.png" width="1100" height="855" alt="Free PDF SDK with the Layers panel open: Structure, Furniture, Electrical and Dimensions layers of a floor plan, each with a show/hide toggle">
-        <img class="shot-dark" src="/assets/img/viewer-layers-dark.png" width="1100" height="855" alt="Free PDF SDK in the dark theme with the Layers panel open: Structure, Furniture, Electrical and Dimensions layers of a floor plan, each with a show/hide toggle">
+        <img class="shot-dark" loading="lazy" src="/assets/img/viewer-layers-dark.png" width="1100" height="855" alt="Free PDF SDK in the dark theme with the Layers panel open: Structure, Furniture, Electrical and Dimensions layers of a floor plan, each with a show/hide toggle">
       </div>
       <div class="float-card fc-layers" data-depth="2" aria-hidden="true">
         <div class="fc-title"><svg viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>Layers</div>
@@ -50,9 +50,9 @@
 
 <section class="stats">
   <div class="container stats-grid">
-    <div class="stat reveal"><b><span data-count="8">0</span></b><span>modes, from read-only to full authoring</span></div>
-    <div class="stat reveal" style="--i: 1"><b><span data-count="31">0</span></b><span>feature switches, each hidden everywhere when off</span></div>
-    <div class="stat reveal" style="--i: 2"><b><span data-count="23">0</span></b><span>interface languages</span></div>
+    <div class="stat reveal"><b><span data-count="8">8</span></b><span>modes, from read-only to full authoring</span></div>
+    <div class="stat reveal" style="--i: 1"><b><span data-count="31">31</span></b><span>feature switches, each hidden everywhere when off</span></div>
+    <div class="stat reveal" style="--i: 2"><b><span data-count="23">23</span></b><span>interface languages</span></div>
     <div class="stat reveal" style="--i: 3"><b><span data-count="0">0</span></b><span>servers. Documents stay on the device</span></div>
   </div>
 </section>
@@ -61,7 +61,7 @@
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">PDF layers</p>
-      <h2>Show a layer. Hide a layer. One click.</h2>
+      <h2>Show or hide any PDF layer in one click</h2>
       <p>Structure, furniture, electrical, plumbing, dimensions, revisions: CAD exports keep them on PDF layers. The Layers panel lists every layer in the drawing and switches it on or off, and the page redraws instantly. Printing follows what is shown; the file itself is untouched.</p>
     </div>
     <div class="story">
@@ -140,7 +140,7 @@
   <div class="container">
     <div class="section-head center reveal">
       <p class="eyebrow">Everything a document workflow needs</p>
-      <h2>A complete PDF toolkit. Only the parts you switch on.</h2>
+      <h2>A complete PDF viewer, annotation and editing toolkit. Only the parts you switch on.</h2>
       <p>Every capability below is a feature flag. Leave one off and it disappears from the toolbars, the menus, the right-click menus and the keyboard shortcuts.</p>
     </div>
     <div class="bento">
@@ -189,7 +189,7 @@
           <div class="orbit"><span class="doc"></span><span class="ring r1"></span><span class="ring r2"></span><span class="lock"></span></div>
         </div>
         <h3>Private by design</h3>
-        <p>WebAssembly in an iframe on your own origin. No server, no uploads, no tracking. AES-256 encrypted files open in place, and an owner password lifts their restrictions.</p>
+        <p>WebAssembly in an iframe on your own origin. The SDK has no server, no uploads and no telemetry. AES-256 encrypted files open in place, and an owner password lifts their restrictions.</p>
       </article>
       <article class="bento-card reveal" style="--i: 1">
         <div class="art art-redact" aria-hidden="true">
@@ -229,15 +229,15 @@
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Modes and features</p>
-      <h2>One option. The right interface.</h2>
+      <h2>One option sets the interface, from read-only viewer to full editor</h2>
       <p>Drag the handle: the same viewer in <code>full</code> mode and in <code>view</code> mode. Every editing tool, panel and menu entry is gone, from the toolbars down to the right-click menus.</p>
     </div>
     <div class="compare reveal" data-compare>
       <div class="compare-frame">
-        <img class="shot-light after" src="/assets/img/viewer-view.png" width="1100" height="855" alt="Free PDF SDK in view mode: only the document, search and navigation">
+        <img class="shot-light after" loading="lazy" src="/assets/img/viewer-view.png" width="1100" height="855" alt="Free PDF SDK in view mode: only the document, search and navigation">
         <img class="shot-dark after" loading="lazy" src="/assets/img/viewer-view-dark.png" width="1100" height="855" alt="Free PDF SDK in view mode, dark theme: only the document, search and navigation">
         <div class="compare-before">
-          <img class="shot-light" src="/assets/img/viewer-full.png" width="1100" height="855" alt="Free PDF SDK in full mode: the Tools panel, quick toolbar, menus and every panel">
+          <img class="shot-light" loading="lazy" src="/assets/img/viewer-full.png" width="1100" height="855" alt="Free PDF SDK in full mode: the Tools panel, quick toolbar, menus and every panel">
           <img class="shot-dark" loading="lazy" src="/assets/img/viewer-full-dark.png" width="1100" height="855" alt="Free PDF SDK in full mode, dark theme: the Tools panel, quick toolbar, menus and every panel">
         </div>
         <div class="compare-handle" aria-hidden="true"><span></span></div>
@@ -264,8 +264,8 @@
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Integrations</p>
-      <h2>Drop it into the framework you already use</h2>
-      <p>First-class components for React and Vue, an action for Svelte, and a Web Component for Angular and everything else. One npm package, fully typed.</p>
+      <h2>A PDF viewer for React, Vue, Angular, Svelte and plain JavaScript</h2>
+      <p>First-class components for <a href="/docs/react/">React</a> and <a href="/docs/vue/">Vue</a>, an action for <a href="/docs/svelte/">Svelte</a>, and a <a href="/docs/web-component/">Web Component</a> for <a href="/docs/angular/">Angular</a> and everything else, including <a href="/docs/vanilla-js/">plain JavaScript</a>. One npm package, fully typed.</p>
     </div>
     <div class="tabs reveal">
       <div class="tab-list" role="tablist">
@@ -297,7 +297,7 @@ export function ProofReview({ url }: { url: string }) {
     /&gt;
   );
 }
-</code></pre></div></div>
+</code></pre></div><a class="tab-doc" href="/docs/react/">React PDF viewer guide <span class="arrow">→</span></a></div>
       <div class="tab-panel" data-tab="vue"><div class="code"><div class="code-bar"><span>vue</span><button class="copy" type="button">Copy</button></div><pre><code class="language-vue">
 &lt;script setup lang="ts"&gt;
 import { ref } from "vue";
@@ -318,7 +318,7 @@ const count = ref(0);
     style="height: 80vh"
   /&gt;
 &lt;/template&gt;
-</code></pre></div></div>
+</code></pre></div><a class="tab-doc" href="/docs/vue/">Vue PDF viewer guide <span class="arrow">→</span></a></div>
       <div class="tab-panel" data-tab="angular"><div class="code"><div class="code-bar"><span>ts</span><button class="copy" type="button">Copy</button></div><pre><code class="language-ts">
 // main.ts: register &lt;free-pdf-viewer&gt; once.
 import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element";
@@ -343,7 +343,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 export class ProofReviewComponent {
   count = 0;
 }
-</code></pre></div></div>
+</code></pre></div><a class="tab-doc" href="/docs/angular/">Angular PDF viewer guide <span class="arrow">→</span></a></div>
       <div class="tab-panel" data-tab="svelte"><div class="code"><div class="code-bar"><span>svelte</span><button class="copy" type="button">Copy</button></div><pre><code class="language-svelte">
 &lt;script&gt;
   import { freePdf } from "@mecorelabs/free-pdf-sdk/svelte";
@@ -356,7 +356,7 @@ export class ProofReviewComponent {
   use:freePdf={{ baseUrl: "/free-pdf-sdk/", mode, document: { url: "/files/proof.pdf" } }}
   on:fps-annotations-changed={(e) =&gt; (count = e.detail.count)}
 &gt;&lt;/div&gt;
-</code></pre></div></div>
+</code></pre></div><a class="tab-doc" href="/docs/svelte/">Svelte and SvelteKit PDF viewer guide <span class="arrow">→</span></a></div>
       <div class="tab-panel" data-tab="element"><div class="code"><div class="code-bar"><span>html</span><button class="copy" type="button">Copy</button></div><pre><code class="language-html">
 &lt;script type="module"&gt;
   import { defineFreePdfViewer } from "@mecorelabs/free-pdf-sdk/element";
@@ -369,7 +369,7 @@ export class ProofReviewComponent {
   mode="fill"
   ui='{"panels": {"layers": false}}'
   style="height: 80vh"&gt;&lt;/free-pdf-viewer&gt;
-</code></pre></div></div>
+</code></pre></div><a class="tab-doc" href="/docs/web-component/">PDF viewer Web Component guide <span class="arrow">→</span></a></div>
       <div class="tab-panel" data-tab="js"><div class="code"><div class="code-bar"><span>ts</span><button class="copy" type="button">Copy</button></div><pre><code class="language-ts">
 import { FreePdf } from "@mecorelabs/free-pdf-sdk";
 
@@ -384,7 +384,7 @@ const viewer = await FreePdf.init(document.getElementById("viewer")!, {
 
 viewer.on("annotationsChanged", ({ count }) =&gt; console.log(count, "comments"));
 const xfdf = await viewer.exportXfdf();
-</code></pre></div></div>
+</code></pre></div><a class="tab-doc" href="/docs/vanilla-js/">JavaScript PDF viewer guide <span class="arrow">→</span></a></div>
     </div>
   </div>
 </section>
@@ -393,7 +393,7 @@ const xfdf = await viewer.exportXfdf();
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">How it works</p>
-      <h2>Three steps to a working viewer</h2>
+      <h2>Embed a PDF viewer in your web app in three steps</h2>
       <p>The viewer is a WebAssembly app in an iframe on your own origin. A small typed wrapper talks to it, so your code stays simple and your page stays isolated.</p>
     </div>
     <ol class="steps">
@@ -401,6 +401,22 @@ const xfdf = await viewer.exportXfdf();
       <li class="step reveal" style="--i: 1"><span class="step-n">2</span><h3>Serve the viewer</h3><p>Copy the viewer files into a folder your site serves, on the same origin.</p><code>npx @mecorelabs/free-pdf-sdk copy-viewer public/free-pdf-sdk</code></li>
       <li class="step reveal" style="--i: 2"><span class="step-n">3</span><h3>Mount it</h3><p>Give an element a height and initialise it with a mode and a document.</p><code>FreePdf.init(el, { baseUrl, mode })</code></li>
     </ol>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container narrow">
+    <div class="section-head center reveal">
+      <p class="eyebrow">FAQ</p>
+      <h2>Questions about Free PDF SDK</h2>
+    </div>
+    <div class="faq reveal">
+      <details><summary><h3>Is Free PDF SDK free for commercial use?</h3></summary><p>Yes. Free PDF SDK is licensed MIT OR Apache-2.0, at your option, including commercial use and white-labelling. It is built on the open-source pdfcraft engine; keep the <code>NOTICE</code> and <code>third-party/</code> files that <code>copy-viewer</code> copies next to the viewer when you deploy. See <a href="/licenses/">licences and notices</a>.</p></details>
+      <details><summary><h3>Does it need a server? Where do my documents go?</h3></summary><p>There is no server component. The viewer opens the PDF with WebAssembly in the browser, and saved PDFs and XFDF comments go to your own code. The SDK sends no documents, comments, passwords or telemetry to any server.</p></details>
+      <details><summary><h3>Which frameworks does it support?</h3></summary><p><a href="/docs/react/">React and Next.js</a>, <a href="/docs/vue/">Vue and Nuxt</a>, <a href="/docs/angular/">Angular</a>, <a href="/docs/svelte/">Svelte and SvelteKit</a>, a <a href="/docs/web-component/">Web Component</a> for any page, and <a href="/docs/vanilla-js/">plain JavaScript</a>.</p></details>
+      <details><summary><h3>Can I load it from a CDN?</h3></summary><p>No. You serve the viewer files from your own origin, copied there with <code>npx @mecorelabs/free-pdf-sdk copy-viewer</code>. See <a href="/docs/hosting-and-security/">Hosting and security</a>.</p></details>
+      <details><summary><h3>Does it work on phones and tablets?</h3></summary><p>Yes, in mobile browsers that support WebAssembly and WebGL. The first visit downloads about 10 MB (compressed), which is then cached. More answers are in the <a href="/docs/faq/">FAQ</a>.</p></details>
+    </div>
   </div>
 </section>
 
