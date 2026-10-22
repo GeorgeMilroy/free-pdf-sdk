@@ -49,7 +49,7 @@ test("init, load, events and version", async ({ page }) => {
   expect(loaded.permissions.canAnnotate).toBe(true);
   expect((await call(page, "getPageCount")).value).toBe(3);
   const version = (await call(page, "version")).value as { sdk: string; pdfcraftRev: string };
-  expect(version.sdk).toBe("0.2.0");
+  expect(version.sdk).toBe("0.2.1");
   expect(version.pdfcraftRev).toMatch(/^[0-9a-f]{40}$/);
   expect((await call(page, "goToPage", 2)).ok).toBe(true);
   expect((await call(page, "goToPage", 9)).code).toBe("BAD_REQUEST");

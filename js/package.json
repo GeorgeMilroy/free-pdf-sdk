@@ -1,6 +1,6 @@
 {
   "name": "@mecorelabs/free-pdf-sdk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Free PDF SDK: an embeddable, white-label PDF viewer, annotator and editor for the web, with React, Vue, Svelte, Angular and Web Component integrations",
   "license": "MIT OR Apache-2.0",
   "homepage": "https://freepdfsdk.mecorelabs.com",
