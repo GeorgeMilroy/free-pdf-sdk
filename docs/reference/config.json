@@ -437,7 +437,7 @@
     },
     {
       "category": "Pages & content",
-      "description": "Converting to PDF/A.",
+      "description": "Converting to PDF/A, and removing a document's PDF/A or PDF/X identification.",
       "edits": true,
       "key": "standards",
       "modes": [

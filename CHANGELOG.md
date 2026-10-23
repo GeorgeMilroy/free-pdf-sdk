@@ -7,6 +7,40 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+pdfcraft updated to 0.13.0 (through 0.12.0). No change to the JavaScript API or the postMessage
+protocol.
+
+### Fixed
+
+- Applying redactions and flattening work on a copy: a page refused part way leaves the
+  document as it was.
+- Many robustness fixes from pdfcraft's code audits: decoding is bounded across all filter
+  stages, image export refuses a bad raster instead of failing, and form, XFA date and signature
+  parsing are stricter.
+- Form fields show their tooltip on hover.
+
+### Added
+
+- View ▸ Page display ▸ **Show gaps between pages** (on by default): turn it off for a gapless
+  continuous view. Always available; hide it with the `view.page_gaps` id.
+- Lines, connected lines, polygons and clouds can be reshaped by dragging their ends and corners
+  (`shapes` feature).
+- Remove a document's PDF/A identification from the PDF/A dialog (`standards` feature).
+- Header and footer can shrink the page content out of their way, and use Times or Courier.
+- A new bookmark goes where the reader is; Pages panel thumbnails can be resized.
+- French and Brazilian Portuguese interface translations completed; Polish and others extended.
+
+### Changed
+
+- The "Save changes?" prompt can be answered from the keyboard: the arrow keys and Tab move
+  between its buttons and Enter or Space press the chosen one. When the configuration doesn't
+  allow saving, the choice starts on Cancel and never lands on Save.
+
+### Based on
+
+- pdfcraft upstream `0dc77fe4ed8810b9e9f25b9dd050afae662c062a` (0.13.0) with the
+  `free-pdf-sdk/patches` commits rebased onto it (exact commit in `version.json`).
+
 ## [0.2.1] - 2026-10-22
 
 pdfcraft updated to 0.11.0 and later upstream changes. No change to the JavaScript API or the

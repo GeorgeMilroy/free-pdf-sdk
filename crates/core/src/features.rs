@@ -67,7 +67,7 @@ pub const FEATURES: &[FeatureDoc] = &[
     f("flatten", "Flatten", "Pages & content", true, "Flattening comments and form fields into the page content."),
     f("redaction", "Redaction", "Pages & content", true, "Marking and applying redactions, sanitizing and removing hidden information."),
     f("accessibility", "Accessibility", "Pages & content", true, "Accessibility checking, tags, reading order and alternate text."),
-    f("standards", "PDF standards", "Pages & content", true, "Converting to PDF/A."),
+    f("standards", "PDF standards", "Pages & content", true, "Converting to PDF/A, and removing a document's PDF/A or PDF/X identification."),
     f(
         "javascript",
         "JavaScript",
