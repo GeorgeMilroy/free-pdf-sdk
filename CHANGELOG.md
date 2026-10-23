@@ -7,6 +7,8 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-23
+
 pdfcraft updated to 0.13.0 (through 0.12.0). No change to the JavaScript API or the postMessage
 protocol.
 
@@ -169,7 +171,8 @@ postMessage protocol.
 - pdfcraft upstream `6fb6b7cf6fd8dc105fdd56a764d207cff6140694` (0.10.0) with the
   `free-pdf-sdk/patches` commits (exact commit in `version.json`).
 
-[Unreleased]: https://github.com/GeorgeMilroy/free-pdf-sdk/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/GeorgeMilroy/free-pdf-sdk/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/GeorgeMilroy/free-pdf-sdk/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/GeorgeMilroy/free-pdf-sdk/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/GeorgeMilroy/free-pdf-sdk/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/GeorgeMilroy/free-pdf-sdk/releases/tag/v0.1.0
