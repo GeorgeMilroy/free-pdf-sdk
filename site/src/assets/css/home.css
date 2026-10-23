@@ -1551,6 +1551,147 @@ body.home {
   overflow-wrap: anywhere;
 }
 
+/* Completely local: the hero's checks and its own section ---------------------------------- */
+.hero-local {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.hero-local li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.hero-local span {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.hero-local svg,
+.local-ico svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hero-local svg {
+  stroke-width: 2.8;
+}
+.local-device {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0 0 18px;
+  padding: 30px 24px 24px;
+  border: 2px dashed color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 20px;
+  background: var(--bg-soft);
+}
+.local-device-label {
+  position: absolute;
+  top: -11px;
+  left: 20px;
+  padding: 0 8px;
+  background: var(--bg);
+  color: var(--muted);
+  font: 500 12px/20px var(--mono);
+}
+.local-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.local-node {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elev);
+  font-weight: 600;
+  font-size: 14px;
+}
+.local-node.strong {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--red), var(--red-deep));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(225, 6, 0, 0.25);
+}
+.local-flow i {
+  flex: none;
+  width: 28px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px);
+}
+.local-cloud {
+  padding: 8px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font: 500 13px/1.2 var(--mono);
+}
+.local-cloud b {
+  color: var(--accent);
+}
+.local-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.local-card {
+  min-width: 0;
+  padding: 24px 22px 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg-elev);
+}
+.local-ico {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.local-ico svg {
+  stroke-width: 2;
+}
+.local-card h3 {
+  margin: 16px 0 6px;
+  font-size: 18px;
+}
+.local-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+.local-note {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.local-note code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--bg-soft);
+  font: 12.5px var(--mono);
+}
+
 /* Docs cards and the closing band ---------------------------------------------------------- */
 #docs {
   padding-bottom: 112px;
@@ -1796,7 +1937,8 @@ body.home {
   }
 }
 @media (max-width: 1100px) {
-  .bento {
+  .bento,
+  .local-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .stats-grid {
@@ -1912,8 +2054,24 @@ body.home {
   }
 }
 @media (max-width: 640px) {
-  .bento {
+  .bento,
+  .local-grid {
     grid-template-columns: 1fr;
+  }
+  .local-device,
+  .local-flow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .local-node,
+  .local-cloud {
+    text-align: center;
+  }
+  .local-flow i {
+    width: 2px;
+    height: 16px;
+    align-self: center;
+    background: repeating-linear-gradient(180deg, var(--muted) 0 4px, transparent 4px 8px);
   }
   .span-2 {
     grid-column: auto;
