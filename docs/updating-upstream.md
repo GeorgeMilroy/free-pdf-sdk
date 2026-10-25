@@ -66,6 +66,14 @@ upstream range before touching anything, runs the script, resolves rebase confli
 each patch's hook on top of upstream's code, places new upstream commands in the UI profile, checks
 new features work in the browser build, verifies, and reports. It never pushes or commits here.
 
+Type `/release-pdfcraft-update` for the whole cycle unattended
+(`.claude/skills/release-pdfcraft-update/SKILL.md`): the same update, then independent reviewers
+check the diff and patch stack, it commits the update and a patch-version "Prepare" commit (no
+co-author lines), pushes the fork, runs `scripts/release.ps1`, pushes `main` and the tag, waits
+for CI to pass, publishes to npm and deploys the site. It stops and reports instead of pushing
+on a conflict it can't resolve cleanly, a decision that needs you (a new public feature, a
+protocol change, a licence), a failing check, or a missing `npm login`; run it again to resume.
+
 ## Building before the fork commit is pushed
 
 Cargo fetches `https://github.com/GeorgeMilroy/pdfcraft` at the commit in `Cargo.lock`. Before
