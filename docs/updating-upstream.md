@@ -73,7 +73,9 @@ co-author lines), pushes the fork, runs `scripts/release.ps1`, pushes `main` and
 for CI to pass, publishes to npm, and deploys the landing site after checking its hand-written
 claims, counts and screenshots against the release. It stops and reports instead of pushing
 on a conflict it can't resolve cleanly, a decision that needs you (a new public feature, a
-protocol change, a licence), a failing check, or a missing `npm login`; run it again to resume.
+protocol change, a licence) or a failing check; run it again to resume. It also stops before
+the npm publish: run `npm run publish:npm:prod` in your own terminal (npm prints a link and you
+approve it with your passkey in the browser), tell it you have, and it deploys the site.
 
 ## Building before the fork commit is pushed
 

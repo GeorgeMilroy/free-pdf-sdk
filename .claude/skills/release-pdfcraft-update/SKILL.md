@@ -37,9 +37,12 @@ below. Every other rule of that skill still applies.
 - `/update-pdfcraft` step 3 says "ask the user" (a genuinely new feature, an API/protocol
   change, a new non-MIT/Apache licence, installing a new `wasm-bindgen` CLI).
 - A reviewer finding that survives verification (step 3) and you cannot fix cleanly.
-- npm not logged in (`npm whoami` fails) or asks for a one-time password: everything up to
-  and including the git pushes is done; tell the user to run `npm login` (or give the OTP) and
-  run this command again - it resumes at step 8 (see "Resuming").
+- npm publish (step 8.2) needs the user: the account signs in with a passkey, which npm only
+  offers in an interactive terminal, and this shell isn't one (it fails with `EOTP`). Don't
+  retry and don't ask for a code. Everything up to and including the git pushes is done; tell
+  the user to run `npm run publish:npm:prod` in their own terminal (it prints a link, they
+  approve with the passkey in the browser) and to say when it's done - then continue at 8.2's
+  check. Also stop here if `npm whoami` fails: they run `npm login` first.
 - CI red on the pushed commit.
 
 When stopping before step 6, leave local work in place (commits included) and say exactly what is
@@ -158,7 +161,9 @@ Watch the CI run for the pushed `main` commit with the Monitor tool (public API,
 
 1. `dist/npm/package.json` version is NEXT; `npm run check:npm-package:dev` (dry run) - look at
    the file list: `dist/`, `bin/`, `viewer/`, licences, NOTICE, `third-party/`, nothing stray.
-2. `npm run publish:npm:prod`. Then `npm view @mecorelabs/free-pdf-sdk version` == NEXT.
+2. The user runs `npm run publish:npm:prod` (`--auth-type=web`, passkey in the browser) in
+   their own terminal - see the stop point. Then `npm view @mecorelabs/free-pdf-sdk version`
+   == NEXT.
 3. Only after npm has NEXT (the site's install instructions point at it):
    `npm run deploy:hosting:prod` (builds the site from `dist/free-pdf-sdk-NEXT/`, deploys to
    the `free-pdf-sdk` Firebase project). `firebase` not logged in is a stop point like npm's:

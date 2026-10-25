@@ -14,7 +14,7 @@
     "deploy:hosting:prod": "npm run build:site && cd site && firebase deploy --only hosting --project free-pdf-sdk --non-interactive",
     "deploy:sdk-and-hosting:prod": "npm run build:sdk && npm run deploy:hosting:prod",
     "check:npm-package:dev": "npm publish ./dist/npm --dry-run",
-    "publish:npm:prod": "npm publish ./dist/npm --access public"
+    "publish:npm:prod": "npm publish ./dist/npm --access public --auth-type=web"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",

@@ -163,7 +163,7 @@ While the pdfcraft fork commit named in `Cargo.lock` is not yet pushed, use
 | `npm run preview:site:dev` | The built website, locally |
 | `npm run test:e2e` | Browser tests (after a build); Rust: `cargo test -p fps-core -p fps-brand -p fps-tests` |
 | `npm run deploy:hosting:prod` | Builds and deploys the website |
-| `npm run publish:npm:prod` | Publishes `dist/npm` as `@mecorelabs/free-pdf-sdk` (`check:npm-package:dev` for a dry run) |
+| `npm run publish:npm:prod` | Publishes `dist/npm` as `@mecorelabs/free-pdf-sdk`, signing in through the browser (passkey); run it in an interactive terminal (`check:npm-package:dev` for a dry run) |
 
 ### Branding
 
