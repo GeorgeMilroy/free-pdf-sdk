@@ -7,6 +7,68 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+pdfcraft updated to 0.14.0 and later upstream changes. No change to the JavaScript API or the
+postMessage protocol.
+
+### Fixed
+
+- Taps and clicks on the page are read once per frame, so a tap on a form field, check box or
+  open editor works, and nothing drawn over a page (a dialog, a panel being dragged) lets a
+  click through to it.
+- Rendering follows the PDF specification more closely: luminosity soft masks in CMYK groups,
+  Separation `/All` colours, twelve-ink DeviceN colours, Type 3 invisible text, tiling patterns
+  at every zoom, symbolic TrueType fonts and stand-ins for fonts that aren't embedded.
+- Comments without their own appearance are drawn: sticky-note icons (upright on rotated pages),
+  named stamps, border dashes, and line comments' leader lines and captions.
+- Check boxes and radio buttons without an appearance are drawn, with their caption and in the
+  field's text colour; comb fields show their cells, and fields that don't scroll stop taking
+  text when full.
+- The viewer's Comments panel threads replies by the comment they answer (`/IRT`) and counts
+  comments as Acrobat counts them. (`getAnnotations` and `annotationsChanged` still group replies
+  by `/NM` as before.)
+- A document opens at its own opening destination (page, position or named destination).
+- Redaction: clearing marks leaves the page as it was, form fields are removed even from an
+  empty form, and images drawn through a form without resources are kept.
+- Typed Password-field values are never written to a saved, extracted or signed file.
+- A static XFA form whose data fills thousands of fields opens in seconds.
+- Many robustness fixes from pdfcraft's code audits: bounded xref streams and JBIG2 data, a CMap
+  can no longer overflow the stack, and stricter XFDF, FDF and FormCalc parsing.
+- Security advisories in dependencies: crypto-bigint 0.7.6 (RUSTSEC-2026-0387) and ctutils 0.4.5
+  (RUSTSEC-2026-0385).
+
+### Added
+
+- Document Properties: a **Custom** tab for custom properties (editable with the
+  `editContent` feature) and a **Space Audit** tab.
+- Bookmarks show their title colour and style, and can set them (`bookmarks` feature).
+- The Pages panel has a **Page tools** menu (insert, rotate, extract, delete), and page
+  thumbnails a **Split document…** item; each shows only where its command is allowed.
+- The Attachments panel: double-click an attachment (other than a PDF) to save it, or
+  right-click it for Save and Delete (`download` feature to save, `editContent` to delete one of
+  the document's own attachments).
+- **Flatten comments** in the page's right-click menu and the Comments panel's menu
+  (`flatten` feature).
+- Measurement: type or pick an architect's 1:N drawing scale, applied at once.
+- The arrow keys move the selected comment (where its feature is on); added text boxes and images
+  can be pasted.
+- Forms: an editable combo box takes a typed value, and the date picker has a **Today** button.
+- Extract pages takes typed page ranges.
+- PDF Optimizer can target a PDF version and choose whether to use object streams (`download`
+  feature).
+- All tools expands to a full, searchable view listing the tools the configuration allows.
+- Persian interface translation.
+
+### Changed
+
+- The secured-document notice has a "Don't show again" button.
+- pdfcraft's new Edit ▸ **Attach a file** is not offered: it needs a native file picker. The
+  Attach file comment tool is unchanged.
+
+### Based on
+
+- pdfcraft upstream `71b47b519d2c295c2068dc89a8d75690fc7dd7e5` (0.14.0 and later) with the
+  `free-pdf-sdk/patches` commits rebased onto it (exact commit in `version.json`).
+
 ## [0.2.2] - 2026-10-23
 
 pdfcraft updated to 0.13.0 (through 0.12.0). No change to the JavaScript API or the postMessage

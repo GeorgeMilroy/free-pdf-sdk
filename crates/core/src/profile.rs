@@ -20,6 +20,8 @@ pub const ALWAYS_HIDDEN: &[&str] = &[
     "group:create",
     "group:combine",
     "group:compare",
+    // Attaching a file needs a native file picker: on the web pdfcraft only says it isn't available.
+    "edit.attach",
 ];
 
 #[cfg(test)]
@@ -28,7 +30,7 @@ mod tests {
 
     #[test]
     fn opening_and_update_checks_are_always_hidden() {
-        for id in ["file.open", "help.check_updates", "group:compare"] {
+        for id in ["file.open", "help.check_updates", "group:compare", "edit.attach"] {
             assert!(ALWAYS_HIDDEN.contains(&id), "{id}");
         }
         let resolved = crate::features::FeatureConfig { mode: crate::features::Mode::Full, ..Default::default() }.resolve();

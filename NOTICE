@@ -8,7 +8,7 @@ Based on pdfcraft
 Free PDF SDK is based on pdfcraft by the ArtCraft Team and the PdfCraft contributors
 (https://github.com/storytold/pdfcraft), used as a Cargo dependency pinned to commit
 
-    0dc77fe4ed8810b9e9f25b9dd050afae662c062a (pdfcraft 0.13.0)
+    71b47b519d2c295c2068dc89a8d75690fc7dd7e5 (pdfcraft 0.14.0)
 
 with Free PDF SDK modifications to pdfcraft's interface crate (pdfcraft-ui-egui): opt-in hooks
 for white-label branding and for hiding features. The exact modified commit is in Cargo.lock

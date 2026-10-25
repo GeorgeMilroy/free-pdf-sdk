@@ -1218,9 +1218,9 @@ checksum = "460fbee9c2c2f33933d720630a6a0bac33ba7053db5344fac858d4b8952d77d5"
 
 [[package]]
 name = "crypto-bigint"
-version = "0.7.5"
+version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a52aa3fcda4e6302a9f48734f234d35d4721b96f8fe07d073f07ce9df4f0271"
+checksum = "6bb08299a6046833a879ace115697f12fd2bd6c8d3e93c909ffc9e0738e7cae0"
 dependencies = [
  "cpubits",
  "ctutils",
@@ -1266,9 +1266,9 @@ dependencies = [
 
 [[package]]
 name = "ctutils"
-version = "0.4.2"
+version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d5515a3834141de9eafb9717ad39eea8247b5674e6066c404e8c4b365d2a29e"
+checksum = "38d28fb6aa7dd680b3ffd1a3e64e115c177bdba63c0ae7f9cd48129ff05c4fa0"
 dependencies = [
  "cmov",
  "subtle",
@@ -1604,7 +1604,7 @@ dependencies = [
 [[package]]
 name = "egui-wgpu"
 version = "0.36.2"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "ahash",
  "bytemuck",
@@ -2505,7 +2505,7 @@ dependencies = [
 [[package]]
 name = "hayro"
 version = "0.7.1"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "bytemuck",
  "hayro-interpret",
@@ -2525,7 +2525,7 @@ checksum = "9f4d0e94ddd48749f06bbe4e5389fb9799a0c45bcaf00495042076ef05e3241a"
 [[package]]
 name = "hayro-cmap"
 version = "0.1.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "brotli",
  "hayro-postscript",
@@ -2534,7 +2534,7 @@ dependencies = [
 [[package]]
 name = "hayro-interpret"
 version = "0.7.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "bitflags 2.13.2",
  "hayro-cmap",
@@ -2552,7 +2552,7 @@ dependencies = [
 [[package]]
 name = "hayro-jbig2"
 version = "0.3.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "fearless_simd",
  "hayro-ccitt",
@@ -2570,13 +2570,12 @@ dependencies = [
 [[package]]
 name = "hayro-postscript"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "885c5ef0654933139a9b9546fc2c69e18d37f38aa2520f079092b1be18f1fcaa"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 
 [[package]]
 name = "hayro-syntax"
 version = "0.7.2"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "flate2",
  "hayro-ccitt",
@@ -3140,7 +3139,7 @@ checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 [[package]]
 name = "lopdf"
 version = "0.45.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "aes",
  "bitflags 2.13.2",
@@ -3879,8 +3878,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-a11y"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-content",
  "pdfcraft-cos",
@@ -3892,8 +3891,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-annot"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-cos",
  "pdfcraft-fonts",
@@ -3903,8 +3902,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-audit"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-content",
  "pdfcraft-cos",
@@ -3915,13 +3914,13 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-compare"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 
 [[package]]
 name = "pdfcraft-content"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "hayro-syntax",
  "pdfcraft-cos",
@@ -3929,8 +3928,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-cos"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "chrono",
  "pdfcraft-crypt",
@@ -3940,8 +3939,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-create"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "encoding_rs",
  "image",
@@ -3956,8 +3955,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-crypt"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "aes",
  "md-5",
@@ -3968,8 +3967,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-edit"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "kurbo 0.13.1",
  "pdfcraft-annot",
@@ -3983,8 +3982,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-engine"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "chrono",
  "craft-docpath",
@@ -4024,16 +4023,16 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-export"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "flate2",
 ]
 
 [[package]]
 name = "pdfcraft-filters"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "flate2",
  "thiserror 2.0.21",
@@ -4041,8 +4040,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-fonts"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "harfrust",
  "pdfcraft-cos",
@@ -4052,8 +4051,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-forms"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-content",
  "pdfcraft-cos",
@@ -4064,13 +4063,13 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-geom"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 
 [[package]]
 name = "pdfcraft-js"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "boa_engine",
  "chrono",
@@ -4078,8 +4077,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-measure"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-annot",
  "pdfcraft-content",
@@ -4091,16 +4090,16 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-model"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-cos",
 ]
 
 [[package]]
 name = "pdfcraft-ocr"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "ocrs",
  "pdfcraft-fonts",
@@ -4110,21 +4109,23 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-optimize"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "image",
  "pdfcraft-annot",
  "pdfcraft-content",
  "pdfcraft-cos",
+ "pdfcraft-filters",
  "pdfcraft-model",
  "thiserror 2.0.21",
+ "zune-jpeg",
 ]
 
 [[package]]
 name = "pdfcraft-organize"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-content",
  "pdfcraft-cos",
@@ -4133,8 +4134,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-platform"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "async-channel",
  "futures-lite",
@@ -4144,8 +4145,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-preflight"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-content",
  "pdfcraft-cos",
@@ -4155,8 +4156,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-print"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "craft-print",
  "pdfcraft-content",
@@ -4167,8 +4168,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-redact"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-annot",
  "pdfcraft-content",
@@ -4183,8 +4184,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-render"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "bytemuck",
  "getrandom 0.4.3",
@@ -4201,8 +4202,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-sign"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "aes",
  "aws-lc-rs",
@@ -4224,6 +4225,7 @@ dependencies = [
  "pdfcraft-annot",
  "pdfcraft-cos",
  "pdfcraft-fonts",
+ "pdfcraft-model",
  "rc2",
  "ripemd",
  "rsa",
@@ -4237,8 +4239,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-ui-egui"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "arboard",
  "base64 0.22.1",
@@ -4282,8 +4284,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-xfa"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "base64 0.22.1",
  "image",
@@ -4297,8 +4299,8 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-xfdf"
-version = "0.13.0"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+version = "0.14.0"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "pdfcraft-annot",
  "pdfcraft-cos",
@@ -6722,7 +6724,7 @@ dependencies = [
 [[package]]
 name = "vello_common"
 version = "0.0.8"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "bytemuck",
  "fearless_simd",
@@ -7552,7 +7554,7 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 [[package]]
 name = "winit"
 version = "0.30.13"
-source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=9109e4f0c4ddc30e4c130180138aee28756f8201#9109e4f0c4ddc30e4c130180138aee28756f8201"
+source = "git+https://github.com/GeorgeMilroy/pdfcraft?rev=6b07948488a526f5b71ed04817521d1487f11668#6b07948488a526f5b71ed04817521d1487f11668"
 dependencies = [
  "ahash",
  "android-activity",
