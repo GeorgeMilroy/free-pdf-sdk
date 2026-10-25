@@ -70,7 +70,8 @@ Type `/release-pdfcraft-update` for the whole cycle unattended
 (`.claude/skills/release-pdfcraft-update/SKILL.md`): the same update, then independent reviewers
 check the diff and patch stack, it commits the update and a patch-version "Prepare" commit (no
 co-author lines), pushes the fork, runs `scripts/release.ps1`, pushes `main` and the tag, waits
-for CI to pass, publishes to npm and deploys the site. It stops and reports instead of pushing
+for CI to pass, publishes to npm, and deploys the landing site after checking its hand-written
+claims, counts and screenshots against the release. It stops and reports instead of pushing
 on a conflict it can't resolve cleanly, a decision that needs you (a new public feature, a
 protocol change, a licence), a failing check, or a missing `npm login`; run it again to resume.
 

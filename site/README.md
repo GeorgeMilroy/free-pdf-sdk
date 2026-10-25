@@ -69,4 +69,6 @@ once for the property:
 | `site.config.json` | Site name, tagline, description, URL, optional source code link. |
 
 Tables of modes, features and options in the docs come from `docs/reference/config.json`, which
-`cargo test -p fps-core` keeps in step with the code.
+`cargo test -p fps-core` keeps in step with the code. So do the home page's mode and feature
+counts (`{{MODES}}`, `{{FEATURES}}` in `home.html`); the build stops if `README.md` or
+`js/README.md` quotes different ones. The language count is written by hand.

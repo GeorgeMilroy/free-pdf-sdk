@@ -55,8 +55,8 @@
 
 <section class="stats">
   <div class="container stats-grid">
-    <div class="stat reveal"><b><span data-count="8">8</span></b><span>modes, from read-only to full authoring</span></div>
-    <div class="stat reveal" style="--i: 1"><b><span data-count="31">31</span></b><span>feature switches, each hidden everywhere when off</span></div>
+    <div class="stat reveal"><b><span data-count="{{MODES}}">{{MODES}}</span></b><span>modes, from read-only to full authoring</span></div>
+    <div class="stat reveal" style="--i: 1"><b><span data-count="{{FEATURES}}">{{FEATURES}}</span></b><span>feature switches, each hidden everywhere when off</span></div>
     <div class="stat reveal" style="--i: 2"><b><span data-count="23">23</span></b><span>interface languages</span></div>
     <div class="stat reveal" style="--i: 3"><b><span data-count="0">0</span></b><span>servers. Documents stay on the device</span></div>
   </div>
@@ -181,7 +181,7 @@
           <ul class="menu-mock-list" data-menu-list></ul>
         </div>
         <h3>Hide what you don't need</h3>
-        <p>Pick a mode, then fine-tune with 31 feature switches. What's off is gone from every menu, not greyed out.</p>
+        <p>Pick a mode, then fine-tune with {{FEATURES}} feature switches. What's off is gone from every menu, not greyed out.</p>
       </article>
       <article class="bento-card reveal" style="--i: 1">
         <div class="art art-measure" aria-hidden="true">

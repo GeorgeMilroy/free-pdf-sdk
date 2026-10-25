@@ -1,6 +1,6 @@
 ---
 name: release-pdfcraft-update
-description: End to end, unattended - take the latest pdfcraft upstream into Free PDF SDK, verify it, have independent reviewers check it, commit, bump the patch version, tag, push (fork first), wait for CI, publish to npm and deploy the site. Commits carry no Claude co-author line.
+description: End to end, unattended - take the latest pdfcraft upstream into Free PDF SDK, verify it, have independent reviewers check it, commit, bump the patch version, tag, push (fork first), wait for CI, publish to npm, update and deploy the landing site. Commits carry no Claude co-author line.
 ---
 
 # Release a pdfcraft update
@@ -65,6 +65,30 @@ screenshots compared, site images regenerated if the UI changed, wasm size compa
 0.2.2 section (summary line, Fixed / Added / Changed, "Based on" naming the upstream commit and
 version). Write it for SDK users: what changed for them, not the patch mechanics.
 
+### 2b. Landing site
+
+The site (`site/`, see `site/README.md`) takes the version, the changelog and the feature/mode
+tables from the repo on its own; the rest is written by hand and must still be true after the
+update. With the SDK built (`dist/free-pdf-sdk-<version>/`):
+
+1. Read `site/src/pages/home.html` and the docs in `site/src/docs/` against the CHANGELOG entry
+   and the upstream log. Fix any claim the update made wrong (behaviour that changed, a feature
+   now hidden or removed, a limitation that's gone). Add a user-visible capability that came in
+   to the "More features" list or the docs page it belongs on, only if the web build actually
+   offers it (check it in the demo). Keep the home page's style; don't rewrite sections that
+   are still right.
+2. Counts: modes and feature switches are filled in from `docs/reference/config.json`
+   (`{{MODES}}`, `{{FEATURES}}`), and the build fails when `README.md` / `js/README.md` say
+   otherwise - fix the READMEs, never the check. The language count ("23 languages", home page
+   and `README.md`) is by hand: compare it with the locales pdfcraft ships.
+3. If the UI changed, regenerate the images: `node site/build.mjs`, serve
+   (`node scripts/serve.mjs --root site/public`), `node site/make-images.mjs`, build again.
+   Look at the new images; a broken render is a failing check.
+4. `node site/build.mjs` must pass (it checks links and front matter). Serve `site/public` and
+   with Playwright load `/`, `/demo/` and `/docs/changelog/`: the version pill says `v<version>`,
+   the demo's viewer opens the sample with no console errors, the changelog has the new entry.
+5. These changes go in the update commit (step 4); say what changed on the site in its body.
+
 ## 3. Independent review (Workflow)
 
 Before committing, run a Workflow (this skill authorises it). The reviewers get the diff and the
@@ -83,6 +107,9 @@ facts, not your conclusions. Give each the upstream range, the fork's
 4. **Pins and release consistency** - Cargo.toml revs, Cargo.lock, NOTICE, `[patch.crates-io]`
    mirrors pdfcraft's, `third-party/` regenerated and licences OK, CHANGELOG entry accurate
    against the upstream log (nothing claimed that didn't come in, notable fixes not missing).
+5. **Landing site** - `site/src/pages/home.html`, `site/src/docs/*.md` and the READMEs against
+   the CHANGELOG entry and the web build: no claim the update made false, nothing advertised
+   that the web build doesn't offer, regenerated images show the real viewer.
 
 Each finding then gets two independent skeptics told to refute it against the code (kill on
 majority refute). Fix confirmed findings, re-run the affected checks, and re-run the review once
@@ -132,20 +159,25 @@ Watch the CI run for the pushed `main` commit with the Monitor tool (public API,
 1. `dist/npm/package.json` version is NEXT; `npm run check:npm-package:dev` (dry run) - look at
    the file list: `dist/`, `bin/`, `viewer/`, licences, NOTICE, `third-party/`, nothing stray.
 2. `npm run publish:npm:prod`. Then `npm view @mecorelabs/free-pdf-sdk version` == NEXT.
-3. `npm run deploy:hosting:prod` (builds the site from `dist/free-pdf-sdk-NEXT/`, deploys to
-   the `free-pdf-sdk` Firebase project).
-4. Check `https://freepdfsdk.mecorelabs.com` serves NEXT (fetch the page / the SDK's
-   `version.json` the site build references).
+3. Only after npm has NEXT (the site's install instructions point at it):
+   `npm run deploy:hosting:prod` (builds the site from `dist/free-pdf-sdk-NEXT/`, deploys to
+   the `free-pdf-sdk` Firebase project). `firebase` not logged in is a stop point like npm's:
+   tell the user to run `firebase login`, rerun resumes here.
+4. Check the live site, `https://freepdfsdk.mecorelabs.com`: `/sdk/version.json` has
+   `"sdk": "NEXT"`, the home page's pill says `vNEXT`, `/docs/changelog/` has the NEXT entry,
+   and with Playwright `/demo/` opens the sample with no console errors. Firebase can take a
+   minute to serve the new release; retry a few times before calling it a failure.
 
 ## 9. Report
 
 Upstream range; fixes and features that came in; conflicts and resolutions; patches
 dropped/changed; feature placement; review findings and their fixes; wasm size change; the two
-commit shas; tag; CI run link and result; npm version; site check. Anything skipped, and why.
+commit shas; tag; CI run link and result; npm version; what changed on the landing site and the
+live site check. Anything skipped, and why.
 
 ## Resuming
 
 Run again after a stop: detect where it got to instead of starting over - an
 `Update pdfcraft` commit already on `main` skips 2-4, a `Prepare NEXT` commit skips 5, tag
 `vNEXT` on origin skips 6, a green CI run for `origin/main` skips 7, NEXT already on npm skips
-8.1-8.2. Re-check the preconditions that still apply.
+8.1-8.2, the live site serving NEXT skips 8.3. Re-check the preconditions that still apply.

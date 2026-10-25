@@ -30,6 +30,16 @@ if (analyticsId && !/^G-[A-Z0-9]+$/.test(analyticsId)) throw new Error(`site.con
 for (const k of ["controller", "email", "updated"]) {
   if (!cfg.legal?.[k]) throw new Error(`site.config.json: legal.${k} is required for the privacy notice`);
 }
+// The READMEs quote the mode and feature counts in prose; the home page fills them in from the
+// reference ({{MODES}}, {{FEATURES}}), so stop when the READMEs say something else.
+for (const file of ["README.md", "js/README.md"]) {
+  const text = readFileSync(join(repo, file), "utf8");
+  for (const [re, want] of [[/(\d+)\s*\**\s*modes\b/g, reference.modes.length], [/(\d+)\s*\**\s*feature switches/g, reference.features.length]]) {
+    for (const m of text.matchAll(re)) {
+      if (Number(m[1]) !== want) throw new Error(`${file}: "${m[0]}" but docs/reference/config.json has ${want}`);
+    }
+  }
+}
 // The sitemap's <lastmod>: the date of the last commit touching these files, or nothing outside a
 // git checkout. A shallow clone would give every page the same date.
 const lastmod = (files) => {
@@ -328,6 +338,8 @@ function write(path, text) {
 function page(name) {
   return readFileSync(join(src, "pages", name), "utf8")
     .replaceAll("{{VERSION}}", version)
+    .replaceAll("{{MODES}}", String(reference.modes.length))
+    .replaceAll("{{FEATURES}}", String(reference.features.length))
     .replace(/<code class="language-([a-z]+)">([\s\S]*?)<\/code>/g, (_, lang, code) => {
       const raw = code.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
       return `<code class="hljs language-${lang}">${highlight(raw.replace(/^\n/, ""), lang)}</code>`;
