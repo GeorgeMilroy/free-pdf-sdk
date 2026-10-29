@@ -283,7 +283,7 @@ const viewer = await FreePdf.init(element, {
     toolsPanel: true,
     quickToolbar: false,   // no floating tool bar beside the page
     searchBox: false,      // no "Find tools and commands" box
-    lockLayout: true,      // panels stay where they are
+    lockLayout: true,      // no Reset side panels
     externalLinks: false,  // links to web pages in the document don't open
   },
 });

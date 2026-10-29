@@ -77,7 +77,7 @@ for (const theme of ["light", "dark"]) {
       await page.waitForTimeout(600);
       await page.mouse.click(box.x + box.width - 23, box.y + 226);
       await page.waitForTimeout(900);
-      await page.mouse.click(box.x + box.width - 310, box.y + 179);
+      await page.mouse.click(box.x + box.width - 310, box.y + 153);
       await page.waitForTimeout(1200);
     }
     await page.locator("#viewer-wrap").screenshot({ path: join(out, file) });

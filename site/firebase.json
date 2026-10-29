@@ -29,6 +29,10 @@
         "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
       },
       {
+        "source": "/sdk/viewer/snippets/**",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      },
+      {
         "source": "/sdk/*.js",
         "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
       },

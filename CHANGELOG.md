@@ -7,6 +7,61 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+pdfcraft updated to 0.15.0 and later upstream changes, on egui 0.37. No change to the JavaScript
+API or the postMessage protocol.
+
+### Fixed
+
+- Rendering: an isolated DeviceCMYK transparency group blends in CMYK (also inside knockout
+  groups, after a pattern and across large pages), a gray drawn with the Color blend mode is no
+  longer drawn black, a non-isolated knockout group blends with the page under it, a stroke
+  whose outline has a NaN is drawn, a form's stray `Q` no longer pops the page's saved states,
+  and Type 1 fonts with an OpenType-wrapped CFF program draw their own face.
+- Redaction: vector paths that cross a redaction mark are removed, not just clipped, so the
+  redacted drawing can't be recovered from the file, and Type 3 glyphs and fonts the page no
+  longer uses are removed too.
+- Extracted and searched text is clipped to the page's CropBox.
+- Forms: radio buttons joined to a group keep their selection, actions and export values;
+  deleting one radio button removes only that button; clearing a field's value or default
+  leaves it empty instead of taking its parent's; list boxes keep their selection and top row
+  when their items are edited or sorted; auto-sized single-line text fills the field's height.
+- Flattening keeps a NoRotate comment upright on a rotated page.
+- XFA forms: BMP images whose pixel offset points into their headers are read correctly.
+- Editing and redaction keep the text position across `Q` inside a text object.
+- Updating a background, watermark or header and footer previews the page without the marks
+  being replaced.
+- A shading or masked image in a knockout group replaces only what is under its own shape.
+- The pointer shows a link hand only where a click follows the link (with Select or Link).
+- Pages that fail to render are not retried every frame.
+
+### Added
+
+- Bookmarks ▸ **New bookmarks from text styles**, for headings that aren't tagged
+  (`bookmarks` feature).
+- Organize pages ▸ **Page properties** sets the selected pages' tab order (`formDesign` feature).
+- Import comments also takes another PDF and copies its comments onto the same pages
+  (`comments` feature).
+- Form script messages keep their title, icon and buttons, and every message is shown.
+- Preferences: the reading-colour options are laid out more clearly, and their preview says
+  when they're off (`preferences` feature).
+
+### Changed
+
+- The **Menu** button is now a menu bar (File, Edit, View, Sign, Window, Help) showing only
+  the commands the configuration allows; the `menu` interface option shows or hides it as before.
+- The side panels are docked panes that can be resized and closed but no longer float, move or
+  group into tabs. `lockLayout` now only hides **Reset side panels**: there is no
+  moving or floating left to lock.
+- Dropdown lists grow back to fit their items after shrinking.
+- Export Data as CSV keeps formula-like cells as text.
+- The `viewer/` folder has a `snippets/` subfolder (a few lines of JavaScript the viewer
+  imports). Serve the whole folder: `copy-viewer` and the release zip already include it.
+
+### Based on
+
+- pdfcraft upstream `3109bb2359759e24ef490e1cdbdba00722b20972` (0.15.0 and later) with the
+  `free-pdf-sdk/patches` commits rebased onto it (exact commit in `version.json`).
+
 ## [0.2.3] - 2026-10-25
 
 pdfcraft updated to 0.14.0 and later upstream changes. No change to the JavaScript API or the

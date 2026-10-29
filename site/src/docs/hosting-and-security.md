@@ -22,6 +22,7 @@ free-pdf-sdk/
     index.html                 not hashed: names the two files below
     fps-viewer-<hash>.js       JavaScript glue, content-hashed
     fps-viewer-<hash>_bg.wasm  the viewer, content-hashed
+    snippets/                  small JavaScript modules the glue imports, not hashed
   version.json                 { "sdk": "...", "pdfcraftRev": "..." }
   NOTICE  LICENSE-MIT  LICENSE-APACHE
   third-party/
@@ -68,12 +69,13 @@ URL with CORS configured), or you can pass bytes with `{ data }`.
 ## Cache hashed files
 
 The JavaScript glue and the `.wasm` have a content hash in their names, so a new version always
-has new names. Cache them forever, and keep the two unhashed files fresh:
+has new names. Cache them forever, and keep the unhashed files fresh:
 
 | Files | `Cache-Control` |
 |---|---|
 | `viewer/fps-viewer-<hash>.js`, `viewer/fps-viewer-<hash>_bg.wasm` | `public, max-age=31536000, immutable` |
 | `viewer/index.html`, `version.json` | `no-cache` (revalidated on each load; it names the current hashed files) |
+| `viewer/snippets/…` | `no-cache` (a few lines of JavaScript the glue imports; their names aren't content-hashed) |
 | Licence files | anything; they are not loaded by the viewer |
 
 After the first visit the browser loads the viewer from its cache, so later visits don't download

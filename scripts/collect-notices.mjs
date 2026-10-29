@@ -65,12 +65,13 @@ const files = [
 ];
 
 // egui's default fonts: every licence file epaint_default_fonts ships.
-const fonts = pkg("epaint_default_fonts", "0.36");
-if (fonts) {
-  const dir = join(dirname(fonts.manifest_path), "fonts");
-  for (const name of ["UFL.txt", "Hack-Regular.txt", "OFL.txt", "emoji-icon-font-mit-license.txt"]) {
-    if (existsSync(join(dir, name))) files.push([`egui-default-fonts/${name}`, () => readFileSync(join(dir, name))]);
-  }
+// Fail rather than drop them: the fonts are compiled into the viewer.
+const fonts = pkg("epaint_default_fonts");
+if (!fonts) throw new Error("epaint_default_fonts is not in the dependency graph");
+const fontDir = join(dirname(fonts.manifest_path), "fonts");
+for (const name of ["UFL.txt", "Hack-Regular.txt", "OFL.txt", "emoji-icon-font-mit-license.txt"]) {
+  if (!existsSync(join(fontDir, name))) throw new Error(`epaint_default_fonts ${fonts.version} has no fonts/${name}`);
+  files.push([`egui-default-fonts/${name}`, () => readFileSync(join(fontDir, name))]);
 }
 
 rmSync(out, { recursive: true, force: true });

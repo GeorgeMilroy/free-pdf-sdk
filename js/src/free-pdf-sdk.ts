@@ -99,13 +99,13 @@ export interface UiOptions {
   zoomControls?: boolean;
   /** Page navigation on the rail (default true). */
   pageNavigation?: boolean;
-  /** The main menu button (default true). */
+  /** The menu bar (default true). */
   menu?: boolean;
   /** The "Find tools and commands" box (default true; needs the `palette` feature). */
   searchBox?: boolean;
   /** Show (true) or hide (false) right-hand panels; unlisted panels show when their feature is on. */
   panels?: Partial<Record<PanelName, boolean>>;
-  /** Panels can't be moved, floated or closed from their tabs (default false). */
+  /** Hides the Reset side panels command (panels are docked: they can't be moved or floated anyway) (default false). */
   lockLayout?: boolean;
   /** Also list tools that are planned but not available yet (default false). */
   showPlannedTools?: boolean;

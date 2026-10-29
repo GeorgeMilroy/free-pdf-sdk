@@ -14,6 +14,7 @@ free-pdf-sdk-0.1.0/
     index.html             the iframe page (not hashed)
     fps-viewer-<hash>.js   wasm-bindgen glue
     fps-viewer-<hash>_bg.wasm
+    snippets/              JavaScript modules the glue imports
   LICENSE-MIT  LICENSE-APACHE  NOTICE  README.md  CHANGELOG.md
   third-party/             licences and notices of everything the wasm embeds
 ```

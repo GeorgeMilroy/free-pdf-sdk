@@ -96,6 +96,9 @@ $glueIn = Join-Path $work "fps-viewer.js"
 $glueHash = Get-ShortHash $glueIn
 $glueName = "fps-viewer-$glueHash.js"
 Copy-Item $glueIn (Join-Path $out "viewer/$glueName")
+# JavaScript snippets of the Rust crates (eframe's text agent), imported by the glue by relative path.
+$snippets = Join-Path $work "snippets"
+if (Test-Path $snippets) { Copy-Item -Recurse $snippets (Join-Path $out "viewer/snippets") }
 
 $template = Get-Content (Join-Path $repo "viewer/index.html") -Raw
 $page = $template.Replace("{{GLUE_JS}}", $glueName).Replace("{{WASM}}", $wasmName)

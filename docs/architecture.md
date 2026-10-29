@@ -53,9 +53,11 @@ document logic are unit-tested natively in seconds, without compiling eframe and
 * pdfcraft is never copied. `Cargo.toml` depends on `pdfcraft-ui-egui`, `pdfcraft-engine`,
   `pdfcraft-render`, `pdfcraft-xfdf`, `pdfcraft-cos` (and others) as git dependencies on
   `https://github.com/storytold/pdfcraft`, all at one full commit (`rev = "<40 hex>"`).
-* pdfcraft's own root `[patch.crates-io]` (its vendored hayro, hayro-interpret, hayro-syntax,
-  hayro-jbig2, lopdf, winit, egui-wgpu, vello_common) is not inherited by git dependents, so our
-  workspace repeats it, taking those crates from the same pdfcraft commit.
+* pdfcraft's own root `[patch.crates-io]` is not inherited by git dependents, so our workspace
+  repeats it: its vendored crates (hayro, hayro-interpret, hayro-syntax, hayro-cmap,
+  hayro-postscript, hayro-jbig2, lopdf, vello_common, vello_cpu) come from the same fork commit,
+  and the egui family and winit from the storytold/egui and storytold/winit git revisions
+  pdfcraft pins.
 * Hooks pdfcraft lacks live as small commits on the fork branch `free-pdf-sdk/patches` of
   `https://github.com/GeorgeMilroy/pdfcraft`, created from `upstream/main`. A
   `[patch."https://github.com/storytold/pdfcraft"]` section points every pdfcraft crate at that

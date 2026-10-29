@@ -896,7 +896,7 @@
     },
     {
       "default": true,
-      "description": "The main menu button (File, Edit, View... with the enabled commands).",
+      "description": "The menu bar (File, Edit, View... with the enabled commands).",
       "key": "menu"
     },
     {
@@ -906,7 +906,7 @@
     },
     {
       "default": false,
-      "description": "Panels can't be moved, floated or closed from their tabs.",
+      "description": "Hides the Reset side panels command (panels are docked: they can't be moved or floated anyway).",
       "key": "lockLayout"
     },
     {

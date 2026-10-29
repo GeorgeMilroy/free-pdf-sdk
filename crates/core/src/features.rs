@@ -212,7 +212,7 @@ pub struct UiOptions {
     pub zoom_controls: bool,
     /// Page navigation on the rail.
     pub page_navigation: bool,
-    /// The main menu button.
+    /// The menu bar.
     pub menu: bool,
     /// The "Find tools and commands" box in the top bar.
     pub search_box: bool,
@@ -268,9 +268,9 @@ pub const UI_FLAGS: &[(&str, bool, &str)] = &[
     ("rightRail", true, "The right-hand rail: panel buttons, page navigation and zoom."),
     ("zoomControls", true, "Zoom and page display controls on the rail."),
     ("pageNavigation", true, "Page navigation on the rail."),
-    ("menu", true, "The main menu button (File, Edit, View... with the enabled commands)."),
+    ("menu", true, "The menu bar (File, Edit, View... with the enabled commands)."),
     ("searchBox", true, "The \"Find tools and commands\" box in the top bar (needs the palette feature)."),
-    ("lockLayout", false, "Panels can't be moved, floated or closed from their tabs."),
+    ("lockLayout", false, "Hides the Reset side panels command (panels are docked: they can't be moved or floated anyway)."),
     ("showPlannedTools", false, "Also list tools that are planned but not available yet."),
     ("externalLinks", true, "Links to web pages in documents may open (after a prompt)."),
 ];

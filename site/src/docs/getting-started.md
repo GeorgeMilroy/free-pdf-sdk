@@ -31,6 +31,7 @@ public/free-pdf-sdk/
     index.html               the page the iframe loads
     fps-viewer-<hash>.js     JavaScript glue (content-hashed)
     fps-viewer-<hash>_bg.wasm the viewer (content-hashed)
+    snippets/                small JavaScript modules the glue imports
   version.json
   NOTICE  LICENSE-MIT  LICENSE-APACHE
   third-party/               licences of the open-source code the viewer embeds
