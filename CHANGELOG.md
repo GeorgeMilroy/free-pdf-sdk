@@ -7,6 +7,8 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-10-29
+
 pdfcraft updated to 0.15.0 and later upstream changes, on egui 0.37. No change to the JavaScript
 API or the postMessage protocol.
 

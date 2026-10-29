@@ -2206,11 +2206,11 @@ dependencies = [
 
 [[package]]
 name = "fps-brand"
-version = "0.2.3"
+version = "0.2.4"
 
 [[package]]
 name = "fps-core"
-version = "0.2.3"
+version = "0.2.4"
 dependencies = [
  "pdfcraft-engine",
  "pdfcraft-render",
@@ -2221,7 +2221,7 @@ dependencies = [
 
 [[package]]
 name = "fps-tests"
-version = "0.2.3"
+version = "0.2.4"
 dependencies = [
  "fps-core",
  "pdfcraft-cos",
@@ -2231,7 +2231,7 @@ dependencies = [
 
 [[package]]
 name = "fps-viewer"
-version = "0.2.3"
+version = "0.2.4"
 dependencies = [
  "eframe",
  "egui",

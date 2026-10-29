@@ -3,7 +3,7 @@ resolver = "3"
 members = ["crates/core", "crates/viewer", "crates/brand", "tests"]
 
 [workspace.package]
-version = "0.2.3"
+version = "0.2.4"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 rust-version = "1.95"
@@ -22,8 +22,8 @@ pdfcraft-crypt = { git = "https://github.com/storytold/pdfcraft", rev = "3109bb2
 pdfcraft-render = { git = "https://github.com/storytold/pdfcraft", rev = "3109bb2359759e24ef490e1cdbdba00722b20972" }
 pdfcraft-annot = { git = "https://github.com/storytold/pdfcraft", rev = "3109bb2359759e24ef490e1cdbdba00722b20972" }
 
-fps-core = { path = "crates/core", version = "0.2.3" }
-fps-brand = { path = "crates/brand", version = "0.2.3" }
+fps-core = { path = "crates/core", version = "0.2.4" }
+fps-brand = { path = "crates/brand", version = "0.2.4" }
 
 eframe = { version = "0.37", default-features = false }
 egui = "0.37"
