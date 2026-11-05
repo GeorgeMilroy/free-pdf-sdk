@@ -8,7 +8,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const params = new URLSearchParams(location.search);
 
 const state = {
-  mode: reference.modes.some((m) => m.key === params.get("mode")) ? params.get("mode") : "annotate",
+  mode: reference.modes.some((m) => m.key === params.get("mode")) ? params.get("mode") : "full",
   features: {},
   ui: {},
   panels: {},
