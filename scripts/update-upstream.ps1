@@ -10,7 +10,8 @@
   4. scoped pdfcraft tests: cargo fmt --check, clippy and test for the patched crates (-j 2)
   5. tag the new patch-branch commit fps-upstream-<yyyymmdd>[-n] so it stays reachable after the
      branch is force-pushed
-  6. bump the pdfcraft revs in Cargo.toml (upstream base and fork patch commit)
+  6. bump the pdfcraft revs in Cargo.toml (upstream base and fork patch commit), and
+     craft-i18n.rev to the translations commit that upstream pdfcraft names
   7. cargo update -p for the pdfcraft crates, then this repo's whole test suite and wasm build
   Then it prints the exact push commands for you to run.
 
@@ -151,6 +152,11 @@ if ((GitOut $Pdfcraft show "${upstream}:Cargo.toml") -match '(?m)^version = "([^
 # [ \t], not \s: \s also matches line breaks and would swallow the blank lines around the commit.
 $noticeText = [regex]::Replace($noticeText, '(?m)^([ \t]+)[0-9a-f]{40}( \(pdfcraft [^)]*\))?[ \t]*$', "`${1}$upstream (pdfcraft $upstreamVersion)")
 [System.IO.File]::WriteAllText($notice, $noticeText, (New-Object System.Text.UTF8Encoding $false))
+# pdfcraft embeds its interface translations from storytold/craft-i18n at the commit it names in
+# craft-i18n.rev; the SDK builds from the same one (scripts/dev-env.ps1 checks it out).
+$i18nRev = GitOut $Pdfcraft show "${upstream}:craft-i18n.rev"
+if ($i18nRev -notmatch '^[0-9a-f]{40}$') { throw "upstream pdfcraft's craft-i18n.rev is not a commit: $i18nRev" }
+[System.IO.File]::WriteAllText((Join-Path $repo "craft-i18n.rev"), "$i18nRev`n", (New-Object System.Text.UTF8Encoding $false))
 
 # 7 -------------------------------------------------------------------------------------------
 Step "7. cargo update and the whole test suite"
@@ -178,7 +184,7 @@ Write-Host @"
   git -C "$Pdfcraft" push origin $tag
   git -C "$Pdfcraft" push origin main          # main: $mainOld -> $mainNew
 
-  # this repository, after committing Cargo.toml, Cargo.lock, NOTICE and third-party/
+  # this repository, after committing Cargo.toml, Cargo.lock, NOTICE, craft-i18n.rev and third-party/
   git -C "$repo" push origin HEAD
 
 "@

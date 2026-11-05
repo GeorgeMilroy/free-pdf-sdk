@@ -23,7 +23,7 @@ leave your page.
   validation**, export to Word, images and HTML, PDF/A, accessibility checker, search and print.
 - **Private by design**: an iframe on your own origin, no server, no uploads, no tracking.
   AES-256 encrypted files open in place; an owner password lifts their restrictions.
-- **23 languages**, light, dark and system themes.
+- **35 languages**, light, dark and system themes.
 - **React, Vue, Svelte, Angular** (Web Component) and plain JavaScript. Fully typed.
 
 ## Install

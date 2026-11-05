@@ -35,7 +35,7 @@
 Your users switch PDF layers on and off with a click. You switch panels, tools and whole features
 on or off, and every menu, toolbar and shortcut follows.
 
-| 8 modes | 31 feature switches | 23 languages | 0 servers |
+| 8 modes | 31 feature switches | 35 languages | 0 servers |
 |:-:|:-:|:-:|:-:|
 | from read-only to full authoring | each hidden everywhere when off | the whole interface, translated | documents stay on the device |
 
@@ -62,7 +62,7 @@ the right-click menus and the keyboard shortcuts: gone, not greyed out.
 | **Signature validation** | See who signed a file, when, and whether every signature still checks out. |
 | **Private by design** | WebAssembly in an iframe on your own origin. No server, no uploads, no tracking. AES-256 encrypted files open in place, and an owner password lifts their restrictions. |
 | **White-label** | Light, dark and system themes at runtime. Build from source to compile in your name, logo and accent colour. |
-| **23 languages** | Pick a locale or follow the browser. |
+| **35 languages** | Pick a locale or follow the browser. |
 
 Also: export to Word, images and HTML · PDF/A · accessibility checker · bookmarks · attachments ·
 watermarks & Bates numbers · flatten · print · search · undo & redo.

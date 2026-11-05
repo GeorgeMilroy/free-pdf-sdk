@@ -14,6 +14,10 @@ env:
   CARGO_INCREMENTAL: "0"
   # The pdfcraft fork commit named in Cargo.lock must be pushed to GeorgeMilroy/pdfcraft.
   CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+  # pdfcraft embeds its interface translations from this craft-i18n checkout (each job checks it
+  # out at the commit in craft-i18n.rev); a build without them fails rather than ship English only.
+  CRAFT_I18N_DIR: ${{ github.workspace }}/craft-i18n
+  CRAFT_I18N_REQUIRED: "1"
 
 jobs:
   rust:
@@ -21,6 +25,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: craft-i18n commit (craft-i18n.rev)
+        id: i18n
+        run: echo "rev=$(tr -d '[:space:]' < craft-i18n.rev)" >> "$GITHUB_OUTPUT"
+      - name: craft-i18n (interface translations)
+        uses: actions/checkout@v4
+        with:
+          repository: storytold/craft-i18n
+          ref: ${{ steps.i18n.outputs.rev }}
+          path: craft-i18n
+          persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -41,6 +55,16 @@ jobs:
     needs: rust
     steps:
       - uses: actions/checkout@v4
+      - name: craft-i18n commit (craft-i18n.rev)
+        id: i18n
+        run: echo "rev=$(tr -d '[:space:]' < craft-i18n.rev)" >> "$GITHUB_OUTPUT"
+      - name: craft-i18n (interface translations)
+        uses: actions/checkout@v4
+        with:
+          repository: storytold/craft-i18n
+          ref: ${{ steps.i18n.outputs.rev }}
+          path: craft-i18n
+          persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown

@@ -63,6 +63,10 @@ closest language it has:
 2. otherwise the primary language, `pt`;
 3. otherwise English, `en`.
 
+The interface is available in 35 languages: `en`, `ar`, `bg`, `ca`, `ckb`, `cs`, `de`, `el`,
+`es`, `fa`, `fi`, `fr`, `hi`, `hu`, `id`, `it`, `ja`, `kk`, `ko`, `lo`, `lt`, `nb`, `pl`,
+`pt-br`, `ro`, `ru`, `sl`, `sq`, `te`, `th`, `tr`, `uk`, `vi`, `zh-hans` and `zh-hant`.
+
 ```ts
 const viewer = await FreePdf.init(el, {
   baseUrl: "/free-pdf-sdk/",

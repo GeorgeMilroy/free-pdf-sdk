@@ -8,7 +8,7 @@ Based on pdfcraft
 Free PDF SDK is based on pdfcraft by the ArtCraft Team and the PdfCraft contributors
 (https://github.com/storytold/pdfcraft), used as a Cargo dependency pinned to commit
 
-    3109bb2359759e24ef490e1cdbdba00722b20972 (pdfcraft 0.15.0)
+    863af864a70f18bcf780a298f1e9923ee792c2ac (pdfcraft 0.18.1)
 
 with Free PDF SDK modifications to pdfcraft's interface crate (pdfcraft-ui-egui): opt-in hooks
 for white-label branding and for hiding features. The exact modified commit is in Cargo.lock
@@ -17,6 +17,13 @@ and in version.json as "pdfcraftRev".
 pdfcraft is Copyright (c) 2026 ArtCraft Team and the PdfCraft contributors, licensed under
 the MIT License or the Apache License, Version 2.0. Its licence files, NOTICE and
 ATTRIBUTION.md are in third-party/pdfcraft/.
+
+Interface translations
+----------------------
+pdfcraft's interface translations come from craft-i18n by the craft-i18n translators
+(https://github.com/storytold/craft-i18n), licensed under the MIT License or the Apache License,
+Version 2.0, and embedded in the viewer at the commit in craft-i18n.rev. Its licence files and
+ATTRIBUTION.md are in third-party/craft-i18n/.
 
 Trademarks
 ----------
@@ -28,11 +35,12 @@ strings and translations. The placeholder logos in brand/ are original to this p
 
 Third-party material
 --------------------
-The viewer embeds third-party material under its own licences: Lucide icons (ISC); the Inter,
-JetBrains Mono and Dancing Script typefaces (SIL OFL 1.1); egui's default fonts (Ubuntu Font
-Licence 1.0, MIT / Bitstream Vera, SIL OFL 1.1, MIT); the Foxit standard-14 substitute fonts and
-Adobe CMap resources (BSD-3-Clause); a CC0 ICC profile; and the Rust crates listed in
-third-party/crates.md. Licences and required notices are in third-party/ (see its README.md).
+The viewer embeds third-party material under its own licences: Lucide icons (ISC, and MIT for
+the Feather-derived icons); the Inter, JetBrains Mono and Dancing Script typefaces (SIL OFL 1.1);
+egui's default fonts (Ubuntu Font Licence 1.0, MIT / Bitstream Vera, SIL OFL 1.1, MIT); the
+Foxit standard-14 substitute fonts and Adobe CMap resources (BSD-3-Clause); a CC0 ICC profile;
+and the Rust crates listed in third-party/crates.md. Licences and required notices are in
+third-party/ (see its README.md).
 
   Foxit standard-14 substitute fonts:
     Copyright 2014 PDFium Authors. All rights reserved. Original code copyright 2014 Foxit

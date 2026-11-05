@@ -7,6 +7,53 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+pdfcraft updated to 0.18.1 and later upstream changes. No change to the JavaScript API or the
+postMessage protocol.
+
+### Fixed
+
+- Rendering: black-and-white JBIG2 scans decode correctly in more files (refinement regions,
+  references past a bitmap's edge, shared symbol dictionaries), scans stay sharp at screen size
+  and smooth when zoomed in, a colour space, Indexed table or function given by reference is no
+  longer lost, a shrunk image on a turned or mirrored page lines up with whole pixels, and a soft
+  hyphen that a substitute font lacks still draws.
+- Opening: every legal form of encryption is read (crypt filters by reference, a stream's own
+  filter), objects that name another generation are found and kept, a negative trailer
+  `/Size` is ignored, and large documents open faster.
+- Forms: clearing a field's length limit leaves it with none, an XFA check box without a width is
+  as wide as its box, positioned XFA drawings turn about their anchor, and FormCalc prints at
+  most 15 significant digits.
+- Redaction: rewritten form XObjects and structure titles go with the content they describe, and
+  black-and-white scans are redacted pixel by pixel instead of losing the whole image.
+- Editing: an edited OCR phrase under its scan is drawn on top, Arrange keeps a top-level inline
+  image as one unit, replacing a header, footer, watermark or background is one step, and Fill &
+  Sign keeps editing on Enter and keeps line breaks.
+- Scrolling: the wheel no longer locks at a page edge in non-continuous views, the continuous
+  view renders the pages ahead of the scroll, and the panel resize handle no longer covers the
+  scroll bar.
+
+### Added
+
+- A customizable quick toolbar (hotbar): pick its commands and dock it to an edge. Commands the
+  configuration hides are not offered (`quickToolbar` interface option as before).
+- Freehand highlight, next to Highlight (`markup` feature).
+- Bookmarks: cut, copy and paste bookmarks with their children (`bookmarks` feature).
+- Right-click menus on the page and on a selected picture, with the usual page and picture
+  actions; each entry shows only where the configuration allows it.
+- Fill & Sign text takes a typed font size and a colour.
+- Preferences are laid out as cards with a search box, and can show page-edge shadows and invert
+  the middle-button drag (`preferences` feature).
+
+### Changed
+
+- The interface translations come from pdfcraft's new translation project (craft-i18n), with
+  more of French and Turkish translated. The interface is available in 35 languages.
+- Optimized copies store black-and-white images as CCITT Group 4 or JBIG2 when smaller.
+- Building from source: the translations are checked out at the commit in `craft-i18n.rev`
+  (`scripts/dev-env.ps1` does it), and a build without them fails rather than ship English only.
+
+Based on pdfcraft 0.18.1, upstream commit `863af864`.
+
 ## [0.2.4] - 2026-10-29
 
 pdfcraft updated to 0.15.0 and later upstream changes, on egui 0.37. No change to the JavaScript

@@ -13,6 +13,7 @@ stack and moving the pins.
 | `Cargo.toml` `[workspace.dependencies]` | `git = "https://github.com/storytold/pdfcraft", rev = "<upstream commit>"` |
 | `Cargo.toml` `[patch."https://github.com/storytold/pdfcraft"]` and `[patch.crates-io]` | `git = "https://github.com/GeorgeMilroy/pdfcraft", rev = "<patch-branch commit>"` |
 | tags `fps-upstream-<date>` | Every patch-branch commit the SDK was built from, so it stays reachable after the branch is force-pushed. |
+| `craft-i18n.rev` | The storytold/craft-i18n commit pdfcraft embeds its interface translations from (the one upstream's own `craft-i18n.rev` names). `scripts/dev-env.ps1` checks it out into `target/craft-i18n` and sets `CRAFT_I18N_DIR` and `CRAFT_I18N_REQUIRED=1`; CI checks it out too. A build without it would be English only, so it fails instead. |
 
 ## The patches
 
@@ -39,7 +40,8 @@ drop the patch in the next rebase.
 4. Scoped pdfcraft checks for the patched crates: `cargo fmt -p … --check`,
    `cargo clippy -p … -j 2 --all-targets -D warnings`, `cargo test -p … -j 2`.
 5. Tag the new patch commit `fps-upstream-<yyyymmdd>`.
-6. Move the pins in `Cargo.toml` (upstream commit and patch commit) and the commit in `NOTICE`.
+6. Move the pins in `Cargo.toml` (upstream commit and patch commit), the commit in `NOTICE`, and
+   `craft-i18n.rev` to the translations commit upstream pdfcraft names.
 7. `cargo update -p pdfcraft-engine -p pdfcraft-ui-egui`, regenerate `third-party/`, then this
    repository's fmt, clippy (native and wasm), tests, build and e2e tests.
 

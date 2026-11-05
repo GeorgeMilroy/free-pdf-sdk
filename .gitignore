@@ -11,3 +11,4 @@ node_modules/
 /site/public
 /site/.firebase
 firebase-debug*.log
+/craft-i18n

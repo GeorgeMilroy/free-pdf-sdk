@@ -59,6 +59,24 @@ test("init, load, events and version", async ({ page }) => {
   expect((await call(page, "isDirty")).value).toBe(false);
 });
 
+// pdfcraft's interface languages. They are embedded from craft-i18n at build time, so a build
+// without the catalogs would quietly be English only: every one must be offered.
+const LANGUAGES = [
+  "en", "ja", "zh-hans", "zh-hant", "cs", "pt-br", "de", "es", "fr", "ru", "kk", "bg", "te", "hu", "uk", "it", "ar", "ckb",
+  "fa", "pl", "sl", "el", "tr", "lt", "id", "vi", "fi", "sq", "th", "ca", "ro", "lo", "hi", "ko", "nb",
+];
+
+test("every interface language is available, with the documented fallback", async ({ page }) => {
+  await open(page);
+  expect(LANGUAGES).toHaveLength(35);
+  for (const code of LANGUAGES) {
+    expect((await call(page, "setLocale", code)).value, code).toBe(code);
+  }
+  expect((await call(page, "setLocale", "zh-Hans")).value, "lower-cased").toBe("zh-hans");
+  expect((await call(page, "setLocale", "de-AT")).value, "the primary language").toBe("de");
+  expect((await call(page, "setLocale", "xx")).value, "English otherwise").toBe("en");
+});
+
 test("owner-protected AES-256: locked, unlock, import, export, list, delete, save", async ({ page }) => {
   await open(page, "?doc=protected-aes256-owner.pdf");
   let p = (await call(page, "getPermissions")).value as Record<string, boolean>;
