@@ -20,7 +20,7 @@
  */
 
 /** The SDK version this wrapper belongs to. */
-export const SDK_VERSION = "0.2.5";
+export const SDK_VERSION = "0.2.6";
 
 /** The postMessage protocol version this wrapper speaks. */
 export const PROTOCOL_VERSION = 1;

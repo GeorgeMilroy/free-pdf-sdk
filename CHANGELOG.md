@@ -7,6 +7,8 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+## [0.2.6] - 2026-11-05
+
 Package and website wording only; no change to the viewer, the JavaScript API or the protocol.
 
 ### Changed
