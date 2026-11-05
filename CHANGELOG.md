@@ -7,6 +7,13 @@ postMessage protocol are the public surface.
 
 ## [Unreleased]
 
+Package and website wording only; no change to the viewer, the JavaScript API or the protocol.
+
+### Changed
+
+- The npm description, keywords and README, and the website, now say that Free PDF SDK is a PDF
+  SDK based on PdfCraft, the open-source PDF engine by ArtCraft.
+
 ## [0.2.5] - 2026-11-05
 
 pdfcraft updated to 0.18.1 and later upstream changes. No change to the JavaScript API or the

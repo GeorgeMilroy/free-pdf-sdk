@@ -31,8 +31,9 @@ Sections, in sidebar order: `Get started`, `Configure`, `Frameworks`, `Guides`, 
   Never invent options, methods, events or error codes.
 - Fenced code blocks name their language (`ts`, `tsx`, `vue`, `svelte`, `html`, `json`, `bash`).
 - Link other pages as `/docs/<slug>/`. Use the package name `@mecorelabs/free-pdf-sdk`.
-- The product is "Free PDF SDK". It is built on the open-source pdfcraft engine; mention that
-  only where it matters (licences), never as branding.
+- The product is "Free PDF SDK". It is based on PdfCraft, the open-source pdfcraft engine by
+  ArtCraft. Say so where it matters (licences, the home FAQ, the footer, the npm description) so
+  searches for a PDF SDK based on PdfCraft or ArtCraft find it, but never as branding.
 - No marketing superlatives, no claims you can't point to in the code (sizes, speeds).
 
 ## Generated tables

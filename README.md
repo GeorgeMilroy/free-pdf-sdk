@@ -9,7 +9,8 @@
 
 <p align="center">
   A free, open-source, white-label PDF viewer, annotator and editor for the web.<br>
-  Runs in the browser, so documents never leave your page.
+  Runs in the browser, so documents never leave your page.<br>
+  A PDF SDK based on <a href="https://github.com/storytold/pdfcraft">PdfCraft</a> by ArtCraft.
 </p>
 
 <p align="center">

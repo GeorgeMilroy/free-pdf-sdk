@@ -1,7 +1,7 @@
 {
   "name": "@mecorelabs/free-pdf-sdk",
   "version": "0.2.5",
-  "description": "Free PDF SDK: an embeddable, white-label PDF viewer, annotator and editor for the web, with React, Vue, Svelte, Angular and Web Component integrations",
+  "description": "Free PDF SDK: an embeddable, white-label PDF viewer, annotator and editor for the web, with React, Vue, Svelte, Angular and Web Component integrations. A PDF SDK based on PdfCraft by ArtCraft.",
   "license": "MIT OR Apache-2.0",
   "homepage": "https://freepdfsdk.mecorelabs.com",
   "repository": {
@@ -80,7 +80,9 @@
   },
   "keywords": [
     "pdf",
+    "pdf-sdk",
     "pdf-viewer",
+    "pdf-editor",
     "pdf-annotation",
     "xfdf",
     "react",
@@ -88,7 +90,11 @@
     "svelte",
     "angular",
     "web-component",
-    "wasm"
+    "wasm",
+    "pdfcraft",
+    "pdf-craft",
+    "artcraft",
+    "art-craft"
   ],
   "bin": {
     "free-pdf-sdk": "bin/free-pdf-sdk.mjs"

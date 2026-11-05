@@ -192,7 +192,8 @@ colour separation preview. The full list of what it offers is in
 ## What is the licence?
 
 Free PDF SDK is licensed **MIT OR Apache-2.0**, at your option, including commercial use and
-white-labelling. The viewer embeds open-source components (it is built on the pdfcraft engine);
+white-labelling. The viewer embeds open-source components (it is based on PdfCraft, the pdfcraft
+engine by ArtCraft);
 their licences and notices are in `NOTICE` and `third-party/`, which `copy-viewer` copies next to
 the viewer. Keep those files when you deploy or redistribute it.
 

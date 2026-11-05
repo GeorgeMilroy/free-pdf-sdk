@@ -5,7 +5,8 @@
 A free, open-source, white-label PDF viewer, annotator and editor for the web. Your users switch
 PDF layers on and off with a click. You switch panels, tools and whole features on or off, and
 every menu, toolbar and shortcut follows. It runs in the browser (WebAssembly), so documents never
-leave your page.
+leave your page. It is a PDF SDK based on [PdfCraft](https://github.com/storytold/pdfcraft), the
+open-source PDF engine by ArtCraft.
 
 [Website](https://freepdfsdk.mecorelabs.com/) · [Live demo](https://freepdfsdk.mecorelabs.com/demo/) ·
 [Get started](https://freepdfsdk.mecorelabs.com/docs/getting-started/) ·

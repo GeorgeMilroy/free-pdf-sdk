@@ -233,7 +233,7 @@ ${body}
   </div>
   <div class="container footer-bottom">
     <p>© ${new Date().getUTCFullYear()} ${esc(cfg.name)}. Released under MIT OR Apache-2.0.</p>
-    <p class="based-on">Built on the open-source pdfcraft engine.</p>
+    <p class="based-on">Based on <a href="https://github.com/storytold/pdfcraft" rel="noopener" target="_blank">PdfCraft</a>, the open-source PDF engine by ArtCraft.</p>
   </div>
 </footer>
 <script type="module" src="/assets/js/site.js?v=${version}"></script>
